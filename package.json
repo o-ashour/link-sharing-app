@@ -2,35 +2,26 @@
   "name": "link-sharing-app",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@headlessui/react": "^2.0.4",
-    "@types/node": "^20.14.2",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "autoprefixer": "^10.4.19",
-    "next": "^14.2.4",
-    "postcss": "^8.4.38",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
-  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "next lint"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "dependencies": {
+    "@headlessui/react": "^2.0.4",
+    "autoprefixer": "^10.4.19",
+    "next": "^14.2.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@types/node": "^20.14.2",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.4",
+    "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.4.5"
   }

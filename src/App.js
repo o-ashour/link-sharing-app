@@ -68,7 +68,7 @@ function App() {
           <button type='submit'>Login</button>
         </form>
         <section>
-          <p>Don't have an account?</p>
+          <p>Don&apos;t have an account?</p>
           <button>Create account</button>
         </section>
       </main>
@@ -86,7 +86,7 @@ function App() {
 
       <main>
         <h2>Create account</h2>
-        <p>Let's get you started sharing your links!</p>
+        <p>Let&apos;s get you started sharing your links!</p>
 
         <form method='post'>
           <label for='email'>Email address</label>
@@ -164,10 +164,10 @@ function App() {
         </figure>
 
         <h2>
-          Let's get you started
+          Let&apos;s get you started
         </h2>
         <p>
-          Use the "Add new link" button to get started. Once you have more than one link, you can reorder and edit them. We're here to help you share your profiles with everyone!
+          Use the &ldquo;Add new link&rdquo; button to get started. Once you have more than one link, you can reorder and edit them. We&apos;re here to help you share your profiles with everyone!
         </p>
       </main>
 

@@ -13,14 +13,18 @@
 
 # misc
 .DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+*.pem
 
+#debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# local env files
+.env*.local
+
+# vercel
+.vercel
 
 # Avoid accidental upload of the Sketch and Figma design files
 *.sketch
@@ -36,12 +40,13 @@ yarn-error.log*
 # static html pages for reference
 /src/pages
 
-# Ignore Readme's, only for ref
-README_FEM.md
-README-FIG.md
-README-REACT.md
+# Ignore references
+/references
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
 
 # Ignore next files
 .next
-next-env.d.ts
 dist
