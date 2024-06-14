@@ -1,6 +1,6 @@
 import './index.css';
 
-import logoImg from './assets/images/logo-devlinks-small.svg';
+// import logoImg from './assets/images/logo-devlinks-small.svg';
 import EmailIcon from './components/icons/EmailIcon';
 import PasswordIcon from './components/icons/PasswordIcon';
 import LinksIconHeader from './components/icons/LinksIconHeader';
@@ -34,7 +34,7 @@ function App() {
       {/***** login page *********/}
       <header>
         <figure>
-          <img src={logoImg} alt='logo' />
+          {/* <img src={logoImg} alt='logo' /> */}
         </figure>
         <h1>
           devlinks
@@ -77,7 +77,7 @@ function App() {
       {/***** signup page *********/}
       <header>
         <figure>
-          <img src={logoImg} alt='logo' />
+          {/* <img src={logoImg} alt='logo' /> */}
         </figure>
         <h1>
           devlinks
@@ -128,7 +128,7 @@ function App() {
       {/***** customize-your-links page 1/2 *********/}
       <header>
         <figure>
-          <img src={logoImg} alt='logo' />
+          {/* <img src={logoImg} alt='logo' /> */}
         </figure>
         <nav>
           <ul>
@@ -180,7 +180,7 @@ function App() {
       {/***** customize-your-links page 2/2 *********/}
       <header>
         <figure>
-          <img src={logoImg} alt='logo' />
+          {/* <img src={logoImg} alt='logo' /> */}
         </figure>
         <nav>
           <ul>
@@ -345,7 +345,7 @@ function App() {
       {/***** profile details *********/}
       <header>
         <figure>
-          <img src={logoImg} alt='logo' />
+          {/* <img src={logoImg} alt='logo' /> */}
         </figure>
         <nav>
           <ul>
@@ -427,11 +427,11 @@ function App() {
         {/* avatar */}
         {/* <div className="flex -space-x-2 overflow-hidden"> */}
         <figure>
-          <img
+          {/* <img
             className="inline-block h-12 w-12 rounded-full ring-2 ring-white"
             src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
             alt=""
-          />
+          /> */}
           <figcaption>
             <h1>
               Ali el-Shorbagy

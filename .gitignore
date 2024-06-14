@@ -41,3 +41,7 @@ README_FEM.md
 README-FIG.md
 README-REACT.md
 
+# Ignore next files
+.next
+next-env.d.ts
+dist
