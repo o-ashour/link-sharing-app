@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+#platforms-dropdown-option:active svg path:first-of-type {
+  fill: #633CFF;
+}

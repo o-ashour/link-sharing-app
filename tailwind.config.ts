@@ -22,10 +22,11 @@ const config: Config = {
       white: '#FFFFFF', // White
       red: '#FF3939', // Red
     },
-    fontSize: {
-      sm: '0.75rem',
+    extend: {
+      fontSize: {
+        sm: '0.75rem',
+      },
     },
-    extend: {},
   },
   plugins: [],
 };
