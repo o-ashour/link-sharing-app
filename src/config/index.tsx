@@ -1,17 +1,17 @@
-import CodepenIcon from '../../components/icons/CodepenIcon';
-import GitHubIcon from '../../components/icons/GitHubIcon';
-import FrontendMentorIcon from '../../components/icons/FrontendMentorIcon';
-import TwitterIcon from '../../components/icons/TwitterIcon';
-import LinkedInIcon from '../../components/icons/LinkedInIcon';
-import YouTubeIcon from '../../components/icons/YouTubeIcon';
-import FacebookIcon from '../../components/icons/FacebookIcon';
-import TwitchIcon from '../../components/icons/TwitchIcon';
-import DevToIcon from '../../components/icons/DevToIcon';
-import CodewarsIcon from '../../components/icons/CodewarsIcon';
-import FreeCodeCampIcon from '../../components/icons/FreeCodeCampIcon';
-import GitLabIcon from '../../components/icons/GitLabIcon';
-import HashnodeIcon from '../../components/icons/HashnodeIcon';
-import StackOverflowIcon from '../../components/icons/StackOverflowIcon';
+import CodepenIcon from '../components/icons/platforms/CodepenIcon';
+import GitHubIcon from '../components/icons/platforms/GitHubIcon';
+import FrontendMentorIcon from '../components/icons/platforms/FrontendMentorIcon';
+import TwitterIcon from '../components/icons/platforms/TwitterIcon';
+import LinkedInIcon from '../components/icons/platforms/LinkedInIcon';
+import YouTubeIcon from '../components/icons/platforms/YouTubeIcon';
+import FacebookIcon from '../components/icons/platforms/FacebookIcon';
+import TwitchIcon from '../components/icons/platforms/TwitchIcon';
+import DevToIcon from '../components/icons/platforms/DevToIcon';
+import CodewarsIcon from '../components/icons/platforms/CodewarsIcon';
+import FreeCodeCampIcon from '../components/icons/platforms/FreeCodeCampIcon';
+import GitLabIcon from '../components/icons/platforms/GitLabIcon';
+import HashnodeIcon from '../components/icons/platforms/HashnodeIcon';
+import StackOverflowIcon from '../components/icons/platforms/StackOverflowIcon';
 
 import { ReactElement } from 'react';
 

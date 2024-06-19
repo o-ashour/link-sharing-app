@@ -6,6 +6,10 @@ import Menu from './elements/Menu';
 
 const Component: React.FC = () => {
   // change to dialog?
+  // need to improve accessiblity 
+  // keyboard esc, enter, tab to focus on menu items 
+  // close/open
+  // clicking outside component should close menu
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClick = () => {

@@ -1,4 +1,4 @@
-import { linkSharePlatformsConfigs } from '@/app/config';
+import { linkSharePlatformsConfigs } from '../../../../config';
 
 const Component: React.FC<{isOpen: boolean}> = ({ isOpen }) => {
   return (
