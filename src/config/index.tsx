@@ -17,19 +17,19 @@ import { ReactElement } from 'react';
 
 export enum LinkShareSupportedPlatforms {
   GitHub = 'GitHub',
-  FrontendMentor = 'Frontend Mentor',
+  FrontendMentor = 'FrontendMentor',
   Twitter = 'Twitter',
   LinkedIn = 'LinkedIn',
   YouTube = 'YouTube',
   Facebook = 'Facebook',
   Twitch = 'Twitch',
-  DevTo = 'Dev.to',
+  DevTo = 'DevTo',
   Codewars = 'Codewars',
   Codepen = 'Codepen',
-  FreeCodeCamp = 'freeCodeCamp',
+  FreeCodeCamp = 'FreeCodeCamp',
   GitLab = 'GitLab',
   Hashnode = 'Hashnode',
-  StackOverflow = 'Stack Overflow',
+  StackOverflow = 'StackOverflow',
 }
   
 
@@ -81,7 +81,7 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
     iconDescription: 'Twitch icon',
     readableName: 'Twitch',
   },
-  Devto: {
+  DevTo: {
     iconComponent: <DevToIcon />,
     iconPath: '/icons/platforms/icon-devto.svg',
     iconDescription: 'Dev.to icon',
