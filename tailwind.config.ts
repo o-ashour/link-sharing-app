@@ -21,6 +21,7 @@ const config: Config = {
       },
       white: '#FFFFFF', // White
       red: '#FF3939', // Red
+      black: '#000000', //Black
     },
     extend: {
       fontSize: {
