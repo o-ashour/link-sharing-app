@@ -12,6 +12,8 @@ import FreeCodeCampIcon from '../components/icons/platforms/FreeCodeCampIcon';
 import GitLabIcon from '../components/icons/platforms/GitLabIcon';
 import HashnodeIcon from '../components/icons/platforms/HashnodeIcon';
 import StackOverflowIcon from '../components/icons/platforms/StackOverflowIcon';
+import EmailIcon from '../components/icons/EmailIcon';
+import PasswordIcon from '../components/icons/PasswordIcon';
 
 import { ReactElement } from 'react';
 
@@ -167,4 +169,9 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
     themeColor: '#EC7100',
     previewBtnThemeType: 'dark',
   },
+}
+
+export const icons = {
+  email: <EmailIcon />,
+  password: <PasswordIcon />,
 }
