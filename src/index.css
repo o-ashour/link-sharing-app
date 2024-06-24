@@ -10,3 +10,8 @@
 #nav-tab-btn:active svg path:first-of-type {
   fill: #633CFF;
 }
+
+#platform-preview-icon svg {
+  width: 20px;
+  height: 20px;
+}
