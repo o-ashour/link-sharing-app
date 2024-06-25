@@ -1,38 +1,24 @@
 'use client'
 
-import Tab from '../../components/UI/Tab';
-import PreviewIconHeader from '../../components/icons/PreviewIconHeader';
 import Button from '../../components/UI/Button';
-import IllustrationEmpty from '../../components/illustrations/IllustrationEmpty';
-import LogoSmall from '../../components/logo/LogoSmall';
-import { icons } from '../../config/index'
+import { useState } from 'react';
+import NoLink from '../../components/content/NoLink';
+import AddedLink from '../../components/content/AddedLink';
+import Header from '../../components/layout/Header';
 
 export default function Page() {
-  // to be integrated into logic
-  const isError = false;
+  const [isLinksOpen, setIsLinksOpen] = useState(false);
+
+  const handleClick = () => {
+    if (!isLinksOpen) {
+      setIsLinksOpen(true);
+    }
+  }
 
   return (
     <section>
-      <header className="flex justify-between items-center p-4 pl-6">
-        <div className="flex-none">
-          <LogoSmall />
-        </div>
-        <nav className="flex-2">
-          <ul className='flex'>
-            <li>
-              <Tab icon={icons.links}/>
-            </li>
-            <li>
-              <Tab icon={icons.profile} />
-            </li>
-          </ul>
-        </nav>
-        <Button id='nav-preview-btn' variant='secondary'>
-          <PreviewIconHeader />
-        </Button>
-      </header>
+      <Header />
 
-      <form>
         <div className="p-4">
           <article className="p-6 space-y-10">
             <div className="space-y-2">
@@ -45,25 +31,16 @@ export default function Page() {
             </div>
 
             <div>
-              <Button variant='secondary'>+ Add new link</Button>
-              <div className="relative mt-6 px-5 py-14 space-y-6">
-                <figure className="w-32 mx-auto">
-                  <IllustrationEmpty width='125' height='80' />
-                </figure>
-                <h2 className="text-2xl font-bold text-center text-grey-400">
-                  Let&apos;s get you started
-                </h2>
-                <p className="text-grey-300 text-center">
-                  Use the &ldquo;Add new link&rdquo; button to get started. Once you have more than one link, you can reorder and edit them. We&apos;re here to help you share your profiles with everyone!
-                </p>
-              </div>
+              <Button variant='secondary' handleClick={handleClick}>
+                + Add new link
+              </Button>
+              {!isLinksOpen ? <NoLink /> : <AddedLink />}
             </div>
           </article>
           <div className="border-t border-grey-200 p-4">
-            <Button type='submit' disabled>Save</Button>
+            <Button disabled={!isLinksOpen}>Save</Button>
           </div>
         </div>
-      </form>
     </section>
   )
 }

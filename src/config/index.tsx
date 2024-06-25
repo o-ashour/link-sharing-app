@@ -16,6 +16,7 @@ import EmailIcon from '../components/icons/EmailIcon';
 import PasswordIcon from '../components/icons/PasswordIcon';
 import LinksIconHeader from '../components/icons/LinksIconHeader';
 import ProfileDetailsIconHeader from '../components/icons/ProfileDetailsIconHeader';
+import LinkIcon from '../components/icons/LinkIcon';
 
 import { ReactElement } from 'react';
 
@@ -177,5 +178,6 @@ export const icons = {
   email: <EmailIcon />,
   password: <PasswordIcon />,
   links: <LinksIconHeader />,
-  profile: <ProfileDetailsIconHeader />
+  profile: <ProfileDetailsIconHeader />,
+  link: <LinkIcon />,
 }
