@@ -14,6 +14,8 @@ import HashnodeIcon from '../components/icons/platforms/HashnodeIcon';
 import StackOverflowIcon from '../components/icons/platforms/StackOverflowIcon';
 import EmailIcon from '../components/icons/EmailIcon';
 import PasswordIcon from '../components/icons/PasswordIcon';
+import LinksIconHeader from '../components/icons/LinksIconHeader';
+import ProfileDetailsIconHeader from '../components/icons/ProfileDetailsIconHeader';
 
 import { ReactElement } from 'react';
 
@@ -174,4 +176,6 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
 export const icons = {
   email: <EmailIcon />,
   password: <PasswordIcon />,
+  links: <LinksIconHeader />,
+  profile: <ProfileDetailsIconHeader />
 }
