@@ -1,29 +1,22 @@
 'use client'
 
-import Image from "next/image";
 import Link from "next/link";
 import { icons } from '../../config';
 import TextInputWithIcon from '../../components/UI/TextInputWithIcon';
 import Button from '../../components/UI/Button';
+import AuthHeader from '../../components/layout/AuthHeader';
 
 export default function Page() {
   // to be integrated into logic
   const isError = false;
 
   return (
-    <section className='flex min-h-full flex-1 flex-col justify-center px-8 py-8 space-y-16 lg:px-8'>
-      <header className="flex items-center gap-1.5 sm:w-full">
-        <figure>
-          <Image src='/logo/logo-devlinks-small.svg' alt='logo' width={32} height={32} />
-        </figure>
-        <h1 className="text-3xl font-semibold">
-          devlinks
-        </h1>
-      </header>
+    <section className='flex min-h-full flex-1 flex-col justify-center px-8 py-8 space-y-16 md:px-36 md:py-28 md:space-y-12 lg:px-8'>
+      <AuthHeader />
 
-      <main>
+      <main className="md:p-10">
         <div>
-          <h2 className="mb-2 text-grey-400 text-2xl font-bold">
+          <h2 className="mb-2 text-grey-400 text-2xl md:text-3xl md:mb-4 font-bold">
             Create account
           </h2>
           <p className="text-grey-300">
@@ -71,8 +64,8 @@ export default function Page() {
             </div>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className='text-grey-300 mb-0.5 '>
+          <div className="flex flex-col mt-6 text-center justify-center md:gap-1 md:flex-row">
+            <p className='text-grey-300'>
               Already have an account?
             </p>
             <Link href="/login" className="text-purple-300">
