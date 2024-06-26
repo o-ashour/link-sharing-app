@@ -1,6 +1,5 @@
 'use client'
 
-import Image from "next/image";
 import Link from "next/link";
 import { icons } from '../../config';
 import TextInputWithIcon from '../../components/UI/TextInputWithIcon';
@@ -15,7 +14,6 @@ export default function Page() {
     <section className='flex min-h-full flex-1 flex-col justify-center px-8 py-8 space-y-16 md:px-40 md:py-56 md:space-y-12 lg:px-8'>
       <header className="flex items-center md:justify-center gap-1.5 sm:w-full">
         <figure>
-          {/* <Image src='/logo/logo-devlinks-small.svg' alt='logo' width={32} height={32} /> */}
           <LogoSmall width={40} height={40} />
         </figure>
         <h1 className="text-3xl md:text-4xl font-semibold">
