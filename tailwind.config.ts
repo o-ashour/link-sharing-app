@@ -1,5 +1,7 @@
 import type { Config } from "tailwindcss";
 
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -22,6 +24,10 @@ const config: Config = {
       white: '#FFFFFF', // White
       red: '#FF3939', // Red
       black: '#000000', //Black
+    },
+    screens: {
+      'xs': '375px',
+      ...defaultTheme.screens,
     },
     extend: {
       fontSize: {

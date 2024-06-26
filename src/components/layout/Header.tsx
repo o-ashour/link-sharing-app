@@ -4,7 +4,7 @@ import { icons } from '../../config/index';
 import Button from '../UI/Button';
 import PreviewIconHeader from '../icons/PreviewIconHeader';
 
-const Component: React.FC<{setIsProfileDetailsOpen: React.Dispatch<boolean>}> = ({ setIsProfileDetailsOpen }) => {
+const Component: React.FC<{ setIsProfileDetailsOpen: React.Dispatch<boolean>, handlePreviewClick: () => void }> = ({ setIsProfileDetailsOpen, handlePreviewClick }) => {
   const handleLinksClick = () => {
     setIsProfileDetailsOpen(false);
   };
@@ -28,7 +28,7 @@ const Component: React.FC<{setIsProfileDetailsOpen: React.Dispatch<boolean>}> = 
           </li>
         </ul>
       </nav>
-      <Button id='nav-preview-btn' variant='secondary'>
+      <Button id='nav-preview-btn' variant='secondary' handleClick={handlePreviewClick}>
         <PreviewIconHeader />
       </Button>
     </header>

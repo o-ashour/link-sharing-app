@@ -6,15 +6,26 @@ import NoLink from '../../components/content/NoLink';
 import AddedLink from '../../components/content/AddedLink';
 import Header from '../../components/layout/Header';
 import ProfileDetails from '../../components/content/ProfileDetails';
+import PreviewHeader from '../../components/layout/PreviewHeader';
+import Preview from '../../components/content/Preview';
 
 export default function Page() {
   const [isFirstLinkAdded, setIsFirstLinkAdded] = useState(false);
   const [isProfileDetailsOpen, setIsProfileDetailsOpen] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const handleClick = () => {
     if (!isFirstLinkAdded) {
       setIsFirstLinkAdded(true);
     }
+  }
+
+  const handleBackToEditorClick = () => {
+    setIsPreviewOpen(false);
+  }
+
+  const handlePreviewClick = () => {
+    setIsPreviewOpen(true);
   }
 
   const content = {
@@ -30,34 +41,41 @@ export default function Page() {
 
   return (
     <section>
-      <Header setIsProfileDetailsOpen={setIsProfileDetailsOpen} />
+      { !isPreviewOpen ?
+        ( <Header setIsProfileDetailsOpen={setIsProfileDetailsOpen} handlePreviewClick={handlePreviewClick} /> )
+        : ( <PreviewHeader handleClick={handleBackToEditorClick}/> )
+      }
+      {
+        !isPreviewOpen ?
+        (
+          <div className="p-4">
+            <article className="p-6 space-y-10">
+              <div className="space-y-2">
+                <h1 className="text-grey-400 text-2xl font-bold">
+                  {!isProfileDetailsOpen ? content.addLinks.title : content.profileDetails.title} 
+                </h1>
+                <p className="text-grey-300">
+                  {!isProfileDetailsOpen ? content.addLinks.subtitle : content.profileDetails.subtitle} 
+                </p>
+              </div>
 
-        <div className="p-4">
-          <article className="p-6 space-y-10">
-            <div className="space-y-2">
-              <h1 className="text-grey-400 text-2xl font-bold">
-                {!isProfileDetailsOpen ? content.addLinks.title : content.profileDetails.title} 
-              </h1>
-              <p className="text-grey-300">
-                {!isProfileDetailsOpen ? content.addLinks.subtitle : content.profileDetails.subtitle} 
-              </p>
+            {!isProfileDetailsOpen ? 
+              <div>
+                <Button variant='secondary' handleClick={handleClick}>
+                  + Add new link
+                </Button>
+                {!isFirstLinkAdded ? <NoLink /> : <AddedLink />}
+              </div> : 
+              <ProfileDetails />
+            }
+
+            </article>
+            <div className="border-t border-grey-200 p-4">
+              <Button disabled={!isFirstLinkAdded}>Save</Button>
             </div>
-
-          {!isProfileDetailsOpen ? 
-            <div>
-              <Button variant='secondary' handleClick={handleClick}>
-                + Add new link
-              </Button>
-              {!isFirstLinkAdded ? <NoLink /> : <AddedLink />}
-            </div> : 
-            <ProfileDetails />
-          }
-
-          </article>
-          <div className="border-t border-grey-200 p-4">
-            <Button disabled={!isFirstLinkAdded}>Save</Button>
           </div>
-        </div>
+        ) : ( <Preview /> )
+      }  
     </section>
   )
 }
