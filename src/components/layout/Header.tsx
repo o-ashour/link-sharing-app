@@ -4,7 +4,15 @@ import { icons } from '../../config/index';
 import Button from '../UI/Button';
 import PreviewIconHeader from '../icons/PreviewIconHeader';
 
-const Component: React.FC = () => {
+const Component: React.FC<{setIsProfileDetailsOpen: React.Dispatch<boolean>}> = ({ setIsProfileDetailsOpen }) => {
+  const handleLinksClick = () => {
+    setIsProfileDetailsOpen(false);
+  };
+
+  const handleProfileClick = () => {
+    setIsProfileDetailsOpen(true);
+  };
+
   return (
     <header className="flex justify-between items-center p-4 pl-6">
       <div className="flex-none">
@@ -13,10 +21,10 @@ const Component: React.FC = () => {
       <nav className="flex-2">
         <ul className='flex'>
           <li>
-            <Tab icon={icons.links} />
+            <Tab handleClick={handleLinksClick} icon={icons.links} />
           </li>
           <li>
-            <Tab icon={icons.profile} />
+            <Tab handleClick={handleProfileClick} icon={icons.profile} />
           </li>
         </ul>
       </nav>

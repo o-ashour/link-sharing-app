@@ -1,6 +1,6 @@
 import UploadImageIcon from '../../components/icons/UploadImageIcon';
 
-const Component: React.FC<{isImgUploaded: boolean, imgUrl: string}> = ({ isImgUploaded = true, imgUrl = '/prototyping-imgs/1024px-Malcolm-x.jpg' }) => {
+const Component: React.FC<{isImgUploaded?: boolean, imgUrl?: string}> = ({ isImgUploaded = false, imgUrl = '/prototyping-imgs/1024px-Malcolm-x.jpg' }) => {
   return(
     <button className='relative w-48 h-48 font-semibold rounded-lg px-9 py-14 text-white bg-purple-100 bg-cover' style={{ backgroundImage: `${isImgUploaded ? `url(${imgUrl})` : 'none'}` }}>
       {isImgUploaded &&

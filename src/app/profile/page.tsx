@@ -5,40 +5,57 @@ import { useState } from 'react';
 import NoLink from '../../components/content/NoLink';
 import AddedLink from '../../components/content/AddedLink';
 import Header from '../../components/layout/Header';
+import ProfileDetails from '../../components/content/ProfileDetails';
 
 export default function Page() {
-  const [isLinksOpen, setIsLinksOpen] = useState(false);
+  const [isFirstLinkAdded, setIsFirstLinkAdded] = useState(false);
+  const [isProfileDetailsOpen, setIsProfileDetailsOpen] = useState(false);
 
   const handleClick = () => {
-    if (!isLinksOpen) {
-      setIsLinksOpen(true);
+    if (!isFirstLinkAdded) {
+      setIsFirstLinkAdded(true);
+    }
+  }
+
+  const content = {
+    addLinks: {
+      title: 'Customize your links',
+      subtitle: 'Add/edit/remove links below and then share all your profiles with the world!'
+    },
+    profileDetails: {
+      title: 'Profile Details',
+      subtitle: 'Add your details to create a personal touch to your profile.'
     }
   }
 
   return (
     <section>
-      <Header />
+      <Header setIsProfileDetailsOpen={setIsProfileDetailsOpen} />
 
         <div className="p-4">
           <article className="p-6 space-y-10">
             <div className="space-y-2">
               <h1 className="text-grey-400 text-2xl font-bold">
-                Customize your links
+                {!isProfileDetailsOpen ? content.addLinks.title : content.profileDetails.title} 
               </h1>
               <p className="text-grey-300">
-                Add/edit/remove links below and then share all your profiles with the world!
+                {!isProfileDetailsOpen ? content.addLinks.subtitle : content.profileDetails.subtitle} 
               </p>
             </div>
 
+          {!isProfileDetailsOpen ? 
             <div>
               <Button variant='secondary' handleClick={handleClick}>
                 + Add new link
               </Button>
-              {!isLinksOpen ? <NoLink /> : <AddedLink />}
-            </div>
+              {!isFirstLinkAdded ? <NoLink /> : <AddedLink />}
+            </div> : 
+            <ProfileDetails />
+          }
+
           </article>
           <div className="border-t border-grey-200 p-4">
-            <Button disabled={!isLinksOpen}>Save</Button>
+            <Button disabled={!isFirstLinkAdded}>Save</Button>
           </div>
         </div>
     </section>
