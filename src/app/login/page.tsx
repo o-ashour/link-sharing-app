@@ -4,7 +4,7 @@ import Link from "next/link";
 import { icons } from '../../config';
 import TextInputWithIcon from '../../components/UI/TextInputWithIcon';
 import Button from '../../components/UI/Button';
-import LogoSmall from '../../components/logo/LogoSmall';
+import AuthHeader from '../../components/layout/AuthHeader';
 
 export default function Page() {
   // to be integrated into logic
@@ -12,14 +12,7 @@ export default function Page() {
 
   return (
     <section className='flex min-h-full flex-1 flex-col justify-center px-8 py-8 space-y-16 md:px-40 md:py-56 md:space-y-12 lg:px-8'>
-      <header className="flex items-center md:justify-center gap-1.5 sm:w-full">
-        <figure>
-          <LogoSmall width={40} height={40} />
-        </figure>
-        <h1 className="text-3xl md:text-4xl font-semibold">
-          devlinks
-        </h1>
-      </header>
+      <AuthHeader />
 
       <main className="md:p-10">
         <div>
