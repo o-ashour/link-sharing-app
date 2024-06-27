@@ -177,7 +177,7 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
 export const icons = {
   email: <EmailIcon />,
   password: <PasswordIcon />,
-  links: <LinksIconHeader />,
-  profile: <ProfileDetailsIconHeader />,
+  links: (fill?: string) => <LinksIconHeader fill={fill} />,
+  profile: (fill?: string) => <ProfileDetailsIconHeader fill={fill} />,
   link: <LinkIcon />,
 }
