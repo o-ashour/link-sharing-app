@@ -1,8 +1,8 @@
 import { HTMLInputTypeAttribute, HTMLInputAutoCompleteAttribute } from 'react';
 
-const Component: React.FC<{ id?: string, name?: string, type?: HTMLInputTypeAttribute, autocomplete?: HTMLInputAutoCompleteAttribute, isError?: boolean, icon?: JSX.Element, placeholder?: string }> = ({ id, name, type, autocomplete, icon, isError = false, placeholder, ...props }) => {
+const Component: React.FC<{ id?: string, name?: string, type?: HTMLInputTypeAttribute, autocomplete?: HTMLInputAutoCompleteAttribute, isError?: boolean, icon?: JSX.Element, placeholder?: string, className?: string }> = ({ id, name, type, autocomplete, icon, isError = false, placeholder, className, ...props }) => {
   return (
-    <div className="w-full relative rounded-md shadow-sm">
+    <div className={`w-full ${className} relative rounded-md shadow-sm`}>
       {isError &&
         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
           <span className="text-red sm:text-sm">Please check again</span>
