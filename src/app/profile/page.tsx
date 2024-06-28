@@ -42,16 +42,25 @@ export default function Page() {
   return (
     <section>
       { !isPreviewOpen ?
-        ( <Header setIsProfileDetailsOpen={setIsProfileDetailsOpen} handlePreviewClick={handlePreviewClick} /> )
-        : ( <PreviewHeader handleClick={handleBackToEditorClick}/> )
+        ( <Header setIsProfileDetailsOpen={setIsProfileDetailsOpen} handlePreviewClick={handlePreviewClick} isProfileDetailsOpen={isProfileDetailsOpen} /> )
+        : 
+        ( 
+          <>
+            <div className='hidden md:block md:bg-purple-300 md:absolute md:w-full md:h-[22rem] md:rounded-b-3xl'/>
+            <div>
+              <PreviewHeader handleClick={handleBackToEditorClick} />
+            </div>
+          </>
+
+        )
       }
       {
         !isPreviewOpen ?
         (
-          <div className="p-4">
-            <article className="p-6 space-y-10">
-              <div className="space-y-2">
-                <h1 className="text-grey-400 text-2xl font-bold">
+          <div className="p-4 md:p-6 md:pt-0">
+              <article className="p-6 space-y-10 border-b border-grey-200 md:p-10 md:pb-14">
+              <div className="space-y-2 md:space-y-4">
+                <h1 className="text-grey-400 text-2xl font-bold md:text-3xl">
                   {!isProfileDetailsOpen ? content.addLinks.title : content.profileDetails.title} 
                 </h1>
                 <p className="text-grey-300">
@@ -70,8 +79,8 @@ export default function Page() {
             }
 
             </article>
-            <div className="border-t border-grey-200 p-4">
-              <Button disabled={!isFirstLinkAdded}>Save</Button>
+            <div className="p-4 md:px-10 md:py-6 md:flex md:justify-end">
+                <Button className='md:w-24' disabled={!isFirstLinkAdded && !isProfileDetailsOpen }>Save</Button>
             </div>
           </div>
         ) : ( <Preview /> )
