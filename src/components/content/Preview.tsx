@@ -5,8 +5,8 @@ import PlatformBtn from '../UI/Platform-Btn';
 
 const Component: React.FC = () => {
   return (
-    <div className='px-16 py-14 space-y-14'>
-      <div className='text-center space-y-6'>
+    <div className='px-16 py-14 space-y-14 md:relative md:bg-white md:w-[21.75rem] md:mx-auto md:rounded-2xl md:px-14 md:py-12 md:mt-24 md:drop-shadow-2xl'>
+      <div className='text-center space-y-6 md:space-y-8'>
         {/* overflow-hidden */}
         <div className="relative h-24 w-24 mx-auto">
           <Image
@@ -23,7 +23,7 @@ const Component: React.FC = () => {
           />
         </div>
 
-        <div className='space-y-2'>
+        <div className='space-y-2 md:space-y-4'>
           <h1 className='text-3xl font-bold'>
             Ali el-Shorbagy
           </h1>
