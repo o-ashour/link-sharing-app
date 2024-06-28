@@ -27,7 +27,7 @@ export default function Page() {
           <div className="mt-10">
             <form className="space-y-6" action="#" method="POST">
               <div>
-                <label htmlFor="email" className="text-grey-400 text-sm">
+                <label htmlFor="email" className={`text-grey-400 text-sm ${isError && 'text-red'}`}>
                   Email address
                 </label>
                 <div className="mt-1">
@@ -36,7 +36,7 @@ export default function Page() {
               </div>
 
               <div>
-                <label htmlFor="password" className="text-grey-400 text-sm">
+                <label htmlFor="password" className={`text-grey-400 text-sm ${isError && 'text-red'}`}>
                   Password
                 </label>
                 <div className="mt-1">

@@ -16,7 +16,7 @@ const Component: React.FC<{ id?: string, name?: string, type?: HTMLInputTypeAttr
         name={name}
         id={id}
         autoComplete={autocomplete}
-        className={`block w-full rounded-lg border px-4 py-3 pl-10 ${isError ? 'text-red border-red' : 'text-grey-400 border-grey-200'} focus:outline-none focus:border-none focus:ring-2 focus:ring-inset focus:ring-purple-300 focus:shadow-[0px_0px_14px_2px_rgba(99,60,255,0.3)] placeholder:text-grey-400 placeholder:opacity-50`}
+        className={`block w-full rounded-lg border px-4 py-3 pl-10 ${isError ? 'text-red border-red' : 'text-grey-400 border-grey-200'} caret-purple-300 focus:outline-none focus:border-none focus:ring-1 focus:ring-inset focus:ring-purple-300 focus:shadow-[0px_0px_14px_2px_rgba(99,60,255,0.3)] placeholder:text-grey-400 placeholder:opacity-50`}
         placeholder={placeholder}
         {...props}
       />
