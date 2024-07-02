@@ -17,6 +17,8 @@ import PasswordIcon from '../components/icons/PasswordIcon';
 import LinksIconHeader from '../components/icons/LinksIconHeader';
 import ProfileDetailsIconHeader from '../components/icons/ProfileDetailsIconHeader';
 import LinkIcon from '../components/icons/LinkIcon';
+import ChangesSavedIcon from '../components/icons/ChangesSavedIcon';
+import LinkCopiedToClipboardIcon from '../components/icons/LinkCopiedToClipboardIcon';
 
 import { ReactElement } from 'react';
 
@@ -180,4 +182,6 @@ export const icons = {
   links: (fill?: string) => <LinksIconHeader fill={fill} />,
   profile: (fill?: string) => <ProfileDetailsIconHeader fill={fill} />,
   link: <LinkIcon />,
+  changesSaved: <ChangesSavedIcon />,
+  linkCopiedToClipboard: <LinkCopiedToClipboardIcon />,
 }
