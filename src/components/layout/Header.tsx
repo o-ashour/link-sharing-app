@@ -3,8 +3,9 @@ import Tab from '../UI/Tab';
 import { icons } from '../../config/index';
 import Button from '../UI/Button';
 import PreviewIconHeader from '../icons/PreviewIconHeader';
+import Link from 'next/link';
 
-const Component: React.FC<{ setIsProfileDetailsOpen: React.Dispatch<boolean>, handlePreviewClick: () => void, isProfileDetailsOpen: boolean }> = ({ setIsProfileDetailsOpen, handlePreviewClick, isProfileDetailsOpen }) => {
+const Component: React.FC<{ setIsProfileDetailsOpen: React.Dispatch<boolean>, isProfileDetailsOpen: boolean }> = ({ setIsProfileDetailsOpen, isProfileDetailsOpen }) => {
   const handleLinksClick = () => {
     setIsProfileDetailsOpen(false);
   };
@@ -30,10 +31,12 @@ const Component: React.FC<{ setIsProfileDetailsOpen: React.Dispatch<boolean>, ha
             </li>
           </ul>
         </nav>
-        <Button id='nav-preview-btn' variant='secondary' handleClick={handlePreviewClick}>
-          <span className='hidden md:inline'>Preview</span>
-          <PreviewIconHeader className='md:hidden' />
-        </Button>
+        <Link href='/preview'>
+          <Button id='nav-preview-btn' variant='secondary'>
+            <span className='hidden md:inline'>Preview</span>
+            <PreviewIconHeader className='md:hidden' />
+          </Button>
+        </Link>
       </div>
     </header>
   )
