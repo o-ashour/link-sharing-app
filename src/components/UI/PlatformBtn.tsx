@@ -1,4 +1,4 @@
-import ArrowRightIcon from '../../components/icons/ArrowRightIcon';
+import ArrowRightIcon from '../icons/ArrowRightIcon';
 import { linkSharePlatformsConfigs } from '@/config';
 
 // default props for button

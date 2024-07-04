@@ -1,4 +1,4 @@
-import IllustrationEmpty from '../../components/illustrations/IllustrationEmpty';
+import IllustrationEmpty from '../illustrations/IllustrationEmpty';
 
 const Component: React.FC = () => {
   return (

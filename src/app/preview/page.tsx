@@ -13,9 +13,9 @@ export default function Page() {
 
   return (
     <section>
-      <div className='hidden md:block md:bg-purple-300 md:absolute md:w-full md:h-[22rem] lg:h-[22.25rem] md:rounded-b-3xl' />
+      <div id='background-section' className='hidden md:block md:bg-purple-300 md:absolute md:w-full md:h-[22rem] lg:h-[22.25rem] md:rounded-b-3xl' />
       <PreviewHeader />
-      <div className='pb-8 space-y-20 overflow-hidden relative'>
+      <main className='pb-8 space-y-20 overflow-hidden relative'>
         <Preview />
         {
           isSuccessful && (
@@ -26,7 +26,7 @@ export default function Page() {
             </div>
           )
         }
-      </div>
+      </main>
     </section>
   )
 }

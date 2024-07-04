@@ -1,7 +1,5 @@
-import Image from "next/image";
-import profilePic from '/Users/Protomar/Desktop/link-sharing-app/public/prototyping-imgs/1024px-Malcolm-x.jpg';
 import { linkSharePlatformsConfigs } from '../../config/index';
-import PlatformBtn from '../UI/Platform-Btn';
+import PlatformBtn from '../UI/PlatformBtn';
 import Avatar from '../Avatar';
 
 const Component: React.FC = () => {
@@ -17,7 +15,6 @@ const Component: React.FC = () => {
           </h1>
           <p className='text-grey-300'>ali_s@example.com</p>
         </div>
-
       </div>
 
       <div>

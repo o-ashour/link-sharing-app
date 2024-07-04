@@ -37,9 +37,6 @@ yarn-error.log*
 .DS_Store
 .prettierignore
 
-# static html pages for reference
-/src/pages
-
 # Ignore references
 /references
 
