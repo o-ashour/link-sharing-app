@@ -11,10 +11,10 @@ export default function Page() {
   const isError = false;
 
   return (
-    <section className='min-h-full px-8 py-8 md:px-36 md:py-28 md:space-y-12 lg:max-w-lg lg:mx-auto lg:p-0'>
-      <div className='flex flex-1 flex-col justify-center space-y-14 lg:mt-20'>
+    <section className='px-8 py-8'>
+      <div className='space-y-14 md:space-y-12 md:mt-28  lg:mt-20'>
         <AuthHeader />
-        <main className="md:p-10">
+        <main className="md:p-10 md:max-w-lg md:mx-auto">
           <div>
             <h2 className="mb-2 text-grey-400 text-2xl md:text-3xl md:mb-4 font-bold">
               Create account

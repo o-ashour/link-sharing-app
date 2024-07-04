@@ -43,7 +43,7 @@ export default function Page() {
   const isAnimate = false;
 
   return (
-    <section>
+    <section className='max-w-screen-xl mx-auto'>
       <Header setIsProfileDetailsOpen={setIsProfileDetailsOpen} isProfileDetailsOpen={isProfileDetailsOpen}  />
       <div className='lg:flex relative overflow-hidden'>
         <figure className='hidden lg:flex lg:mt-20 lg:justify-center lg:w-2/5 lg:p-6'>
