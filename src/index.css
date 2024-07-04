@@ -6,6 +6,11 @@
   fill: #633CFF;
 }
 
+#selected-platform-icon svg path:first-of-type {
+  fill: #633CFF;
+}
+
+
 #nav-tab-btn:hover svg path:first-of-type,
 #nav-tab-btn:active svg path:first-of-type {
   fill: #633CFF;

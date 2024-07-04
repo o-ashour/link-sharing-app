@@ -1,4 +1,5 @@
 import { linkSharePlatformsConfigs } from '../../../../config';
+import { LinkShareSupportedPlatforms } from '../../../../config';
 
 // Consider using the native <dialog> HTML element 
 // then you can have access to the onClose prop, 
@@ -9,17 +10,29 @@ import { linkSharePlatformsConfigs } from '../../../../config';
 // see @components/UI/Modal/
 // https://medium.com/@dimterion/modals-with-html-dialog-element-in-javascript-and-react-fb23c885d62e
 
-const Component: React.FC<{menuRef: any}> = ({ menuRef }) => {
+const Component: React.FC<{ menuRef: any, selectedPlatform: LinkShareSupportedPlatforms, setSelectedPlatform: React.Dispatch<LinkShareSupportedPlatforms>, setIsOpen: React.Dispatch<boolean> }> = ({ menuRef, selectedPlatform, setSelectedPlatform, setIsOpen }) => {
+  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
+    const selectedPlatformId = e.currentTarget.id as LinkShareSupportedPlatforms;
+    setSelectedPlatform(selectedPlatformId);
+    setIsOpen(false);
+  }
+
   return (
     <div id="dropdown-menu" className='mt-2 w-full border border-grey-200 rounded-lg shadow-[0px_0px_32px_0px_rgba(0,0,0,0.15)] max-h-52 overflow-scroll' ref={menuRef} aria-labelledby='dropdown-button' role='menu'>
       <ul className="px-4 text-grey-400 divide-y divide-grey-200">
         { Object.entries(linkSharePlatformsConfigs).map(([k, v]) => {
           return (
             <li key={k} id='platforms-dropdown-option'>
-              <button className="w-full flex gap-x-3 items-center py-3 cursor-pointer active:text-purple-300">
-                <figure>
-                  {v.iconComponent}
-                </figure>
+              <button id={k} onClick={handleClick} className={`w-full flex gap-x-3 items-center py-3 cursor-pointer active:text-purple-300 ${k === selectedPlatform && 'text-purple-300'}`}>
+                {k === selectedPlatform ? (
+                  <figure id='selected-platform-icon'>
+                    {v.iconComponent}
+                  </figure>
+                ) : 
+                  <figure>
+                    {v.iconComponent}
+                  </figure>
+                }
                 <span>
                   {v.readableName}
                 </span>

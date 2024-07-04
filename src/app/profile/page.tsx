@@ -14,10 +14,18 @@ export default function Page() {
   const [isFirstLinkAdded, setIsFirstLinkAdded] = useState(false);
   const [isProfileDetailsOpen, setIsProfileDetailsOpen] = useState(false);
 
+  const [linksArr, setLinksArr] = useState<Array<any>>([]);
+
   const handleClick = () => {
     if (!isFirstLinkAdded) {
       setIsFirstLinkAdded(true);
     }
+    setLinksArr(prevVal => {
+      const arr: Array<Number> = [].concat(...prevVal);
+      const linkId = arr.length + 1;
+      arr.push(linkId);
+      return arr;
+    });
   }
 
   const content = {
@@ -56,7 +64,9 @@ export default function Page() {
                 <Button variant='secondary' handleClick={handleClick}>
                   + Add new link
                 </Button>
-                {!isFirstLinkAdded ? <LinksInitial /> : <Links />}
+                {!isFirstLinkAdded ? 
+                  <LinksInitial /> 
+                  : <Links linksArr={linksArr} setLinksArr={setLinksArr} setIsFirstLinkAdded={setIsFirstLinkAdded} />}
               </div> :
               <ProfileDetails />
             }

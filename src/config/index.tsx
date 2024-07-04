@@ -40,6 +40,7 @@ export enum LinkShareSupportedPlatforms {
 }
 
 export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: {
+  id: string,
   iconComponent: ReactElement<any, any>,
   iconComponentForPreviewBtn: ReactElement<any, any>,
   iconPath: string;
@@ -49,6 +50,7 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
   previewBtnThemeType: string;
 } } = {
   GitHub: {
+    id: 'github',
     iconComponent: <GitHubIcon />,
     iconComponentForPreviewBtn: <GitHubIcon id='preview-btn' />, 
     iconPath: '/icons/platforms/icon-github.svg',
@@ -58,6 +60,7 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
     previewBtnThemeType: 'dark',
   },
   FrontendMentor: {
+    id: 'frontend-mentor',
     iconComponent: <FrontendMentorIcon />,
     iconComponentForPreviewBtn: <FrontendMentorIcon id='preview-btn' />, 
     iconPath: '/icons/platforms/icon-frontend-mentor.svg',
@@ -67,6 +70,7 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
     previewBtnThemeType: 'light',
   },
   Twitter: {
+    id: 'twitter',
     iconComponent: <TwitterIcon />,
     iconComponentForPreviewBtn: <TwitterIcon id='preview-btn'/>,
     iconPath: '/icons/platforms/icon-twitter.svg',
@@ -76,6 +80,7 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
     previewBtnThemeType: 'dark',
   },
   LinkedIn: {
+    id: 'linkedin',
     iconComponent: <LinkedInIcon />,
     iconComponentForPreviewBtn: <LinkedInIcon id='preview-btn' />,
     iconPath: '/icons/platforms/icon-linkedin.svg',
@@ -85,6 +90,7 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
     previewBtnThemeType: 'dark',
   },
   YouTube: {
+    id: 'youtube',
     iconComponent: <YouTubeIcon />,
     iconComponentForPreviewBtn: <YouTubeIcon id='preview-btn' />,
     iconPath: '/icons/platforms/icon-youtube.svg',
@@ -94,6 +100,7 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
     previewBtnThemeType: 'dark',
   },
   Facebook: {
+    id: 'facebook',
     iconComponent: <FacebookIcon />,
     iconComponentForPreviewBtn: <FacebookIcon id='preview-btn' />,
     iconPath: '/icons/platforms/icon-facebook.svg',
@@ -103,6 +110,7 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
     previewBtnThemeType: 'dark',
   },
   Twitch: {
+    id: 'twitch',
     iconComponent: <TwitchIcon />,
     iconComponentForPreviewBtn: <TwitchIcon id='preview-btn' />,
     iconPath: '/icons/platforms/icon-twitch.svg',
@@ -112,6 +120,7 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
     previewBtnThemeType: 'dark',
   },
   DevTo: {
+    id: 'dev-to',
     iconComponent: <DevToIcon />,
     iconComponentForPreviewBtn: <DevToIcon id='preview-btn' />,
     iconPath: '/icons/platforms/icon-devto.svg',
@@ -121,6 +130,7 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
     previewBtnThemeType: 'dark',
   },
   Codewars: {
+    id: 'codewars',
     iconComponent: <CodewarsIcon />,
     iconComponentForPreviewBtn: <CodewarsIcon id='preview-btn' />,
     iconPath: '/icons/platforms/icon-codewars.svg',
@@ -130,6 +140,7 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
     previewBtnThemeType: 'dark',
   },
   Codepen: {
+    id: 'codepen',
     iconComponent: <CodepenIcon />,
     iconComponentForPreviewBtn: <CodepenIcon id='preview-btn' />,
     iconPath: '/icons/platforms/icon-codepen.svg',
@@ -139,6 +150,7 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
     previewBtnThemeType: 'dark',
   },
   FreeCodeCamp: {
+    id: 'free-code-camp',
     iconComponent: <FreeCodeCampIcon />,
     iconComponentForPreviewBtn: <FreeCodeCampIcon id='preview-btn' />,
     iconPath: '/icons/platforms/icon-freecodecamp.svg',
@@ -148,6 +160,7 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
     previewBtnThemeType: 'dark',
   },
   GitLab: {
+    id: 'gitlab',
     iconComponent: <GitLabIcon />,
     iconComponentForPreviewBtn: <GitHubIcon id='preview-btn' />,
     iconPath: '/icons/platforms/icon-gitlab.svg',
@@ -157,6 +170,7 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
     previewBtnThemeType: 'dark',
   },
   Hashnode: {
+    id: 'hashnode',
     iconComponent: <HashnodeIcon />,
     iconComponentForPreviewBtn: <HashnodeIcon id='preview-btn' />,
     iconPath: '/icons/platforms/icon-hashnode.svg',
@@ -166,6 +180,7 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
     previewBtnThemeType: 'dark',
   },
   StackOverflow: {
+    id: 'stack-overflow',
     iconComponent: <StackOverflowIcon />,
     iconComponentForPreviewBtn: <StackOverflowIcon id='preview-btn' />,
     iconPath: '/icons/platforms/icon-stack-overflow.svg',
