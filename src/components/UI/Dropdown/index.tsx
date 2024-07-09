@@ -9,7 +9,7 @@ import Button from './elements/Button';
 import Menu from './elements/Menu';
 import { LinkShareSupportedPlatforms } from "../../../config";
 
-const Component: React.FC = () => {
+const Component: React.FC<{ linkId: number, setLinksArr: React.Dispatch<any>}> = ({ linkId, setLinksArr }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedPlatform, setSelectedPlatform] = useState(LinkShareSupportedPlatforms['GitHub']);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -47,7 +47,7 @@ const Component: React.FC = () => {
   return (
     <div className="relative inline-block text-left w-full">
       <Button isOpen={isOpen} handleClick={handleClick} buttonRef={buttonRef} selectedPlatform={selectedPlatform} />
-      {isOpen && <Menu menuRef={menuRef} selectedPlatform={selectedPlatform} setSelectedPlatform={setSelectedPlatform} setIsOpen={setIsOpen} />}
+      {isOpen && <Menu menuRef={menuRef} selectedPlatform={selectedPlatform} setSelectedPlatform={setSelectedPlatform} setIsOpen={setIsOpen} linkId={linkId} setLinksArr={setLinksArr} />}
     </div>
   )
 }

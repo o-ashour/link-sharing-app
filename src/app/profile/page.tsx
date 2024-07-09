@@ -7,25 +7,30 @@ import Links from '../../components/content/Links';
 import Header from '../../components/layout/Header';
 import ProfileDetails from '../../components/content/ProfileDetails';
 import Toast from '../../components/UI/Toast';
-import { icons } from '../../config/index';
+import { icons, linkSharePlatformsConfigs, LinkShareSupportedPlatforms } from '../../config/index';
 import PhoneMockup from '../../components/content/PhoneMockup';
 
 export default function Page() {
   const [isFirstLinkAdded, setIsFirstLinkAdded] = useState(false);
   const [isProfileDetailsOpen, setIsProfileDetailsOpen] = useState(false);
 
-  const [linksArr, setLinksArr] = useState<Array<any>>([]);
+  const [linksArr, setLinksArr] = useState<{id: number, platform: string}[] | []>([]);
 
   const handleClick = () => {
     if (!isFirstLinkAdded) {
       setIsFirstLinkAdded(true);
     }
+    const now = Date.now();
+
     setLinksArr(prevVal => {
-      const arr: Array<Number> = [].concat(...prevVal);
-      const linkId = arr.length + 1;
-      arr.push(linkId);
+      const link = {
+        id: now,
+        platform: LinkShareSupportedPlatforms['GitHub'],
+      }
+      const arr: any = [...prevVal];
+      arr.push(link);
       return arr;
-    });
+    })
   }
 
   const content = {
@@ -48,7 +53,7 @@ export default function Page() {
     <section className='max-w-screen-xl mx-auto'>
       <Header setIsProfileDetailsOpen={setIsProfileDetailsOpen} isProfileDetailsOpen={isProfileDetailsOpen}  />
       <main className='lg:flex relative overflow-hidden'>
-        <PhoneMockup />
+        <PhoneMockup linksArr={linksArr} />
         <div className="p-4 md:p-6 md:pt-0 lg:w-3/5">
           <article className="p-6 space-y-10 border-b border-grey-200 md:p-10 md:pb-14">
             <div className="space-y-2 md:space-y-4">

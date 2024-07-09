@@ -10,10 +10,23 @@ import { LinkShareSupportedPlatforms } from '../../../../config';
 // see @components/UI/Modal/
 // https://medium.com/@dimterion/modals-with-html-dialog-element-in-javascript-and-react-fb23c885d62e
 
-const Component: React.FC<{ menuRef: any, selectedPlatform: LinkShareSupportedPlatforms, setSelectedPlatform: React.Dispatch<LinkShareSupportedPlatforms>, setIsOpen: React.Dispatch<boolean> }> = ({ menuRef, selectedPlatform, setSelectedPlatform, setIsOpen }) => {
+const Component: React.FC<{
+  menuRef: any, selectedPlatform: LinkShareSupportedPlatforms, setSelectedPlatform: React.Dispatch<LinkShareSupportedPlatforms>, setIsOpen: React.Dispatch<boolean>, linkId: number, setLinksArr: React.Dispatch<React.SetStateAction<[] | {
+    id: number;
+    platform: string;
+  }[]>> }> = ({ menuRef, selectedPlatform, setSelectedPlatform, setIsOpen, linkId, setLinksArr }) => {
+
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     const selectedPlatformId = e.currentTarget.id as LinkShareSupportedPlatforms;
     setSelectedPlatform(selectedPlatformId);
+
+    setLinksArr(prevVal => {
+      const arr = [...prevVal];
+      const foundIdx = arr.findIndex(link => linkId === link.id);
+      arr[foundIdx].platform = selectedPlatformId;
+      return arr;
+    })
+
     setIsOpen(false);
   }
 

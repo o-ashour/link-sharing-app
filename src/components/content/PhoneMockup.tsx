@@ -1,9 +1,9 @@
 import Avatar from '../Avatar';
 import PlatformBtnPreview from '../UI/PlatformBtnPreview';
-import { linkSharePlatformsConfigs } from '../../config/index';
+import { linkSharePlatformsConfigs, LinkShareSupportedPlatforms } from '../../config/index';
 import IllustrationPhoneMockup from '../illustrations/IllustrationPhoneMockup';
 
-const Component: React.FC = () => {
+const Component: React.FC<{ linksArr: any[] }> = ({ linksArr }) => {
   const isText = true;
 
   return (
@@ -26,15 +26,16 @@ const Component: React.FC = () => {
             </div>
             <div id='phone-mockup-content-bottom' className='w-full'>
               <ul className='space-y-[22px]'>
-                <li>
-                  <PlatformBtnPreview iconComponent={linkSharePlatformsConfigs['GitHub'].iconComponentForPreviewBtn} themeColor={linkSharePlatformsConfigs['GitHub'].themeColor} name={linkSharePlatformsConfigs['GitHub'].readableName} themeType={linkSharePlatformsConfigs['GitHub'].previewBtnThemeType} />
-                </li>
-                <li>
-                  <PlatformBtnPreview iconComponent={linkSharePlatformsConfigs['YouTube'].iconComponentForPreviewBtn} themeColor={linkSharePlatformsConfigs['YouTube'].themeColor} name={linkSharePlatformsConfigs['YouTube'].readableName} themeType={linkSharePlatformsConfigs['YouTube'].previewBtnThemeType} />
-                </li>
-                <li>
-                  <PlatformBtnPreview iconComponent={linkSharePlatformsConfigs['LinkedIn'].iconComponentForPreviewBtn} themeColor={linkSharePlatformsConfigs['LinkedIn'].themeColor} name={linkSharePlatformsConfigs['LinkedIn'].readableName} themeType={linkSharePlatformsConfigs['LinkedIn'].previewBtnThemeType} />
-                </li>
+                { linksArr.map((link, idx) => {
+                  const { platform, id }  = link;
+                  if (idx < 5) {
+                    return (
+                      <li key={id}>
+                        <PlatformBtnPreview iconComponent={linkSharePlatformsConfigs[platform as LinkShareSupportedPlatforms].iconComponentForPreviewBtn} themeColor={linkSharePlatformsConfigs[platform as LinkShareSupportedPlatforms].themeColor} name={linkSharePlatformsConfigs[platform as LinkShareSupportedPlatforms].readableName} themeType={linkSharePlatformsConfigs[platform as LinkShareSupportedPlatforms].previewBtnThemeType} />
+                      </li>
+                    )
+                  }  
+                })}
               </ul>
             </div>
           </div>
