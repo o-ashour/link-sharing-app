@@ -1,7 +1,7 @@
 'use client'
 
 import Button from '../../components/UI/Button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import LinksInitial from '../../components/content/LinksInitial';
 import Links from '../../components/content/Links';
 import Header from '../../components/layout/Header';
@@ -13,10 +13,16 @@ import PhoneMockup from '../../components/content/PhoneMockup';
 export default function Page() {
   const [isFirstLinkAdded, setIsFirstLinkAdded] = useState(false);
   const [isProfileDetailsOpen, setIsProfileDetailsOpen] = useState(false);
+  const [isSuccessfullySaved, setIsSuccessfullySaved] = useState(false);
+  const [linksArr, setLinksArr] = useState<{id: number, platform: LinkShareSupportedPlatforms, url: string, status: {isError: boolean, message: string}}[] | []>([]);
 
-  const [linksArr, setLinksArr] = useState<{id: number, platform: string}[] | []>([]);
+  useEffect(() => {
+    if (isSuccessfullySaved) {
+      setTimeout(() => setIsSuccessfullySaved(false), 2000)
+    }
+  }, [isSuccessfullySaved]);
 
-  const handleClick = () => {
+  const handleAddLinkBtnClick = () => {
     if (!isFirstLinkAdded) {
       setIsFirstLinkAdded(true);
     }
@@ -26,9 +32,37 @@ export default function Page() {
       const link = {
         id: now,
         platform: LinkShareSupportedPlatforms['GitHub'],
+        url: '',
+        status: { isError: false, message: '' },
       }
       const arr: any = [...prevVal];
       arr.push(link);
+      return arr;
+    })
+  }
+
+  const handleSaveBtnClick = () => {
+    setLinksArr(prevVal => {
+      const arr = [...prevVal];
+      arr.forEach(link => {
+        const isUrlValid = linkSharePlatformsConfigs[link.platform].urlRegex.test(link.url);
+
+        if (!link.url || !isUrlValid) {
+          link.status.isError = true;
+          if (!link.url) {
+            link.status.message = 'Empty Url';
+          } else if (!isUrlValid) {
+            link.status.message = 'Invalid Url'
+          }
+        } else {
+          link.status.isError = false;
+          link.status.message = '';
+        }
+      })
+      const isError = arr.some(link => link.status.isError === true);
+      if (!isError) {
+        setIsSuccessfullySaved(true);
+      }
       return arr;
     })
   }
@@ -45,9 +79,6 @@ export default function Page() {
   }
 
   const toastMsg = 'Your changes have been successfully saved!';
-
-  const isSuccessful = false;
-  const isAnimate = false;
 
   return (
     <section className='max-w-screen-xl mx-auto'>
@@ -66,7 +97,7 @@ export default function Page() {
             </div>
             {!isProfileDetailsOpen ?
               <div id='links'>
-                <Button variant='secondary' handleClick={handleClick}>
+                <Button variant='secondary' handleClick={handleAddLinkBtnClick}>
                   + Add new link
                 </Button>
                 {!isFirstLinkAdded ? 
@@ -77,18 +108,14 @@ export default function Page() {
             }
           </article>
           <div className="p-4 md:px-10 md:py-6 md:flex md:justify-end">
-            <Button className='md:w-24' disabled={!isFirstLinkAdded && !isProfileDetailsOpen}>Save</Button>
+            <Button className='md:w-24' disabled={!isFirstLinkAdded && !isProfileDetailsOpen} handleClick={handleSaveBtnClick}>Save</Button>
           </div>
         </div>
-        {isSuccessful && 
-          (
-            <div className={`fixed -bottom-14 w-full transition-transform duration-200 ease-in ${isAnimate && '-translate-y-24'}`}>
-              <div className='w-fit mx-auto'>
-                <Toast iconComponent={icons.changesSaved} message={toastMsg} />
-              </div>
-            </div>
-          )
-        }
+        <div className={`fixed -bottom-20 w-full transition-transform duration-200 ease-in ${isSuccessfullySaved && '-translate-y-40 lg:-translate-y-24'}`}>
+          <div className='w-fit mx-auto'>
+            <Toast iconComponent={icons.changesSaved} message={toastMsg} />
+          </div>
+        </div>
       </main>
     </section>
   )

@@ -13,7 +13,7 @@ import { LinkShareSupportedPlatforms } from '../../../../config';
 const Component: React.FC<{
   menuRef: any, selectedPlatform: LinkShareSupportedPlatforms, setSelectedPlatform: React.Dispatch<LinkShareSupportedPlatforms>, setIsOpen: React.Dispatch<boolean>, linkId: number, setLinksArr: React.Dispatch<React.SetStateAction<[] | {
     id: number;
-    platform: string;
+    platform: LinkShareSupportedPlatforms;
   }[]>> }> = ({ menuRef, selectedPlatform, setSelectedPlatform, setIsOpen, linkId, setLinksArr }) => {
 
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {

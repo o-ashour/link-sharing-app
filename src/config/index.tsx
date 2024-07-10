@@ -41,6 +41,8 @@ export enum LinkShareSupportedPlatforms {
 
 export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: {
   id: string,
+  urlFormat: string,
+  urlRegex: RegExp,
   iconComponent: ReactElement<any, any>,
   iconComponentForPreviewBtn: ReactElement<any, any>,
   iconPath: string;
@@ -51,6 +53,8 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
 } } = {
   GitHub: {
     id: 'github',
+    urlFormat: 'https://github.com/[username]',
+    urlRegex: /https:\/\/(www\.)?github.com\/.+/,
     iconComponent: <GitHubIcon />,
     iconComponentForPreviewBtn: <GitHubIcon id='preview-btn' />, 
     iconPath: '/icons/platforms/icon-github.svg',
@@ -61,6 +65,8 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
   },
   FrontendMentor: {
     id: 'frontend-mentor',
+    urlFormat: 'https://www.frontendmentor.io/profile/[username]',
+    urlRegex: /https:\/\/(www\.)?frontendmentor.io\/profile\/.+/,
     iconComponent: <FrontendMentorIcon />,
     iconComponentForPreviewBtn: <FrontendMentorIcon id='preview-btn' />, 
     iconPath: '/icons/platforms/icon-frontend-mentor.svg',
@@ -71,6 +77,8 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
   },
   Twitter: {
     id: 'twitter',
+    urlFormat: 'https://x.com/[username]',
+    urlRegex: /https:\/\/(www\.)?x.com\/.+/,
     iconComponent: <TwitterIcon />,
     iconComponentForPreviewBtn: <TwitterIcon id='preview-btn'/>,
     iconPath: '/icons/platforms/icon-twitter.svg',
@@ -81,6 +89,8 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
   },
   LinkedIn: {
     id: 'linkedin',
+    urlFormat: 'https://www.linkedin.com/in/[username]',
+    urlRegex: /https:\/\/(www\.)?linkedin.com\/in\/.+/,
     iconComponent: <LinkedInIcon />,
     iconComponentForPreviewBtn: <LinkedInIcon id='preview-btn' />,
     iconPath: '/icons/platforms/icon-linkedin.svg',
@@ -91,6 +101,8 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
   },
   YouTube: {
     id: 'youtube',
+    urlFormat: 'https://www.youtube.com/channel/[id]',
+    urlRegex: /https:\/\/(www\.)?youtube.com\/channel\/.+/,
     iconComponent: <YouTubeIcon />,
     iconComponentForPreviewBtn: <YouTubeIcon id='preview-btn' />,
     iconPath: '/icons/platforms/icon-youtube.svg',
@@ -101,6 +113,8 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
   },
   Facebook: {
     id: 'facebook',
+    urlFormat: 'https://www.facebook.com/[username]',
+    urlRegex: /https:\/\/(www\.)?facebook.com\/.+/,
     iconComponent: <FacebookIcon />,
     iconComponentForPreviewBtn: <FacebookIcon id='preview-btn' />,
     iconPath: '/icons/platforms/icon-facebook.svg',
@@ -111,6 +125,8 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
   },
   Twitch: {
     id: 'twitch',
+    urlFormat: 'https://www.twitch.tv/[username]',
+    urlRegex: /https:\/\/(www\.)?twitch.tv\/.+/,
     iconComponent: <TwitchIcon />,
     iconComponentForPreviewBtn: <TwitchIcon id='preview-btn' />,
     iconPath: '/icons/platforms/icon-twitch.svg',
@@ -121,6 +137,8 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
   },
   DevTo: {
     id: 'dev-to',
+    urlFormat: 'https://dev.to/[username]',
+    urlRegex: /https:\/\/(www\.)?dev.to\/.+/,
     iconComponent: <DevToIcon />,
     iconComponentForPreviewBtn: <DevToIcon id='preview-btn' />,
     iconPath: '/icons/platforms/icon-devto.svg',
@@ -131,6 +149,8 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
   },
   Codewars: {
     id: 'codewars',
+    urlFormat: 'https://www.codewars.com/users/[username]',
+    urlRegex: /https:\/\/(www\.)?codewars.com\/users\/.+/,
     iconComponent: <CodewarsIcon />,
     iconComponentForPreviewBtn: <CodewarsIcon id='preview-btn' />,
     iconPath: '/icons/platforms/icon-codewars.svg',
@@ -141,6 +161,8 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
   },
   Codepen: {
     id: 'codepen',
+    urlFormat: 'https://codepen.io/[username]',
+    urlRegex: /https:\/\/codepen.io\/.+/,
     iconComponent: <CodepenIcon />,
     iconComponentForPreviewBtn: <CodepenIcon id='preview-btn' />,
     iconPath: '/icons/platforms/icon-codepen.svg',
@@ -151,6 +173,8 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
   },
   FreeCodeCamp: {
     id: 'free-code-camp',
+    urlFormat: 'https://www.freecodecamp.org/news/author/[username]',
+    urlRegex: /https:\/\/(www.)?freecodecamp.org\/news\/author\/.+/,
     iconComponent: <FreeCodeCampIcon />,
     iconComponentForPreviewBtn: <FreeCodeCampIcon id='preview-btn' />,
     iconPath: '/icons/platforms/icon-freecodecamp.svg',
@@ -161,6 +185,8 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
   },
   GitLab: {
     id: 'gitlab',
+    urlFormat: 'https://gitlab.com/[username]',
+    urlRegex: /https:\/\/(www.)?gitlab.com\/.+/,
     iconComponent: <GitLabIcon />,
     iconComponentForPreviewBtn: <GitHubIcon id='preview-btn' />,
     iconPath: '/icons/platforms/icon-gitlab.svg',
@@ -171,6 +197,8 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
   },
   Hashnode: {
     id: 'hashnode',
+    urlFormat: 'https://[username].hashnode.dev',
+    urlRegex: /https:\/\/.+.hashnode.dev\/?/,
     iconComponent: <HashnodeIcon />,
     iconComponentForPreviewBtn: <HashnodeIcon id='preview-btn' />,
     iconPath: '/icons/platforms/icon-hashnode.svg',
@@ -181,6 +209,8 @@ export const linkSharePlatformsConfigs: { [key in LinkShareSupportedPlatforms]: 
   },
   StackOverflow: {
     id: 'stack-overflow',
+    urlFormat: 'https://stackoverflow.com/users/[userId]/[username]',
+    urlRegex: /https:\/\/(www.)?stackoverflow.com\/users\/\d+\/.+/,
     iconComponent: <StackOverflowIcon />,
     iconComponentForPreviewBtn: <StackOverflowIcon id='preview-btn' />,
     iconPath: '/icons/platforms/icon-stack-overflow.svg',

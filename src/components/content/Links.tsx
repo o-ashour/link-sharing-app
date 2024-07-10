@@ -3,19 +3,20 @@ import Dropdown from '../UI/Dropdown/index';
 import TextInputWithIcon from '../UI/TextInputWithIcon';
 import { icons } from '../../config/index';
 import { useState } from 'react';
+import { LinkShareSupportedPlatforms } from '../../config/index';
 
 const Component: React.FC<{
   linksArr: any[], setLinksArr: React.Dispatch<React.SetStateAction<[] | {
     id: number;
-    platform: string;
+    platform: LinkShareSupportedPlatforms;
+    url: string;
+    status: { isError: boolean, message: string };
   }[]>>, setIsFirstLinkAdded: React.Dispatch<boolean> }> = ({ linksArr, setLinksArr, setIsFirstLinkAdded }) => {
 
   // shouldn't have styling changed for same slot
   const [isExpand, setIsExpand] = useState(false);
   const [targetId, setTargetId] = useState('');
   const [draggedLinkId, setDraggedLinkId] = useState(0)
-
-  const isError = false;
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const btnEL = e.target as HTMLButtonElement;
@@ -73,6 +74,16 @@ const Component: React.FC<{
     setIsExpand(false);
   }
 
+  const handleChange = (e: any) => {
+    const linkIdx = linksArr.findIndex(link => link.id == e.target.id) 
+    setLinksArr(prevVal => {
+      const arr = [...prevVal];
+      arr[linkIdx].url = e.target.value;
+      arr[linkIdx].status = { isError: false, message: '' };
+      return arr;
+    })
+  }
+
   return (
     <div id='links' className='mt-6'>
       <ul className='space-y-6'>
@@ -106,7 +117,7 @@ const Component: React.FC<{
                     <label htmlFor="link" className="text-grey-400 text-sm">
                       Link
                     </label>
-                    <TextInputWithIcon id='link' name='link' type='url' autocomplete='url' isError={isError} icon={icons.link} placeholder='e.g https://www.github.com/al-khawarizmi' />
+                    <TextInputWithIcon id={link.id.toString()} name='link' type='url' autocomplete='url' isError={link.status.isError} icon={icons.link} handleChange={handleChange} placeholder='e.g https://www.github.com/al-khawarizmi' />
                   </div>
                 </li>
                 <div id={link.id} onDragOver={handleDragOver} className='w-full h-12 absolute' onDrop={(e, id=link.id) => handleDrop(e, id)} onDragLeave={handleDragLeave}/>
