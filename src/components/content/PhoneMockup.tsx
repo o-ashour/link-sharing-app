@@ -3,8 +3,8 @@ import PlatformBtnPreview from '../UI/PlatformBtnPreview';
 import { linkSharePlatformsConfigs, LinkShareSupportedPlatforms } from '../../config/index';
 import IllustrationPhoneMockup from '../illustrations/IllustrationPhoneMockup';
 
-const Component: React.FC<{ linksArr: any[] }> = ({ linksArr }) => {
-  const isText = true;
+const Component: React.FC<{ linksArr: any[], profileInfo: { firstName: { value: string, isError: boolean }, lastName: { value: string, isError: boolean }, email: { value: string, isError: boolean }, profilePicUrl: { value: string, isError: boolean } }, savedProfileInfo: { firstName: { value: string, isError: boolean }, lastName: { value: string, isError: boolean }, email: { value: string, isError: boolean }, profilePicUrl: { value: string, isError: boolean } } }> = ({ linksArr, profileInfo, savedProfileInfo }) => {
+  const isText = profileInfo.firstName.value || profileInfo.lastName.value;
 
   return (
     <figure className='hidden lg:flex lg:mt-20 lg:justify-center lg:w-2/5 lg:p-6'>
@@ -15,13 +15,14 @@ const Component: React.FC<{ linksArr: any[] }> = ({ linksArr }) => {
               <div className="relative h-24 w-24 mx-auto">
                 <Avatar />
               </div>
+              
               <div className={`space-y-2 w-full min-h-[3.6rem] mx-auto text-center ${isText && 'bg-white'}`}>
-                <h1 className='text-lg font-semibold'>
-                  Ali el-Shorbagy
-                </h1>
-                <p className='text-[14px] text-grey-300'>
-                  ali_s@example.com
-                </p>
+                  <h1 className='text-lg font-semibold'>
+                    {savedProfileInfo.firstName.value + ' ' + savedProfileInfo.lastName.value}
+                  </h1>
+                  <p className='text-[14px] text-grey-300'>
+                    {savedProfileInfo.email.value}
+                  </p>                              
               </div>
             </div>
             <div id='phone-mockup-content-bottom' className='w-full'>

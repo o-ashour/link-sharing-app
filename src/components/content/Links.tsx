@@ -117,7 +117,7 @@ const Component: React.FC<{
                     <label htmlFor="link" className="text-grey-400 text-sm">
                       Link
                     </label>
-                    <TextInputWithIcon id={link.id.toString()} name='link' type='url' autocomplete='url' isError={link.status.isError} icon={icons.link} handleChange={handleChange} placeholder='e.g https://www.github.com/al-khawarizmi' />
+                    <TextInputWithIcon id={link.id.toString()} value={link.url} name='link' type='url' autocomplete='url' isError={link.status.isError} icon={icons.link} handleChange={handleChange} placeholder='e.g https://www.github.com/al-khawarizmi' />
                   </div>
                 </li>
                 <div id={link.id} onDragOver={handleDragOver} className='w-full h-12 absolute' onDrop={(e, id=link.id) => handleDrop(e, id)} onDragLeave={handleDragLeave}/>

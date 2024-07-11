@@ -1,6 +1,6 @@
 import { HTMLInputTypeAttribute, HTMLInputAutoCompleteAttribute } from 'react';
 
-const Component: React.FC<{ id?: string, name?: string, type?: HTMLInputTypeAttribute, autocomplete?: HTMLInputAutoCompleteAttribute, isError?: boolean, icon?: JSX.Element, placeholder?: string, className?: string }> = ({ id, name, type, autocomplete, icon, isError = false, placeholder, className, ...props }) => {
+const Component: React.FC<{ id?: string, value?: string, name?: string, type?: HTMLInputTypeAttribute, autocomplete?: HTMLInputAutoCompleteAttribute, isError?: boolean, icon?: JSX.Element, placeholder?: string, className?: string, handleChange?: (event: React.ChangeEvent) => void }> = ({ id, value, name, type, autocomplete, icon, isError = false, placeholder, className, handleChange, ...props }) => {
   return (
     <div className={`w-full ${className} relative rounded-md shadow-sm`}>
       {isError &&
@@ -9,7 +9,9 @@ const Component: React.FC<{ id?: string, name?: string, type?: HTMLInputTypeAttr
         </div>
       }
       <input
+        onChange={handleChange}
         type={type}
+        value={value}
         name={name}
         id={id}
         autoComplete={autocomplete}
