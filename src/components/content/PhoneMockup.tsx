@@ -12,8 +12,15 @@ const Component: React.FC<{ linksArr: any[], profileInfo: { firstName: { value: 
         <div id='phone-mockup-outer-wrapper' className='absolute flex items-center justify-center'>
           <div id='phone-mockup-inner-wrapper' className='relative space-y-10'>
             <div id='phone-mockup-content-top' className='w-full space-y-6'>
-              <div className="relative h-24 w-24 mx-auto">
-                <Avatar />
+              <div className="relative flex items-center justify-center h-24 w-24 mx-auto">
+              {savedProfileInfo.profilePicUrl.value ? 
+                <Avatar profilePic={savedProfileInfo.profilePicUrl.value} /> :
+                (savedProfileInfo.firstName.value && savedProfileInfo.lastName.value) ?
+                <span id='initials-placeholder' className='text-4xl text-grey-300 mt-0.5'>
+                  {savedProfileInfo.firstName.value[0] + savedProfileInfo.lastName.value[0]}
+                </span> :
+                null
+              }
               </div>
               
               <div className={`space-y-2 w-full min-h-[3.6rem] mx-auto text-center ${isText && 'bg-white'}`}>

@@ -1,8 +1,23 @@
 import UploadImage from '../UI/UploadImage';
 import TextInput from '../UI/TextInput';
-import { useState } from 'react';
+import { useRef } from 'react';
 
-const Component: React.FC<{ handleProfileInfoChange: (event: React.ChangeEvent) => void, profileInfo: { firstName: { value: string, isError: boolean }, lastName: { value: string, isError: boolean }, email: { value: string, isError: boolean }, profilePicUrl: { value: string, isError: boolean } } }> = ({ handleProfileInfoChange, profileInfo }) => {
+const Component: React.FC<{
+  handleProfileInfoChange: (event: React.ChangeEvent) => void, 
+  profileInfo: 
+    { firstName: { value: string, isError: boolean }, 
+      lastName: { value: string, isError: boolean }, 
+      email: { value: string, isError: boolean }, 
+      profilePicUrl: { value: string, isError: boolean } }, 
+  handleFileUploadChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  isFileUploaded: boolean }> = ({ 
+    handleProfileInfoChange, 
+    profileInfo, 
+    handleFileUploadChange, 
+    isFileUploaded }) => {
+
+  const fileInputRef = useRef(null);
+
   return (
     <div className='space-y-7 md:pb-24'>
       <div className='flex flex-col text-grey-300 p-5 md:flex-row md:items-center'>
@@ -11,11 +26,15 @@ const Component: React.FC<{ handleProfileInfoChange: (event: React.ChangeEvent) 
         </label>
         <div className='flex flex-col md:flex-row md:items-center md:w-7/12'>
           <figure className='mt-4 md:mr-6'>
-            <UploadImage />
+            <UploadImage fileInputRef={fileInputRef} isFileUploaded={isFileUploaded} imgUrl={profileInfo.profilePicUrl.value} />
           </figure>
           <figcaption className='text-sm mt-6 md:mb-2'>
             Image must be below 1024x1024px. Use PNG or JPG format.
           </figcaption>
+        </div>
+        <div className='absolute hidden'>
+          <label htmlFor="file" className="sr-only">Choose File</label>
+          <input ref={fileInputRef} id='file' type='file' onChange={handleFileUploadChange} />
         </div>
       </div>
 

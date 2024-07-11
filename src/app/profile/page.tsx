@@ -17,6 +17,7 @@ export default function Page() {
   const [linksArr, setLinksArr] = useState<{id: number, platform: LinkShareSupportedPlatforms, url: string, status: {isError: boolean, message: string}}[] | []>([]);
   const [profileInfo, setProfileInfo] = useState<{ firstName: { value: string, isError: boolean }, lastName: { value: string, isError: boolean }, email: { value: string, isError: boolean }, profilePicUrl: { value: string, isError: boolean } }>({ firstName: { value: '', isError: false }, lastName: { value: '', isError: false }, email: { value: '', isError: false }, profilePicUrl: { value: '', isError: false } });
   const [savedProfileInfo, setSavedProfileInfo] = useState<{ firstName: { value: string, isError: boolean }, lastName: { value: string, isError: boolean }, email: { value: string, isError: boolean }, profilePicUrl: { value: string, isError: boolean } }>({ firstName: { value: '', isError: false }, lastName: { value: '', isError: false }, email: { value: '', isError: false }, profilePicUrl: { value: '', isError: false } });
+  const [isFileUploaded, setIsFileUploaded] = useState(false);
 
   useEffect(() => {
     if (isSuccessfullySaved) {
@@ -43,7 +44,18 @@ export default function Page() {
         return userInfo;
       })
     }
-  }, [isProfileDetailsOpen])
+  }, [isProfileDetailsOpen]);
+
+  const handleFileUploadChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const blob = e.target.files[0];
+      const url = URL.createObjectURL(blob);
+      setProfileInfo(prevVal => {
+        return { ...prevVal, profilePicUrl: { value: url, isError: false } };
+      });
+      setIsFileUploaded(true);
+    }
+  }
 
   const handleProfileInfoChange = (e: any) => {
     const getChangedProperty = () => {
@@ -177,7 +189,7 @@ export default function Page() {
                   <LinksInitial /> 
                   : <Links linksArr={linksArr} setLinksArr={setLinksArr} setIsFirstLinkAdded={setIsFirstLinkAdded} />}
               </div> :
-              <ProfileDetails handleProfileInfoChange={handleProfileInfoChange} profileInfo={profileInfo} />
+              <ProfileDetails handleProfileInfoChange={handleProfileInfoChange} profileInfo={profileInfo} handleFileUploadChange={handleFileUploadChange} isFileUploaded={isFileUploaded} />
             }
           </article>
           <div className="p-4 md:px-10 md:py-6 md:flex md:justify-end">
