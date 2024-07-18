@@ -34,8 +34,8 @@
 }
 
 #phone-mockup-inner-wrapper {
-    width: calc(100% - 3rem);
-    height: calc(100% - 6.25rem)
+  width: calc(100% - 3rem);
+  height: calc(100% - 6.25rem)
 }
 
 #phone-mockup-buttons {
@@ -44,7 +44,7 @@
 
 @media (min-width: 768px) {
   #nav-preview-btn {
-  padding-left: 27px;
-  padding-right: 27px;
-}
+    padding-left: 27px;
+    padding-right: 27px;
+  }
 }

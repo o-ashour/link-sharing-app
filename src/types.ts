@@ -1,9 +1,9 @@
 import { LinkShareSupportedPlatforms } from "./config";
 
 export interface ProfileInfo {
-  firstName: { value: string, isError: boolean }, 
-  lastName: { value: string, isError: boolean }, 
-  email: { value?: string, isError: boolean }, 
+  firstName: { value: string, isError: boolean },
+  lastName: { value: string, isError: boolean },
+  email: { value?: string, isError: boolean },
   profilePicUrl: { value?: string, isError: boolean },
 };
 

@@ -20,7 +20,7 @@ const Component: React.FC<{ id?: string, children?: any, variant?: string, type?
         >
           {children}
         </button>
-      }    
+      }
     </>
   )
 }

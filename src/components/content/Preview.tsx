@@ -1,6 +1,6 @@
-import { linkSharePlatformsConfigs } from '../../config/index';
-import PlatformBtn from '../UI/PlatformBtn';
-import Avatar from '../Avatar';
+import { linkSharePlatformsConfigs } from '@/config/index';
+import PlatformBtn from '@/components/UI/PlatformBtn';
+import Avatar from '@/components/Avatar';
 
 const Component: React.FC = () => {
   return (

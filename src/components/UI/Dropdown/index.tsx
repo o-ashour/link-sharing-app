@@ -1,16 +1,17 @@
 'use client'
 
-import { 
-  useState, 
-  useRef, 
-  useCallback, 
+import {
+  useState,
+  useRef,
+  useCallback,
   useEffect,
-  Dispatch } from "react"
+  Dispatch
+} from "react"
 import Button from './elements/Button';
 import Menu from './elements/Menu';
 import { State, Action } from "@/userReducer";
 
-const Component: React.FC<{ linkId: number, dispatch: Dispatch<Action>, state: State  }> = ({ linkId, dispatch, state }) => {
+const Component: React.FC<{ linkId: number, dispatch: Dispatch<Action>, state: State }> = ({ linkId, dispatch, state }) => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -21,7 +22,7 @@ const Component: React.FC<{ linkId: number, dispatch: Dispatch<Action>, state: S
       !buttonRef.current?.contains(e.target)
     ) {
       setIsOpen(false);
-    } 
+    }
   }, [isOpen])
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {

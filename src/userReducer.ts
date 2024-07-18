@@ -13,7 +13,7 @@ export type State = {
     firstName: { value: string, isError: boolean },
     lastName: { value: string, isError: boolean },
     email: { value: string, isError: boolean },
-    profilePicUrl: { value: string, isError: boolean }, 
+    profilePicUrl: { value: string, isError: boolean },
   }
 }
 
@@ -78,8 +78,8 @@ export const userReducer = (state: State, action: Action): State => {
           ]
           const filteredArr = arr.filter((link, idx) => (link !== draggedLink) || (idx === dropzoneLinkIdx + 1));
           return { ...state, links: filteredArr };
-        };      
-      }  
+        };
+      }
     }
     case 'edited_url': {
       const foundIdx = state.links.findIndex(link => link.id === action.linkId)
@@ -90,8 +90,8 @@ export const userReducer = (state: State, action: Action): State => {
           return link;
         }
       })
-      return {...state, links: arr};
-    }  
+      return { ...state, links: arr };
+    }
     case 'saved_links': {
       const arr = state.links.map(link => {
         const isUrlValid = linkSharePlatformsConfigs[link.platform].urlRegex.test(link.url);
@@ -104,18 +104,18 @@ export const userReducer = (state: State, action: Action): State => {
           return { ...link, status: { isError: false, message: '' } };
         }
       })
-      return {...state, links: arr};
+      return { ...state, links: arr };
     }
     case 'reset_errors': {
       const nextLinksState = state.links.map(link => {
-        return {...link, status: { isError: false, message: ''}};
+        return { ...link, status: { isError: false, message: '' } };
       });
 
       const nextProfileInfo = { ...state.profileInfo };
-        Object.entries(nextProfileInfo).map(([k, v]) => {
-          nextProfileInfo[k as keyof ProfileInfo] = { value: v.value, isError: false }
-        })
-      return {...state, links: nextLinksState, profileInfo: nextProfileInfo};
+      Object.entries(nextProfileInfo).map(([k, v]) => {
+        nextProfileInfo[k as keyof ProfileInfo] = { value: v.value, isError: false }
+      })
+      return { ...state, links: nextLinksState, profileInfo: nextProfileInfo };
     }
     case 'saved_profile': {
       let userInfo = { ...state.profileInfo };
@@ -127,14 +127,14 @@ export const userReducer = (state: State, action: Action): State => {
           userInfo = { ...userInfo, lastName: { ...userInfo.lastName, isError: true } }
         }
       }
-      return {...state, profileInfo: userInfo};
+      return { ...state, profileInfo: userInfo };
     }
     case 'edited_profile': {
       const nextState = { ...state.profileInfo, [action.fieldName]: { value: action.fieldValue, isError: false } }
-      return {...state, profileInfo: nextState}
+      return { ...state, profileInfo: nextState }
     }
     case 'changed_avatar': {
-      return { ...state, profileInfo: {...state.profileInfo, profilePicUrl: { value: action.imgUrl, isError: false } } };
+      return { ...state, profileInfo: { ...state.profileInfo, profilePicUrl: { value: action.imgUrl, isError: false } } };
     }
     default:
       return state;

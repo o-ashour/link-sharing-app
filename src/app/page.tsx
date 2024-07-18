@@ -1,10 +1,10 @@
 'use client'
 
 import Link from "next/link";
-import { icons } from '../config';
-import TextInputWithIcon from '../components/UI/TextInputWithIcon';
-import Button from '../components/UI/Button';
-import AuthHeader from '../components/layout/AuthHeader';
+import { icons } from '@/config';
+import TextInputWithIcon from '@/components/UI/TextInputWithIcon';
+import Button from '@/components/UI/Button';
+import AuthHeader from '@/components/layout/AuthHeader';
 
 export default function Page() {
   // to be integrated into logic

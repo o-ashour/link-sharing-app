@@ -1,7 +1,7 @@
 import DragAndDropIcon from '../icons/DragAndDropIcon';
-import Dropdown from '../UI/Dropdown/index';
-import TextInputWithIcon from '../UI/TextInputWithIcon';
-import { icons } from '../../config/index';
+import Dropdown from '@/components/UI/Dropdown/index';
+import TextInputWithIcon from '@/components/UI/TextInputWithIcon';
+import { icons } from '@/config/index';
 import { useState } from 'react';
 import { State, Action } from '@/userReducer';
 import { Dispatch } from 'react';
@@ -31,7 +31,7 @@ const Component: React.FC<{ state: State, dispatch: Dispatch<Action> }> = ({ sta
     e.preventDefault();
     const targetIdx = state.links.findIndex(link => link.id === linkId)
     const draggedLinkIdx = state.links.findIndex(link => link.id === draggedLinkId);
-  
+
     if (draggedLinkId !== linkId && ((draggedLinkIdx - 1) !== targetIdx)) {
       setIsExpand(true);
     } else {
@@ -54,7 +54,7 @@ const Component: React.FC<{ state: State, dispatch: Dispatch<Action> }> = ({ sta
   return (
     <div id='links' className='mt-6'>
       <ul className='space-y-6'>
-        <div id='top-dropzone' onDragOver={(e, linkId = 'top-dropzone') => handleDragOver(e, linkId)} className='w-full h-6 absolute' onDrop={(e, linkId='top-dropzone') => handleDrop(e, linkId)} onDragLeave={handleDragLeave} />
+        <div id='top-dropzone' onDragOver={(e, linkId = 'top-dropzone') => handleDragOver(e, linkId)} className='w-full h-6 absolute' onDrop={(e, linkId = 'top-dropzone') => handleDrop(e, linkId)} onDragLeave={handleDragLeave} />
         {
           targetId == 'top-dropzone' && isExpand &&
           <div className='transition ease-in w-full h-12' />
@@ -83,20 +83,20 @@ const Component: React.FC<{ state: State, dispatch: Dispatch<Action> }> = ({ sta
                     <label htmlFor="link" className="text-grey-400 text-sm">
                       Link
                     </label>
-                    <TextInputWithIcon value={link.url} name='link' type='url' autocomplete='url' isError={link.status.isError} icon={icons.link} handleChange={(e, linkId=link.id) => handleUrlChange(e, linkId)} placeholder='e.g https://www.github.com/al-khawarizmi' />
+                    <TextInputWithIcon value={link.url} name='link' type='url' autocomplete='url' isError={link.status.isError} icon={icons.link} handleChange={(e, linkId = link.id) => handleUrlChange(e, linkId)} placeholder='e.g https://www.github.com/al-khawarizmi' />
                   </div>
                 </li>
-                <div onDragOver={(e, linkId = link.id) => handleDragOver(e, linkId)} className='w-full h-12 absolute' onDrop={(e, linkId=link.id) => handleDrop(e, linkId)} onDragLeave={handleDragLeave}/>
+                <div onDragOver={(e, linkId = link.id) => handleDragOver(e, linkId)} className='w-full h-12 absolute' onDrop={(e, linkId = link.id) => handleDrop(e, linkId)} onDragLeave={handleDragLeave} />
                 {
                   targetId == link.id && isExpand &&
-                  <div className='w-full h-12' /> 
+                  <div className='w-full h-12' />
                 }
               </div>
             )
           })
         }
       </ul>
-    </div>   
+    </div>
   )
 }
 

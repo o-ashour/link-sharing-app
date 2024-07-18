@@ -1,6 +1,6 @@
-import ChevronDownIcon from '../../../icons/ChevronDownIcon';
-import ChevronUpIcon from '../../../icons/ChevronUpIcon';
-import { linkSharePlatformsConfigs } from '../../../../config/index';
+import ChevronDownIcon from '@/components/icons/ChevronDownIcon';
+import ChevronUpIcon from '@/components/icons/ChevronUpIcon';
+import { linkSharePlatformsConfigs } from '@/config/index';
 import { State } from '@/userReducer';
 
 const Component: React.FC<{ isOpen: boolean, buttonRef: any, linkId: number, state: State, setIsOpen: React.Dispatch<boolean> }> = ({ isOpen, buttonRef, linkId, state, setIsOpen }) => {

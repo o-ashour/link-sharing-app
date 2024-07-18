@@ -1,6 +1,6 @@
 import LogoSmall from '../logo/LogoSmall';
 import Tab from '../UI/Tab';
-import { icons } from '../../config/index';
+import { icons } from '@/config/index';
 import Button from '../UI/Button';
 import PreviewIconHeader from '../icons/PreviewIconHeader';
 import Link from 'next/link';

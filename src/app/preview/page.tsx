@@ -1,9 +1,9 @@
 'use client'
 
-import PreviewHeader from '../../components/layout/PreviewHeader';
-import Preview from '../../components/content/Preview';
-import Toast from '../../components/UI/Toast';
-import { icons } from '../../config/index';
+import PreviewHeader from '@/components/layout/PreviewHeader';
+import Preview from '@/components/content/Preview';
+import Toast from '@/components/UI/Toast';
+import { icons } from '@/config/index';
 
 export default function Page() {
   const toastLinkCopiedMsg = 'The link has been copied to your clipboard!'

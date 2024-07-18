@@ -1,28 +1,26 @@
 'use client'
 
-import Button from '../../components/UI/Button';
-import { useEffect, useState, FormEvent } from 'react';
-import LinksInitial from '../../components/content/LinksInitial';
-import Links from '../../components/content/Links';
-import Header from '../../components/layout/Header';
-import ProfileDetails from '../../components/content/ProfileDetails';
-import Toast from '../../components/UI/Toast';
-import { icons } from '../../config/index';
-import PhoneMockup from '../../components/content/PhoneMockup';
-import { useRef, useReducer } from 'react';
+import Button from '@/components/UI/Button';
+import { useEffect, useState, useRef, useReducer, FormEvent } from 'react';
+import LinksInitial from '@/components/content/LinksInitial';
+import Links from '@/components/content/Links';
+import Header from '@/components/layout/Header';
+import ProfileDetails from '@/components/content/ProfileDetails';
+import Toast from '@/components/UI/Toast';
+import { icons } from '@/config/index';
+import PhoneMockup from '@/components/content/PhoneMockup';
 import { userReducer, Action } from '@/userReducer';
 import { ProfileInfo } from '@/types';
 
 export default function Page() {
   const [isProfileDetailsOpen, setIsProfileDetailsOpen] = useState(false);
-  const [isSuccessfullySaved, setIsSuccessfullySaved] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
   const initialProfileInfo = {
     firstName: { value: '', isError: false },
     lastName: { value: '', isError: false },
     email: { value: '', isError: false },
-    profilePicUrl: { value: '', isError: false }, 
+    profilePicUrl: { value: '', isError: false },
   }
 
   const [savedProfileInfo, setSavedProfileInfo] = useState<ProfileInfo>(initialProfileInfo);
@@ -42,7 +40,7 @@ export default function Page() {
   }, [showToast]);
 
   useEffect(() => {
-      dispatch({ type: 'reset_errors'}) 
+    dispatch({ type: 'reset_errors' })
   }, [isProfileDetailsOpen]);
 
   const handleFileUploadChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,17 +53,11 @@ export default function Page() {
     }
   }
 
-  // const handleProfileInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   dispatch({type: 'edited_profile', fieldValue: e.target.value, fieldName: e.target.name});
-  // }
-
-  // handleAddLink
-  const handleAddLinkBtnClick = () => {
+  const handleAddLink = () => {
     dispatch({ type: 'added_link' });
   }
 
-  // handleSave
-  const handleSaveBtnClick = () => {
+  const handleSave = () => {
     if (submitBtn.current) {
       submitBtn.current.click();
     }
@@ -79,7 +71,6 @@ export default function Page() {
       const nextState = userReducer(state, action);
       const isError = nextState.links.some(link => link.status.isError === true);
       if (!isError) {
-        setIsSuccessfullySaved(true);
         setShowToast(true);
       } else {
         // should handle error and notify user
@@ -90,7 +81,6 @@ export default function Page() {
       const nextState = userReducer(state, action);
       const isError = Object.values(nextState.profileInfo).some(value => value.isError === true)
       if (!isError) {
-        setIsSuccessfullySaved(true);
         setSavedProfileInfo(state.profileInfo);
         setShowToast(true);
       } else {
@@ -114,7 +104,7 @@ export default function Page() {
 
   return (
     <section className='max-w-screen-xl mx-auto'>
-      <Header setIsProfileDetailsOpen={setIsProfileDetailsOpen} isProfileDetailsOpen={isProfileDetailsOpen}  />
+      <Header setIsProfileDetailsOpen={setIsProfileDetailsOpen} isProfileDetailsOpen={isProfileDetailsOpen} />
       <main className='lg:flex relative overflow-hidden'>
         <PhoneMockup state={state} savedProfileInfo={savedProfileInfo} />
         <div className="p-4 md:p-6 md:pt-0 lg:w-3/5">
@@ -130,7 +120,7 @@ export default function Page() {
             <form action="" onSubmit={handleSubmit}>
               {!isProfileDetailsOpen ?
                 <div id='links'>
-                  <Button type='button' variant='secondary' handleClick={handleAddLinkBtnClick}>
+                  <Button type='button' variant='secondary' handleClick={handleAddLink}>
                     + Add new link
                   </Button>
                   {state.links.length < 1 ?
@@ -141,10 +131,10 @@ export default function Page() {
               }
               <button aria-label='hidden-submit-button-for-design' type='submit' className='hidden' ref={submitBtn}>Submit</button>
             </form>
-            
+
           </article>
           <div className="p-4 md:px-10 md:py-6 md:flex md:justify-end">
-            <Button className='md:w-24' disabled={(state.links.length < 1) && !isProfileDetailsOpen} handleClick={handleSaveBtnClick}>Save</Button>
+            <Button className='md:w-24' disabled={(state.links.length < 1) && !isProfileDetailsOpen} handleClick={handleSave}>Save</Button>
           </div>
         </div>
         <div className={`fixed -bottom-20 w-full transition-transform duration-200 ease-in ${showToast && '-translate-y-40 lg:-translate-y-24'}`}>

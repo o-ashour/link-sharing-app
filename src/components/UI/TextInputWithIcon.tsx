@@ -1,6 +1,6 @@
 import { HTMLInputTypeAttribute, HTMLInputAutoCompleteAttribute } from 'react';
 
-const Component: React.FC<{ id?: string, value?: string, name?: string, type?: HTMLInputTypeAttribute, autocomplete?: HTMLInputAutoCompleteAttribute, isError?: boolean, icon?: JSX.Element, handleChange?: (event: React.ChangeEvent<HTMLInputElement>) => void, placeholder?: string }> = ({ id, value, name, type, autocomplete, icon, isError = false, handleChange, placeholder, ...props  }) => {
+const Component: React.FC<{ id?: string, value?: string, name?: string, type?: HTMLInputTypeAttribute, autocomplete?: HTMLInputAutoCompleteAttribute, isError?: boolean, icon?: JSX.Element, handleChange?: (event: React.ChangeEvent<HTMLInputElement>) => void, placeholder?: string }> = ({ id, value, name, type, autocomplete, icon, isError = false, handleChange, placeholder, ...props }) => {
   return (
     <div className="w-full relative rounded-md shadow-sm">
       <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
