@@ -4,20 +4,16 @@ import {
   useState, 
   useRef, 
   useCallback, 
-  useEffect } from "react"
+  useEffect,
+  Dispatch } from "react"
 import Button from './elements/Button';
 import Menu from './elements/Menu';
-import { LinkShareSupportedPlatforms } from "../../../config";
+import { State, Action } from "@/userReducer";
 
-const Component: React.FC<{ linkId: number, setLinksArr: React.Dispatch<any>}> = ({ linkId, setLinksArr }) => {
+const Component: React.FC<{ linkId: number, dispatch: Dispatch<Action>, state: State  }> = ({ linkId, dispatch, state }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedPlatform, setSelectedPlatform] = useState(LinkShareSupportedPlatforms['GitHub']);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-
-  const handleClick = () => {
-    setIsOpen(!isOpen);
-  }
 
   // check type for event
   const handleMouseDown = useCallback((e: any) => {
@@ -46,8 +42,8 @@ const Component: React.FC<{ linkId: number, setLinksArr: React.Dispatch<any>}> =
 
   return (
     <div className="relative inline-block text-left w-full">
-      <Button isOpen={isOpen} handleClick={handleClick} buttonRef={buttonRef} selectedPlatform={selectedPlatform} />
-      {isOpen && <Menu menuRef={menuRef} selectedPlatform={selectedPlatform} setSelectedPlatform={setSelectedPlatform} setIsOpen={setIsOpen} linkId={linkId} setLinksArr={setLinksArr} />}
+      <Button isOpen={isOpen} buttonRef={buttonRef} linkId={linkId} state={state} setIsOpen={setIsOpen} />
+      {isOpen && <Menu menuRef={menuRef} setIsOpen={setIsOpen} linkId={linkId} dispatch={dispatch} state={state} />}
     </div>
   )
 }

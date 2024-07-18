@@ -1,5 +1,4 @@
 import UploadImageIcon from '../../components/icons/UploadImageIcon';
-import { MutableRefObject } from 'react';
 
 const Component: React.FC<{
   imgUrl?: string, 
@@ -15,7 +14,7 @@ const Component: React.FC<{
   }
 
   return(
-    <button className='relative w-48 h-48 font-semibold rounded-lg px-9 py-14 text-white bg-purple-100 bg-cover bg-center' style={{ backgroundImage: `${isFileUploaded ? `url(${imgUrl})` : 'none'}` }} onClick={handleClick}>
+    <button className='relative w-48 h-48 font-semibold rounded-lg px-9 py-14 text-white bg-purple-100 bg-cover bg-center' style={{ backgroundImage: `${isFileUploaded ? `url(${imgUrl})` : 'none'}` }} type='button' onClick={handleClick}>
       {isFileUploaded &&
         <div id='overlay' className="bg-black opacity-50 absolute inset-0 rounded-lg" />
       }

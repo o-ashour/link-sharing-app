@@ -1,34 +1,19 @@
 import { linkSharePlatformsConfigs } from '../../../../config';
 import { LinkShareSupportedPlatforms } from '../../../../config';
-
-// Consider using the native <dialog> HTML element 
-// then you can have access to the onClose prop, 
-// use it to perform any cleanup that you might want 
-// (e.g close the modal, trigger state stc...)
-// https://stackoverflow.com/questions/63074577/close-modal-popup-using-esc-key-on-keyboard
-
-// see @components/UI/Modal/
-// https://medium.com/@dimterion/modals-with-html-dialog-element-in-javascript-and-react-fb23c885d62e
+import { State, Action } from '@/userReducer';
+import { Dispatch } from 'react';
 
 const Component: React.FC<{
-  menuRef: any, selectedPlatform: LinkShareSupportedPlatforms, setSelectedPlatform: React.Dispatch<LinkShareSupportedPlatforms>, setIsOpen: React.Dispatch<boolean>, linkId: number, setLinksArr: React.Dispatch<React.SetStateAction<[] | {
-    id: number;
-    platform: LinkShareSupportedPlatforms;
-  }[]>> }> = ({ menuRef, selectedPlatform, setSelectedPlatform, setIsOpen, linkId, setLinksArr }) => {
+  menuRef: any, setIsOpen: React.Dispatch<boolean>, linkId: number, dispatch: Dispatch<Action>, state: State  }> = ({ menuRef, setIsOpen, linkId, dispatch, state }) => {
 
-  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
+  const handlePlatformSelect = (e: React.MouseEvent<HTMLElement>) => {
     const selectedPlatformId = e.currentTarget.id as LinkShareSupportedPlatforms;
-    setSelectedPlatform(selectedPlatformId);
-
-    setLinksArr(prevVal => {
-      const arr = [...prevVal];
-      const foundIdx = arr.findIndex(link => linkId === link.id);
-      arr[foundIdx].platform = selectedPlatformId;
-      return arr;
-    })
-
+    dispatch({ type: 'selected_platform', linkId, selectedPlatformId })
     setIsOpen(false);
   }
+
+  const foundLink = state.links.find(link => link.id == linkId);
+  const selectedPlatform = foundLink?.platform;
 
   return (
     <div id="dropdown-menu" className='mt-2 w-full border border-grey-200 rounded-lg shadow-[0px_0px_32px_0px_rgba(0,0,0,0.15)] max-h-52 overflow-scroll' ref={menuRef} aria-labelledby='dropdown-button' role='menu'>
@@ -36,7 +21,7 @@ const Component: React.FC<{
         { Object.entries(linkSharePlatformsConfigs).map(([k, v]) => {
           return (
             <li key={k} id='platforms-dropdown-option'>
-              <button id={k} onClick={handleClick} className={`w-full flex gap-x-3 items-center py-3 cursor-pointer active:text-purple-300 ${k === selectedPlatform && 'text-purple-300'}`}>
+              <button id={k} onClick={handlePlatformSelect} className={`w-full flex gap-x-3 items-center py-3 cursor-pointer active:text-purple-300 ${k === selectedPlatform && 'text-purple-300'}`}>
                 {k === selectedPlatform ? (
                   <figure id='selected-platform-icon'>
                     {v.iconComponent}

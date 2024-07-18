@@ -1,154 +1,101 @@
 'use client'
 
 import Button from '../../components/UI/Button';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, FormEvent } from 'react';
 import LinksInitial from '../../components/content/LinksInitial';
 import Links from '../../components/content/Links';
 import Header from '../../components/layout/Header';
 import ProfileDetails from '../../components/content/ProfileDetails';
 import Toast from '../../components/UI/Toast';
-import { icons, linkSharePlatformsConfigs, LinkShareSupportedPlatforms } from '../../config/index';
+import { icons } from '../../config/index';
 import PhoneMockup from '../../components/content/PhoneMockup';
+import { useRef, useReducer } from 'react';
+import { userReducer, Action } from '@/userReducer';
+import { ProfileInfo } from '@/types';
 
 export default function Page() {
-  const [isFirstLinkAdded, setIsFirstLinkAdded] = useState(false);
   const [isProfileDetailsOpen, setIsProfileDetailsOpen] = useState(false);
   const [isSuccessfullySaved, setIsSuccessfullySaved] = useState(false);
-  const [linksArr, setLinksArr] = useState<{id: number, platform: LinkShareSupportedPlatforms, url: string, status: {isError: boolean, message: string}}[] | []>([]);
-  const [profileInfo, setProfileInfo] = useState<{ firstName: { value: string, isError: boolean }, lastName: { value: string, isError: boolean }, email: { value: string, isError: boolean }, profilePicUrl: { value: string, isError: boolean } }>({ firstName: { value: '', isError: false }, lastName: { value: '', isError: false }, email: { value: '', isError: false }, profilePicUrl: { value: '', isError: false } });
-  const [savedProfileInfo, setSavedProfileInfo] = useState<{ firstName: { value: string, isError: boolean }, lastName: { value: string, isError: boolean }, email: { value: string, isError: boolean }, profilePicUrl: { value: string, isError: boolean } }>({ firstName: { value: '', isError: false }, lastName: { value: '', isError: false }, email: { value: '', isError: false }, profilePicUrl: { value: '', isError: false } });
+  const [showToast, setShowToast] = useState(false);
+
+  const initialProfileInfo = {
+    firstName: { value: '', isError: false },
+    lastName: { value: '', isError: false },
+    email: { value: '', isError: false },
+    profilePicUrl: { value: '', isError: false }, 
+  }
+
+  const [savedProfileInfo, setSavedProfileInfo] = useState<ProfileInfo>(initialProfileInfo);
   const [isFileUploaded, setIsFileUploaded] = useState(false);
+  const submitBtn = useRef<HTMLButtonElement>(null);
+
+  const initialState = {
+    links: [],
+    profileInfo: initialProfileInfo,
+  }
+  const [state, dispatch] = useReducer(userReducer, initialState);
 
   useEffect(() => {
-    if (isSuccessfullySaved) {
-      setTimeout(() => setIsSuccessfullySaved(false), 2000)
+    if (showToast) {
+      setTimeout(() => setShowToast(false), 2000)
     }
-  }, [isSuccessfullySaved]);
+  }, [showToast]);
 
   useEffect(() => {
-    if (!isProfileDetailsOpen) {
-      setLinksArr(prevVal => {
-        const arr = [...prevVal];
-        arr.forEach(link => {
-          link.status.isError = false;
-        });
-        return arr;
-      })
-    } else {
-
-      setProfileInfo(prevVal => {
-        const userInfo: any = { ...prevVal };
-        Object.keys(userInfo).forEach(field => {
-          userInfo[field].isError = false;
-        })
-        return userInfo;
-      })
-    }
+      dispatch({ type: 'reset_errors'}) 
   }, [isProfileDetailsOpen]);
 
   const handleFileUploadChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const blob = e.target.files[0];
+      // what if we don't get a valid url?
       const url = URL.createObjectURL(blob);
-      setProfileInfo(prevVal => {
-        return { ...prevVal, profilePicUrl: { value: url, isError: false } };
-      });
+      dispatch({ type: 'changed_avatar', imgUrl: url });
       setIsFileUploaded(true);
     }
   }
 
-  const handleProfileInfoChange = (e: any) => {
-    const getChangedProperty = () => {
-      if (e.target.id === 'first-name') {
-        return { firstName: { value: e.target.value, isError: false } }
-      } else if (e.target.id === 'last-name') {
-        return { lastName: { value: e.target.value, isError: false } }
-      } else if (e.target.id === 'email') {
-        return { email: { value: e.target.value, isError: false } }
-      } else {
-        return;
-      }
-    }
-    const changedProperty = getChangedProperty();
+  // const handleProfileInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   dispatch({type: 'edited_profile', fieldValue: e.target.value, fieldName: e.target.name});
+  // }
 
-    setProfileInfo(prevVal => {
-      const userInfo = {
-        ...prevVal,
-        ...changedProperty,
-      }
-      return userInfo;
-    })
-  }
-
+  // handleAddLink
   const handleAddLinkBtnClick = () => {
-    if (!isFirstLinkAdded) {
-      setIsFirstLinkAdded(true);
-    }
-    const now = Date.now();
-
-    setLinksArr(prevVal => {
-      const link = {
-        id: now,
-        platform: LinkShareSupportedPlatforms['GitHub'],
-        url: '',
-        status: { isError: false, message: '' },
-      }
-      const arr: any = [...prevVal];
-      arr.push(link);
-      return arr;
-    })
+    dispatch({ type: 'added_link' });
   }
 
+  // handleSave
   const handleSaveBtnClick = () => {
+    if (submitBtn.current) {
+      submitBtn.current.click();
+    }
+  }
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (!isProfileDetailsOpen) {
-      setLinksArr(prevVal => {
-        const arr = [...prevVal];
-        arr.forEach(link => {
-          const isUrlValid = linkSharePlatformsConfigs[link.platform].urlRegex.test(link.url);
-
-          if (!link.url || !isUrlValid) {
-            link.status.isError = true;
-            if (!link.url) {
-              link.status.message = 'Empty Url';
-            } else if (!isUrlValid) {
-              link.status.message = 'Invalid Url'
-            }
-          } else {
-            link.status.isError = false;
-            link.status.message = '';
-          }
-        })
-        const isError = arr.some(link => link.status.isError === true);
-        if (!isError) {
-          setIsSuccessfullySaved(true);
-        }
-        return arr;
-      })
+      const action: Action = { type: 'saved_links' };
+      dispatch(action);
+      const nextState = userReducer(state, action);
+      const isError = nextState.links.some(link => link.status.isError === true);
+      if (!isError) {
+        setIsSuccessfullySaved(true);
+        setShowToast(true);
+      } else {
+        // should handle error and notify user
+      }
     } else {
-      setProfileInfo(prevVal => {
-        const userInfo = {
-          ...prevVal,
-        }
-        const emailRegex = /.+@.+\..+/;
-        const isEmailValid = emailRegex.test(userInfo.email.value) || !userInfo.email.value;
-
-        if (!userInfo.firstName.value || !userInfo.lastName.value || !isEmailValid) {
-          if (!userInfo.firstName.value) {
-            userInfo.firstName.isError = true;
-          }
-          if (!userInfo.lastName.value) {
-            userInfo.lastName.isError = true;
-          }
-          if (!isEmailValid) {
-            console.log(isEmailValid)
-            userInfo.email.isError = true;
-          }
-        } else {
-          setIsSuccessfullySaved(true);
-          setSavedProfileInfo(userInfo);
-        }
-        return userInfo;
-      })
+      const action: Action = { type: 'saved_profile' };
+      dispatch(action);
+      const nextState = userReducer(state, action);
+      const isError = Object.values(nextState.profileInfo).some(value => value.isError === true)
+      if (!isError) {
+        setIsSuccessfullySaved(true);
+        setSavedProfileInfo(state.profileInfo);
+        setShowToast(true);
+      } else {
+        // should handle error and notify user
+      }
     }
   }
 
@@ -169,7 +116,7 @@ export default function Page() {
     <section className='max-w-screen-xl mx-auto'>
       <Header setIsProfileDetailsOpen={setIsProfileDetailsOpen} isProfileDetailsOpen={isProfileDetailsOpen}  />
       <main className='lg:flex relative overflow-hidden'>
-        <PhoneMockup linksArr={linksArr} profileInfo={profileInfo} savedProfileInfo={savedProfileInfo} />
+        <PhoneMockup state={state} savedProfileInfo={savedProfileInfo} />
         <div className="p-4 md:p-6 md:pt-0 lg:w-3/5">
           <article className="p-6 space-y-10 border-b border-grey-200 md:p-10 md:pb-14">
             <div className="space-y-2 md:space-y-4">
@@ -180,23 +127,27 @@ export default function Page() {
                 {!isProfileDetailsOpen ? content.addLinks.subtitle : content.profileDetails.subtitle}
               </p>
             </div>
-            {!isProfileDetailsOpen ?
-              <div id='links'>
-                <Button variant='secondary' handleClick={handleAddLinkBtnClick}>
-                  + Add new link
-                </Button>
-                {!isFirstLinkAdded ? 
-                  <LinksInitial /> 
-                  : <Links linksArr={linksArr} setLinksArr={setLinksArr} setIsFirstLinkAdded={setIsFirstLinkAdded} />}
-              </div> :
-              <ProfileDetails handleProfileInfoChange={handleProfileInfoChange} profileInfo={profileInfo} handleFileUploadChange={handleFileUploadChange} isFileUploaded={isFileUploaded} />
-            }
+            <form action="" onSubmit={handleSubmit}>
+              {!isProfileDetailsOpen ?
+                <div id='links'>
+                  <Button type='button' variant='secondary' handleClick={handleAddLinkBtnClick}>
+                    + Add new link
+                  </Button>
+                  {state.links.length < 1 ?
+                    <LinksInitial />
+                    : <Links state={state} dispatch={dispatch} />}
+                </div> :
+                <ProfileDetails state={state} dispatch={dispatch} handleFileUploadChange={handleFileUploadChange} isFileUploaded={isFileUploaded} />
+              }
+              <button aria-label='hidden-submit-button-for-design' type='submit' className='hidden' ref={submitBtn}>Submit</button>
+            </form>
+            
           </article>
           <div className="p-4 md:px-10 md:py-6 md:flex md:justify-end">
-            <Button className='md:w-24' disabled={!isFirstLinkAdded && !isProfileDetailsOpen} handleClick={handleSaveBtnClick}>Save</Button>
+            <Button className='md:w-24' disabled={(state.links.length < 1) && !isProfileDetailsOpen} handleClick={handleSaveBtnClick}>Save</Button>
           </div>
         </div>
-        <div className={`fixed -bottom-20 w-full transition-transform duration-200 ease-in ${isSuccessfullySaved && '-translate-y-40 lg:-translate-y-24'}`}>
+        <div className={`fixed -bottom-20 w-full transition-transform duration-200 ease-in ${showToast && '-translate-y-40 lg:-translate-y-24'}`}>
           <div className='w-fit mx-auto'>
             <Toast iconComponent={icons.changesSaved} message={toastMsg} />
           </div>

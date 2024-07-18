@@ -1,3 +1,4 @@
+// maybe import all here with '*' ?
 import CodepenIcon from '../components/icons/platforms/CodepenIcon';
 import GitHubIcon from '../components/icons/platforms/GitHubIcon';
 import FrontendMentorIcon from '../components/icons/platforms/FrontendMentorIcon';

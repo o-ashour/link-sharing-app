@@ -1,22 +1,22 @@
 import UploadImage from '../UI/UploadImage';
 import TextInput from '../UI/TextInput';
-import { useRef } from 'react';
+import { useRef, Dispatch } from 'react';
+import { State, Action } from '@/userReducer';
 
 const Component: React.FC<{
-  handleProfileInfoChange: (event: React.ChangeEvent) => void, 
-  profileInfo: 
-    { firstName: { value: string, isError: boolean }, 
-      lastName: { value: string, isError: boolean }, 
-      email: { value: string, isError: boolean }, 
-      profilePicUrl: { value: string, isError: boolean } }, 
+  // handleProfileInfoChange: (event: React.ChangeEvent) => void, 
   handleFileUploadChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
-  isFileUploaded: boolean }> = ({ 
-    handleProfileInfoChange, 
-    profileInfo, 
+  isFileUploaded: boolean, state: State, dispatch: Dispatch<Action> }> = ({ 
     handleFileUploadChange, 
-    isFileUploaded }) => {
+    isFileUploaded,
+    state,
+    dispatch }) => {
 
   const fileInputRef = useRef(null);
+
+  const handleProfileInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({ type: 'edited_profile', fieldValue: e.target.value, fieldName: e.target.name });
+  }
 
   return (
     <div className='space-y-7 md:pb-24'>
@@ -26,7 +26,7 @@ const Component: React.FC<{
         </label>
         <div className='flex flex-col md:flex-row md:items-center md:w-7/12'>
           <figure className='mt-4 md:mr-6'>
-            <UploadImage fileInputRef={fileInputRef} isFileUploaded={isFileUploaded} imgUrl={profileInfo.profilePicUrl.value} />
+            <UploadImage fileInputRef={fileInputRef} isFileUploaded={isFileUploaded} imgUrl={state.profileInfo.profilePicUrl.value} />
           </figure>
           <figcaption className='text-sm mt-6 md:mb-2'>
             Image must be below 1024x1024px. Use PNG or JPG format.
@@ -43,17 +43,17 @@ const Component: React.FC<{
           <label htmlFor='first-name' className='text-sm text-grey-400 md:text-grey-300 md:text-base md:w-5/12'>
             First name*
           </label>
-          <TextInput className='md:w-7/12' type='text' value={profileInfo.firstName.value} name='first-name' id='first-name' autocomplete='given-name' placeholder='Shady' handleChange={handleProfileInfoChange} isError={profileInfo.firstName.isError}/>
+          <TextInput className='md:w-7/12' type='text' value={state.profileInfo.firstName.value} name='firstName' id='first-name' autocomplete='given-name' placeholder='Shady' handleChange={handleProfileInfoChange} isError={state.profileInfo.firstName.isError}/>
         </div>
 
         <div className='space-y-1 md:flex md:flex-row md:items-center'>
           <label htmlFor='last-name' className='text-sm text-grey-400 md:text-grey-300 md:w-5/12 md:text-base'>Last name*</label>
-          <TextInput className='md:w-7/12' type='text' value={profileInfo.lastName.value}  name='last-name' id='last-name' autocomplete='family-name' placeholder='Ahmed' handleChange={handleProfileInfoChange} isError={profileInfo.lastName.isError} />
+          <TextInput className='md:w-7/12' type='text' value={state.profileInfo.lastName.value}  name='lastName' id='last-name' autocomplete='family-name' placeholder='Ahmed' handleChange={handleProfileInfoChange} isError={state.profileInfo.lastName.isError} />
         </div>
 
         <div className='space-y-1 md:flex md:flex-row md:items-center'>
           <label htmlFor='email' className='text-sm text-grey-400 md:text-base md:text-grey-300 md:w-5/12'>Email</label>
-          <TextInput className='md:w-7/12' type='email' value={profileInfo.email.value} name='email' id='email' autocomplete='email' placeholder='e.g. shady@example.com' handleChange={handleProfileInfoChange} isError={profileInfo.email.isError} />
+          <TextInput className='md:w-7/12' type='email' value={state.profileInfo.email.value} name='email' id='email' autocomplete='email' placeholder='e.g. shady@example.com' handleChange={handleProfileInfoChange} isError={state.profileInfo.email.isError} />
         </div>
       </div>
     </div>

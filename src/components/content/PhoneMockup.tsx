@@ -2,9 +2,14 @@ import Avatar from '../Avatar';
 import PlatformBtnPreview from '../UI/PlatformBtnPreview';
 import { linkSharePlatformsConfigs, LinkShareSupportedPlatforms } from '../../config/index';
 import IllustrationPhoneMockup from '../illustrations/IllustrationPhoneMockup';
+import { ProfileInfo } from '@/types';
+import { State } from '@/userReducer';
 
-const Component: React.FC<{ linksArr: any[], profileInfo: { firstName: { value: string, isError: boolean }, lastName: { value: string, isError: boolean }, email: { value: string, isError: boolean }, profilePicUrl: { value: string, isError: boolean } }, savedProfileInfo: { firstName: { value: string, isError: boolean }, lastName: { value: string, isError: boolean }, email: { value: string, isError: boolean }, profilePicUrl: { value: string, isError: boolean } } }> = ({ linksArr, profileInfo, savedProfileInfo }) => {
-  const isText = profileInfo.firstName.value || profileInfo.lastName.value;
+const Component: React.FC<{ 
+  savedProfileInfo: ProfileInfo, state: State }> 
+    = ({ state, savedProfileInfo }) => {
+
+  const isText = savedProfileInfo.firstName.value || savedProfileInfo.lastName.value;
 
   return (
     <figure className='hidden lg:flex lg:mt-20 lg:justify-center lg:w-2/5 lg:p-6'>
@@ -34,7 +39,7 @@ const Component: React.FC<{ linksArr: any[], profileInfo: { firstName: { value: 
             </div>
             <div id='phone-mockup-content-bottom' className='w-full'>
               <ul className='space-y-[22px]'>
-                { linksArr.map((link, idx) => {
+                { state.links.map((link, idx) => {
                   const { platform, id }  = link;
                   if (idx < 5) {
                     return (
