@@ -26,7 +26,7 @@ type SavedLinks = { type: 'saved_links' };
 type ResetErrors = { type: 'reset_errors' };
 type SavedProfile = { type: 'saved_profile' };
 type EditedProfile = { type: 'edited_profile', fieldName: string, fieldValue: string };
-type ChangedAvatar = { type: 'changed_avatar', imgUrl: string };
+type ChangedAvatar = { type: 'changed_avatar', imgUrl: string, file: File };
 
 export type Action = AddedLink | RemovedLink | SelectedPlatform | MovedLink | EditedUrl | SavedLinks | ResetErrors | SavedProfile | EditedProfile | ChangedAvatar;
 

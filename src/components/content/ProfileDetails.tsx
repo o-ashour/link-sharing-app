@@ -34,7 +34,7 @@ const Component: React.FC<{
           </div>
           <div className='absolute hidden'>
             <label htmlFor="file" className="sr-only">Choose File</label>
-            <input ref={fileInputRef} id='file' type='file' onChange={handleFileUploadChange} />
+            <input ref={fileInputRef} name='file' id='file' type='file' onChange={handleFileUploadChange} />
           </div>
         </div>
 

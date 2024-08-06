@@ -33,6 +33,8 @@ export default function Page() {
   }
   const [state, dispatch] = useReducer(userReducer, initialState);
 
+  console.log(state);
+
   useEffect(() => {
     if (showToast) {
       setTimeout(() => setShowToast(false), 2000)
@@ -48,7 +50,7 @@ export default function Page() {
       const blob = e.target.files[0];
       // what if we don't get a valid url?
       const url = URL.createObjectURL(blob);
-      dispatch({ type: 'changed_avatar', imgUrl: url });
+      dispatch({ type: 'changed_avatar', imgUrl: url, file: blob });
       setIsFileUploaded(true);
     }
   }
@@ -63,7 +65,7 @@ export default function Page() {
     }
   }
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isProfileDetailsOpen) {
       const action: Action = { type: 'saved_links' };
@@ -82,6 +84,20 @@ export default function Page() {
       const isError = Object.values(nextState.profileInfo).some(value => value.isError === true)
       if (!isError) {
         setSavedProfileInfo(state.profileInfo);
+
+        const formData = new FormData(e.target as HTMLFormElement);
+
+        try {
+          const response = await fetch('/api/user-info', {
+            method: 'POST',
+            // not sure what appropriate headers are here, if any
+            body: formData,
+          });
+          const data = await response.json();
+          console.log(data)
+        } catch (err) {
+          console.error(err)
+        }
         setShowToast(true);
       } else {
         // should handle error and notify user
@@ -117,7 +133,7 @@ export default function Page() {
                 {!isProfileDetailsOpen ? content.addLinks.subtitle : content.profileDetails.subtitle}
               </p>
             </div>
-            <form action="" onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
               {!isProfileDetailsOpen ?
                 <div id='links'>
                   <Button type='button' variant='secondary' handleClick={handleAddLink}>
