@@ -1,5 +1,5 @@
 import Image from "next/image";
-import profilePicDefault from '/Users/Protomar/Desktop/link-sharing-app/public/prototyping-imgs/1024px-Malcolm-x.jpg';
+import profilePicDefault from '/Users/Protomar/Desktop/link-sharing-app/public/logo/logo-devlinks-small.svg';
 
 const Component: React.FC<{ profilePic?: string }> = ({ profilePic = profilePicDefault }) => {
   return (
