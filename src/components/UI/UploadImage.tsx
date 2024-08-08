@@ -3,11 +3,12 @@ import UploadImageIcon from '@/components/icons/UploadImageIcon';
 const Component: React.FC<{
   imgUrl?: string,
   fileInputRef: any,
-  isFileUploaded: boolean
+  isFileUploading: boolean,
 }> = ({
-  imgUrl = '/prototyping-imgs/1024px-Malcolm-x.jpg',
+  imgUrl,
   fileInputRef,
-  isFileUploaded }) => {
+  isFileUploading,
+ }) => {
     const handleClick = () => {
       if (fileInputRef.current) {
         fileInputRef.current.click();
@@ -15,20 +16,24 @@ const Component: React.FC<{
     }
 
     return (
-      <button className='relative w-48 h-48 font-semibold rounded-lg px-9 py-14 text-white bg-purple-100 bg-cover bg-center' style={{ backgroundImage: `${isFileUploaded ? `url(${imgUrl})` : 'none'}` }} type='button' onClick={handleClick}>
-        {isFileUploaded &&
+      <button className='relative w-48 h-48 font-semibold rounded-lg px-9 py-14 text-white bg-purple-100 bg-cover bg-center' style={{ backgroundImage: `${imgUrl && !isFileUploading ? `url(${imgUrl})` : 'none' }` }} type='button' onClick={handleClick}>
+        {imgUrl && !isFileUploading &&
           <div id='overlay' className="bg-black opacity-50 absolute inset-0 rounded-lg" />
         }
         <div className='flex flex-col justify-center items-center gap-y-2.5'>
-          <UploadImageIcon isFileUploaded={isFileUploaded} />
+          <UploadImageIcon isFileUploading={isFileUploading} imgUrl={imgUrl} />
           {/* heading below but not sure which level */}
-          {isFileUploaded ?
-            <span className='z-50 text-white'>
-              Change Image
-            </span> :
+          {isFileUploading ?
             <span className='text-purple-300'>
-              + Upload Image
-            </span>
+              Loading...
+            </span> :
+            imgUrl ?
+              <span className='z-50 text-white'>
+                Change Image
+              </span> :
+              <span className='text-purple-300'>
+                + Upload Image
+              </span>  
           }
         </div>
       </button>

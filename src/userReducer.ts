@@ -10,10 +10,10 @@ export type State = {
     status: { isError: boolean, message: string },
   }[] | [],
   profileInfo: {
-    firstName: { value: string, isError: boolean },
-    lastName: { value: string, isError: boolean },
-    email: { value: string, isError: boolean },
-    profilePicUrl: { value: string, isError: boolean },
+    firstName: { value: string, errors: string[] },
+    lastName: { value: string, errors: string[] },
+    email: { value: string, errors: string[] },
+    profilePicUrl: { value: string, errors: string[] },
   }
 }
 
@@ -26,9 +26,10 @@ type SavedLinks = { type: 'saved_links' };
 type ResetErrors = { type: 'reset_errors' };
 type SavedProfile = { type: 'saved_profile' };
 type EditedProfile = { type: 'edited_profile', fieldName: string, fieldValue: string };
-type ChangedAvatar = { type: 'changed_avatar', imgUrl: string, file: File };
+type ChangedAvatar = { type: 'changed_avatar', blob: Blob };
+type UploadedAvatar = { type: 'uploaded_avatar', data: { value: string, errors: string[] } };
 
-export type Action = AddedLink | RemovedLink | SelectedPlatform | MovedLink | EditedUrl | SavedLinks | ResetErrors | SavedProfile | EditedProfile | ChangedAvatar;
+export type Action = AddedLink | RemovedLink | SelectedPlatform | MovedLink | EditedUrl | SavedLinks | ResetErrors | SavedProfile | EditedProfile | ChangedAvatar | UploadedAvatar;
 
 export const userReducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -113,7 +114,7 @@ export const userReducer = (state: State, action: Action): State => {
 
       const nextProfileInfo = { ...state.profileInfo };
       Object.entries(nextProfileInfo).map(([k, v]) => {
-        nextProfileInfo[k as keyof ProfileInfo] = { value: v.value, isError: false }
+        nextProfileInfo[k as keyof ProfileInfo] = { value: v.value, errors: [''] }
       })
       return { ...state, links: nextLinksState, profileInfo: nextProfileInfo };
     }
@@ -121,20 +122,36 @@ export const userReducer = (state: State, action: Action): State => {
       let userInfo = { ...state.profileInfo };
       if (!userInfo.firstName.value || !userInfo.lastName.value) {
         if (!userInfo.firstName.value) {
-          userInfo = { ...userInfo, firstName: { ...userInfo.firstName, isError: true } }
+          userInfo = { ...userInfo, firstName: { ...userInfo.firstName, errors: ['First name field is required'] } }
         }
         if (!userInfo.lastName.value) {
-          userInfo = { ...userInfo, lastName: { ...userInfo.lastName, isError: true } }
+          userInfo = { ...userInfo, lastName: { ...userInfo.lastName, errors: ['Last name field is required'] } }
         }
       }
       return { ...state, profileInfo: userInfo };
     }
     case 'edited_profile': {
-      const nextState = { ...state.profileInfo, [action.fieldName]: { value: action.fieldValue, isError: false } }
+      const nextState = { ...state.profileInfo, [action.fieldName]: { value: action.fieldValue, errors: [''] } }
       return { ...state, profileInfo: nextState }
     }
     case 'changed_avatar': {
-      return { ...state, profileInfo: { ...state.profileInfo, profilePicUrl: { value: action.imgUrl, isError: false } } };
+      const errors = [];
+      const MAX_FILE_SIZE = 3000 * 1000; // max nMegabytes = max nBytes * nKilobytes
+      const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
+      const isFileTypeValid = ACCEPTED_IMAGE_TYPES.some(fileType => fileType === action.blob.type);
+      if (action.blob.size > 0 && !isFileTypeValid) {
+        errors.push('Invalid file type.')
+      }
+      if (action.blob.size >= MAX_FILE_SIZE) {
+        errors.push('Max file size exceeded.')
+      }
+      if (errors[0]) {
+        return { ...state, profileInfo: { ...state.profileInfo, profilePicUrl: { ...state.profileInfo.profilePicUrl, errors } } };
+      }
+      return { ...state, profileInfo: { ...state.profileInfo, profilePicUrl: { ...state.profileInfo.profilePicUrl, errors: [''] } } };
+    }
+    case 'uploaded_avatar': {
+      return { ...state, profileInfo: { ...state.profileInfo, profilePicUrl: action.data }}
     }
     default:
       return state;

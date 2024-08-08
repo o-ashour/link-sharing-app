@@ -17,14 +17,14 @@ export default function Page() {
   const [showToast, setShowToast] = useState(false);
 
   const initialProfileInfo = {
-    firstName: { value: '', isError: false },
-    lastName: { value: '', isError: false },
-    email: { value: '', isError: false },
-    profilePicUrl: { value: '', isError: false },
+    firstName: { value: '', errors: [''] },
+    lastName: { value: '', errors: [''] },
+    email: { value: '', errors: [''] },
+    profilePicUrl: { value: '', errors: [''] },
   }
 
   const [savedProfileInfo, setSavedProfileInfo] = useState<ProfileInfo>(initialProfileInfo);
-  const [isFileUploaded, setIsFileUploaded] = useState(false);
+  const [isFileUploading, setIsFileUploading] = useState(false);
   const submitBtn = useRef<HTMLButtonElement>(null);
 
   const initialState = {
@@ -33,6 +33,7 @@ export default function Page() {
   }
   const [state, dispatch] = useReducer(userReducer, initialState);
 
+  // temp log
   console.log(state);
 
   useEffect(() => {
@@ -45,14 +46,30 @@ export default function Page() {
     dispatch({ type: 'reset_errors' })
   }, [isProfileDetailsOpen]);
 
-  const handleFileUploadChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUploadChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsFileUploading(true);
     if (e.target.files) {
       const blob = e.target.files[0];
-      // what if we don't get a valid url?
-      const url = URL.createObjectURL(blob);
-      dispatch({ type: 'changed_avatar', imgUrl: url, file: blob });
-      setIsFileUploaded(true);
+      const action: Action = { type: 'changed_avatar', blob };
+      dispatch(action);
+      const nextState = userReducer(state, action);
+      const isError = nextState.profileInfo.profilePicUrl.errors[0];
+
+      if (!isError) {
+        try {
+          const response = await fetch('/api/upload-image', {
+            method: 'POST',
+            // not sure what appropriate headers are here, if any
+            body: blob
+          });
+          const data = await response.json();
+          dispatch({ type: 'uploaded_avatar', data })
+        } catch (err) {
+          console.error(err)
+        }
+      }    
     }
+    setIsFileUploading(false);
   }
 
   const handleAddLink = () => {
@@ -81,23 +98,24 @@ export default function Page() {
       const action: Action = { type: 'saved_profile' };
       dispatch(action);
       const nextState = userReducer(state, action);
-      const isError = Object.values(nextState.profileInfo).some(value => value.isError === true)
+      const isError = Object.values(nextState.profileInfo).some(value => value.errors[0])
       if (!isError) {
+        // this should update from data from backend/db
         setSavedProfileInfo(state.profileInfo);
 
         const formData = new FormData(e.target as HTMLFormElement);
 
-        try {
-          const response = await fetch('/api/user-info', {
-            method: 'POST',
-            // not sure what appropriate headers are here, if any
-            body: formData,
-          });
-          const data = await response.json();
-          console.log(data)
-        } catch (err) {
-          console.error(err)
-        }
+        // try {
+        //   const response = await fetch('/api/user-info', {
+        //     method: 'POST',
+        //     // not sure what appropriate headers are here, if any
+        //     body: formData,
+        //   });
+        //   const data = await response.json();
+        //   console.log(data) // temp log
+        // } catch (err) {
+        //   console.error(err)
+        // }
         setShowToast(true);
       } else {
         // should handle error and notify user
@@ -143,7 +161,7 @@ export default function Page() {
                     <LinksInitial />
                     : <Links state={state} dispatch={dispatch} />}
                 </div> :
-                <ProfileDetails state={state} dispatch={dispatch} handleFileUploadChange={handleFileUploadChange} isFileUploaded={isFileUploaded} />
+                <ProfileDetails state={state} dispatch={dispatch} handleFileUploadChange={handleFileUploadChange} isFileUploading={isFileUploading} />
               }
               <button aria-label='hidden-submit-button-for-design' type='submit' className='hidden' ref={submitBtn}>Submit</button>
             </form>
