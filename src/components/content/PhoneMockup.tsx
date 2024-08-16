@@ -5,12 +5,10 @@ import IllustrationPhoneMockup from '@/components/illustrations/IllustrationPhon
 import { ProfileInfo } from '@/types';
 import { State } from '@/userReducer';
 
-const Component: React.FC<{
-  savedProfileInfo: ProfileInfo, state: State
-}>
+const Component: React.FC<{ savedProfileInfo: ProfileInfo, state: State }>
   = ({ state, savedProfileInfo }) => {
-
     const isText = savedProfileInfo.firstName.value || savedProfileInfo.lastName.value;
+    const isEmail = savedProfileInfo.email.value;
 
     return (
       <figure className='hidden lg:flex lg:mt-20 lg:justify-center lg:w-2/5 lg:p-6'>
@@ -29,8 +27,8 @@ const Component: React.FC<{
                   }
                 </div>
 
-                <div className={`space-y-2 w-full min-h-[3.6rem] mx-auto text-center ${isText && 'bg-white'}`}>
-                  <h1 className='text-lg font-semibold'>
+                <div className={`space-y-2 w-full min-h-[3.6rem] mx-auto text-center ${(isText || isEmail) && 'bg-white'}`}>
+                  <h1 className='text-lg font-semibold min-h-5'>
                     {savedProfileInfo.firstName.value + ' ' + savedProfileInfo.lastName.value}
                   </h1>
                   <p className='text-[14px] text-grey-300'>

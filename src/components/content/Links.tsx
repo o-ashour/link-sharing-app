@@ -6,15 +6,10 @@ import { useState } from 'react';
 import { State, Action } from '@/userReducer';
 import { Dispatch } from 'react';
 
-const Component: React.FC<{ state: State, dispatch: Dispatch<Action> }> = ({ state, dispatch }) => {
-
+const Component: React.FC<{ state: State, dispatch: Dispatch<Action>, handleRemoveLink: (id: number) => void }> = ({ state, dispatch, handleRemoveLink }) => {
   const [isExpand, setIsExpand] = useState(false);
   const [targetId, setTargetId] = useState<string | number>();
   const [draggedLinkId, setDraggedLinkId] = useState(0)
-
-  const handleRemoveLink = (linkId: number) => {
-    dispatch({ type: 'removed_link', linkId });
-  }
 
   const handleDragStart = (e: React.DragEvent, linkId: number) => {
     e.dataTransfer.setData("linkId", linkId.toString());

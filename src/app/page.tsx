@@ -5,10 +5,34 @@ import { icons } from '@/config';
 import TextInputWithIcon from '@/components/UI/TextInputWithIcon';
 import Button from '@/components/UI/Button';
 import AuthHeader from '@/components/layout/AuthHeader';
+import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { storeNewUser } from "@/components/actions";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   // to be integrated into logic
   const isError = false;
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const router = useRouter();
+
+  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    /// testing here, assume below to have passed all necessary validation ftm ///
+    const uuid = uuidv4();
+    // store user info 
+    try {
+      const res = await storeNewUser(email, uuid);
+      console.log(res)
+      window.sessionStorage.setItem('email', email);
+      window.sessionStorage.setItem('id', uuid);
+      router.push('/profile');
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <section className='px-8 py-8'>
@@ -25,13 +49,14 @@ export default function Page() {
           </div>
 
           <div className="mt-10">
-            <form className="space-y-6" action="#" method="POST">
+            <form className="space-y-6" action='/profile' method="POST" onSubmit={handleSignUp}>
               <div>
                 <label htmlFor="email" className="text-grey-400 text-sm">
                   Email address
                 </label>
                 <div className="mt-1">
-                  <TextInputWithIcon id='email' name='email' type='email' autocomplete='email' isError={isError} placeholder='e.g. 2pac@email.com' icon={icons.email} />
+                  {/* need to validate */}
+                  <TextInputWithIcon id='email' name='email' type='email' autocomplete='email' isError={isError} placeholder='e.g. 2pac@email.com' icon={icons.email} required handleChange={e => setEmail(e.target.value)}/>
                 </div>
               </div>
 
@@ -40,7 +65,8 @@ export default function Page() {
                   Password
                 </label>
                 <div className="mt-1">
-                  <TextInputWithIcon id='password' name='password' type='password' autocomplete='current-password' isError={isError} icon={icons.password} placeholder='At least 8 characters' />
+                  {/* need to validate */}
+                  <TextInputWithIcon id='password' name='password' type='password' autocomplete='current-password' isError={isError} icon={icons.password} placeholder='At least 8 characters' min={8} required handleChange={e => setPassword(e.target.value)} />
                 </div>
               </div>
 
@@ -49,7 +75,11 @@ export default function Page() {
                   Confirm Password
                 </label>
                 <div className="mt-1">
-                  <TextInputWithIcon id='confirm-password' name='confirm-password' type='password' autocomplete='current-password' isError={isError} icon={icons.password} placeholder='At least 8 characters' />
+                  {/* need to validate */}
+                  <TextInputWithIcon id='confirm-password' name='confirm-password' type='password' autocomplete='current-password' isError={isError} icon={icons.password} placeholder='At least 8 characters' min={8} required handleChange={e => {
+                    if (password === e.target.value)
+                     setPassword(e.target.value);
+                   }} />
                 </div>
               </div>
               <p className="text-grey-300 text-sm">

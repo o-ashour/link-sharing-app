@@ -31,7 +31,7 @@ export default function Page() {
                   Email address
                 </label>
                 <div className="mt-1">
-                  <TextInputWithIcon id='email' name='email' type='email' autocomplete='email' isError={isError} placeholder='e.g. 2pac@email.com' icon={icons.email} />
+                  <TextInputWithIcon id='email' name='email' type='email' autocomplete='email' isError={isError} placeholder='e.g. 2pac@email.com' icon={icons.email} required />
                 </div>
               </div>
 
@@ -40,7 +40,7 @@ export default function Page() {
                   Password
                 </label>
                 <div className="mt-1">
-                  <TextInputWithIcon id='password' name='password' type='password' autocomplete='current-password' isError={isError} icon={icons.password} placeholder='Enter your password' />
+                  <TextInputWithIcon id='password' name='password' type='password' autocomplete='current-password' isError={isError} icon={icons.password} placeholder='Enter your password' required />
                 </div>
               </div>
 

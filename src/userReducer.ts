@@ -1,6 +1,9 @@
+// TODO:
+// 1. Move types to /types.ts ?
+
 import { LinkShareSupportedPlatforms } from "./config";
 import { linkSharePlatformsConfigs } from "./config";
-import { ProfileInfo } from "./types";
+import { ProfileInfo, Data } from "./types";
 
 export type State = {
   links: {
@@ -28,8 +31,9 @@ type SavedProfile = { type: 'saved_profile' };
 type EditedProfile = { type: 'edited_profile', fieldName: string, fieldValue: string };
 type ChangedAvatar = { type: 'changed_avatar', blob: Blob };
 type UploadedAvatar = { type: 'uploaded_avatar', data: { value: string, errors: string[] } };
+type LoadedDashboard = { type: 'loaded_dashboard', data: Data };
 
-export type Action = AddedLink | RemovedLink | SelectedPlatform | MovedLink | EditedUrl | SavedLinks | ResetErrors | SavedProfile | EditedProfile | ChangedAvatar | UploadedAvatar;
+export type Action = AddedLink | RemovedLink | SelectedPlatform | MovedLink | EditedUrl | SavedLinks | ResetErrors | SavedProfile | EditedProfile | ChangedAvatar | UploadedAvatar | LoadedDashboard;
 
 export const userReducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -152,6 +156,18 @@ export const userReducer = (state: State, action: Action): State => {
     }
     case 'uploaded_avatar': {
       return { ...state, profileInfo: { ...state.profileInfo, profilePicUrl: action.data }}
+    }
+    case 'loaded_dashboard': {
+      const nextState = {
+        links: action.data.links,
+        profileInfo: {
+          firstName: { ...state.profileInfo.firstName, value: Boolean(action.data.profileInfo.firstName.value) ? action.data.profileInfo.firstName.value : '' },
+          lastName: { ...state.profileInfo.lastName, value: Boolean(action.data.profileInfo.lastName.value) ? action.data.profileInfo.lastName.value : '' },
+          email: { ...state.profileInfo.email, value: Boolean(action.data.profileInfo.email.value) ? action.data.profileInfo.email.value : '' },
+          profilePicUrl: { ...state.profileInfo.profilePicUrl, value: Boolean(action.data.profileInfo.profilePicUrl.value) ? action.data.profileInfo.profilePicUrl.value : '' },
+        }
+      }
+      return nextState;
     }
     default:
       return state;

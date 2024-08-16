@@ -1,7 +1,16 @@
 'use client'
 
+// TODO:
+// 1. Loading states (i.e. skeleton loaders)
+// 2. Error toast
+// 3. Show server-thrown errors, validation errors in UI
+// 4. Look at useTransition for wrapping server actions for error handling
+// 5. Case: Upload pic - successfully previewed/uploaded 
+//          - change pic - cancel - typeerror
+// 6. Case: Can still open file uploader during loading state, shouldn't be allowed
+
 import Button from '@/components/UI/Button';
-import { useEffect, useState, useRef, useReducer, FormEvent } from 'react';
+import { useEffect, useState, useRef, useReducer, FormEvent, useActionState } from 'react';
 import LinksInitial from '@/components/content/LinksInitial';
 import Links from '@/components/content/Links';
 import Header from '@/components/layout/Header';
@@ -11,10 +20,12 @@ import { icons } from '@/config/index';
 import PhoneMockup from '@/components/content/PhoneMockup';
 import { userReducer, Action } from '@/userReducer';
 import { ProfileInfo } from '@/types';
+import { clearLinksInStore, getUserData, saveLinks, saveProfileInfo} from '@/components/actions';
 
 export default function Page() {
   const [isProfileDetailsOpen, setIsProfileDetailsOpen] = useState(false);
   const [showToast, setShowToast] = useState(false);
+
 
   const initialProfileInfo = {
     firstName: { value: '', errors: [''] },
@@ -46,6 +57,30 @@ export default function Page() {
     dispatch({ type: 'reset_errors' })
   }, [isProfileDetailsOpen]);
 
+  useEffect(() => {
+    const userId = window.sessionStorage.getItem('id'); // temp auth flow
+    const loadInitialUserProfileData = async () => {
+      try {
+        const data = await getUserData(userId);
+        dispatch({ type: 'loaded_dashboard', data })
+          const nextProfileInfo = {
+            firstName: { value: data.profileInfo.firstName.value, errors: [''] },
+            lastName: { value: data.profileInfo.lastName.value, errors: [''] },
+            email: { value: data.profileInfo.email.value, errors: [''] },
+            profilePicUrl: { value: data.profileInfo.profilePicUrl.value, errors: [''] },
+          }
+          setSavedProfileInfo(nextProfileInfo);
+      } catch (error) {
+        console.error(error);
+        // show error toast
+      }
+    }
+    // TODO: show loading state
+    if (userId) {
+      loadInitialUserProfileData();
+    }
+  }, []);
+
   const handleFileUploadChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsFileUploading(true);
     if (e.target.files) {
@@ -60,6 +95,9 @@ export default function Page() {
           const response = await fetch('/api/upload-image', {
             method: 'POST',
             // not sure what appropriate headers are here, if any
+            headers: {
+              "Content-Type": blob.type,
+            },
             body: blob
           });
           const data = await response.json();
@@ -69,11 +107,23 @@ export default function Page() {
         }
       }    
     }
+    // should tell user about successful upload
     setIsFileUploading(false);
   }
 
   const handleAddLink = () => {
     dispatch({ type: 'added_link' });
+  }
+
+  const handleRemoveLink = async (linkId: number) => {
+    const userId = window.sessionStorage.getItem('id'); // temp auth flow
+    const action: Action = { type: 'removed_link', linkId };
+    dispatch(action);
+    const nextState = userReducer(state, action);
+    if (nextState.links.length < 1) {
+      await clearLinksInStore(userId);
+      setShowToast(true);
+    }
   }
 
   const handleSave = () => {
@@ -84,12 +134,15 @@ export default function Page() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const userId = window.sessionStorage.getItem('id'); // temp auth flow
     if (!isProfileDetailsOpen) {
       const action: Action = { type: 'saved_links' };
       dispatch(action);
       const nextState = userReducer(state, action);
       const isError = nextState.links.some(link => link.status.isError === true);
       if (!isError) {
+        const res = await saveLinks(state.links, userId);
+        console.log(res);
         setShowToast(true);
       } else {
         // should handle error and notify user
@@ -100,25 +153,21 @@ export default function Page() {
       const nextState = userReducer(state, action);
       const isError = Object.values(nextState.profileInfo).some(value => value.errors[0])
       if (!isError) {
-        // this should update from data from backend/db
-        setSavedProfileInfo(state.profileInfo);
-
-        const formData = new FormData(e.target as HTMLFormElement);
-
-        // try {
-        //   const response = await fetch('/api/user-info', {
-        //     method: 'POST',
-        //     // not sure what appropriate headers are here, if any
-        //     body: formData,
-        //   });
-        //   const data = await response.json();
-        //   console.log(data) // temp log
-        // } catch (err) {
-        //   console.error(err)
-        // }
-        setShowToast(true);
+        try {
+          const res = await saveProfileInfo(state.profileInfo, userId);
+          console.log(res.data);
+          if (!res.errors && res.data) {
+            setSavedProfileInfo(res.data);
+            setShowToast(true); // show success toast after successful save
+          } else if (res.errors) {
+            // display validation errors
+          }
+        } catch (error) {
+          console.error(error);
+        }
       } else {
         // should handle error and notify user
+        // errors from client-side validation
       }
     }
   }
@@ -159,7 +208,7 @@ export default function Page() {
                   </Button>
                   {state.links.length < 1 ?
                     <LinksInitial />
-                    : <Links state={state} dispatch={dispatch} />}
+                    : <Links state={state} dispatch={dispatch} handleRemoveLink={handleRemoveLink} />}
                 </div> :
                 <ProfileDetails state={state} dispatch={dispatch} handleFileUploadChange={handleFileUploadChange} isFileUploading={isFileUploading} />
               }

@@ -13,3 +13,33 @@ export interface Link {
   url: string,
   status: { isError: boolean, message: string },
 };
+
+export type Data = {
+  links: {
+    id: any;
+    platform: any;
+    url: any;
+    status: {
+      isError: boolean;
+      message: string;
+    };
+  }[];
+  profileInfo: {
+    firstName: {
+      value: any;
+      errors: string[];
+    };
+    lastName: {
+      value: any;
+      errors: string[];
+    };
+    email: {
+      value: any;
+      errors: string[];
+    };
+    profilePicUrl: {
+      value: any;
+      errors: string[];
+    };
+  }
+}

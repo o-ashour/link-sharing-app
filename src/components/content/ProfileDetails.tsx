@@ -14,7 +14,6 @@ const Component: React.FC<{
   state,
   dispatch,
  }) => {
-
     const fileInputRef = useRef(null);
 
     const handleProfileInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,10 +23,10 @@ const Component: React.FC<{
     return (
       <div className='space-y-7 md:pb-24'>
         <div className='flex flex-col text-grey-300 p-5 md:flex-row md:items-center'>
-          <label htmlFor='Profile picture' className='md:w-5/12'>
+          <label htmlFor='file' className='md:w-5/12'>
             Profile picture
           </label>
-          <div className='flex flex-col md:flex-row md:items-center md:w-7/12'>
+          <div id='profile-picture' className='flex flex-col md:flex-row md:items-center md:w-7/12'>
             <figure className='mt-4 md:mr-6'>
               <UploadImage 
                 fileInputRef={fileInputRef} 
@@ -39,7 +38,7 @@ const Component: React.FC<{
               Image size must be below 3MB. Use PNG or JPG format.
               {state.profileInfo.profilePicUrl.errors[0] &&
                 <div className='text-red text-sm mt-2'>
-                  <span>Please cheack again:</span>
+                  <span>Please check again:</span>
                   <ul>
                     {state.profileInfo.profilePicUrl.errors.map((errorMsg, idx) => {
                       return <li key={idx}>{errorMsg}</li>
