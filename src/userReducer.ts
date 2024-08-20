@@ -12,12 +12,13 @@ export type State = {
     url: string,
     status: { isError: boolean, message: string },
   }[] | [],
-  profileInfo: {
-    firstName: { value: string, errors: string[] },
-    lastName: { value: string, errors: string[] },
-    email: { value: string, errors: string[] },
-    profilePicUrl: { value: string, errors: string[] },
-  }
+  // profileInfo: {
+  //   firstName: { value: string, errors: string[] },
+  //   lastName: { value: string, errors: string[] },
+  //   email: { value: string, errors: string[] },
+  //   profilePicUrl: { value: string, errors: string[] },
+  // }
+  profileInfo: ProfileInfo,
 }
 
 type AddedLink = { type: 'added_link' };
@@ -32,8 +33,9 @@ type EditedProfile = { type: 'edited_profile', fieldName: string, fieldValue: st
 type ChangedAvatar = { type: 'changed_avatar', blob: Blob };
 type UploadedAvatar = { type: 'uploaded_avatar', data: { value: string, errors: string[] } };
 type LoadedDashboard = { type: 'loaded_dashboard', data: Data };
+type FailedServerValidation = { type: 'failed_server_validation', nextProfileInfo: ProfileInfo };
 
-export type Action = AddedLink | RemovedLink | SelectedPlatform | MovedLink | EditedUrl | SavedLinks | ResetErrors | SavedProfile | EditedProfile | ChangedAvatar | UploadedAvatar | LoadedDashboard;
+export type Action = AddedLink | RemovedLink | SelectedPlatform | MovedLink | EditedUrl | SavedLinks | ResetErrors | SavedProfile | EditedProfile | ChangedAvatar | UploadedAvatar | LoadedDashboard | FailedServerValidation;
 
 export const userReducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -168,6 +170,9 @@ export const userReducer = (state: State, action: Action): State => {
         }
       }
       return nextState;
+    }
+    case 'failed_server_validation': {
+      return { ...state, profileInfo: action.nextProfileInfo };
     }
     default:
       return state;

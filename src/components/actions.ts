@@ -3,6 +3,7 @@
 import { Link, ProfileInfo } from "@/types";
 import { sql } from "@vercel/postgres";
 import { z } from 'zod';
+import { LinkShareSupportedPlatforms } from "@/config";
 
 const getUserProfileInfo = async (userId: string | null) => {
   try {
@@ -60,16 +61,28 @@ export const getUserData = async (userId: string | null) => {
 export const saveLinks = async (links: Link[], userId: string | null) => {
   const schema = z.array(z.object({
     id: z.number(),
-    platform: z.string(),
+    platform: z.nativeEnum(LinkShareSupportedPlatforms),
     url: z.string().url(),
   }))
 
   const parse = schema.safeParse(links);
+
   if (!parse.success) {
-    return {
-      errors: parse.error?.flatten().fieldErrors,
-    }
+    // let errorMessage = '';
+    const errors: string[] = [];
+    // parse.error.issues.forEach((issue) => {
+    //   if (issue.path[1] === 'url' && typeof(issue.path[0]) === 'number') {
+    //     errorMessage = errorMessage + "Link #" + (issue.path[0] + 1) + ": " + issue.message + ' (check ' + issue.path[1] + '). ';
+    //   }
+    // })
+    parse.error.issues.forEach((issue) => {
+      if (issue.path[1] === 'url' && typeof(issue.path[0]) === 'number') {
+        errors.push("Link #" + (issue.path[0] + 1) + ": " + issue.message + ' (check ' + issue.path[1] + '). ')
+      }
+    })
+    return { errors };
   }
+
   const data = parse.data;
 
   // create or update links 
@@ -165,11 +178,30 @@ export const saveProfileInfo = async (profileInfo: ProfileInfo, userId: string |
     email,
     profilePicUrl,
   })
+  // const parse = schema.safeParse({
+  //   userId,
+  //   firstName: 'jkfdsg',
+  //   lastName: 439578,
+  //   email: '98745jhksndf',
+  //   profilePicUrl: 'jkdskjn',
+  // })
 
   if (!parse.success) {
-    return {
-      errors: parse.error?.flatten().fieldErrors,
-    }
+    const errors = ['Failed to save changes'];
+    const nextProfileInfo = {...profileInfo};
+    parse.error.issues.forEach((issue) => {
+      if (issue.path[0] === 'firstName') {
+        errors.push(`First name: ${issue.message}`);
+        nextProfileInfo.firstName.errors = [issue.message];
+      } else if (issue.path[0] === 'lastName') {
+        errors.push(`Last name: ${issue.message}`);
+        nextProfileInfo.lastName.errors = [issue.message];
+      } else if (issue.path[0] === 'email') {
+        errors.push(`Email: ${issue.message}`);
+        nextProfileInfo.email.errors = [issue.message];
+      }
+    })
+    return { errors, nextProfileInfo }
   }
 
   const data = parse.data;

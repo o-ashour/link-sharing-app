@@ -2,8 +2,8 @@
 
 // TODO:
 // 1. Loading states (i.e. skeleton loaders)
-// 2. Error toast
-// 3. Show server-thrown errors, validation errors in UI
+// 2. Error toast (fix styling) (x)
+// 3. Show server-thrown errors, validation errors in UI (x)
 // 4. Look at useTransition for wrapping server actions for error handling
 // 5. Case: Upload pic - successfully previewed/uploaded 
 //          - change pic - cancel - typeerror
@@ -21,11 +21,19 @@ import PhoneMockup from '@/components/content/PhoneMockup';
 import { userReducer, Action } from '@/userReducer';
 import { ProfileInfo } from '@/types';
 import { clearLinksInStore, getUserData, saveLinks, saveProfileInfo} from '@/components/actions';
+import { toast, ToastContainer } from 'react-toastify';
+// import "react-toastify/dist/ReactToastify.css";
 
 export default function Page() {
   const [isProfileDetailsOpen, setIsProfileDetailsOpen] = useState(false);
-  const [showToast, setShowToast] = useState(false);
 
+  const enum ToastTypes {
+    error,
+    success,
+    initial,
+  }
+
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
 
   const initialProfileInfo = {
     firstName: { value: '', errors: [''] },
@@ -47,11 +55,16 @@ export default function Page() {
   // temp log
   console.log(state);
 
+  const enum ToastMessages {
+    success = 'Your changes have been successfully saved!',
+    error = 'Something went wrong.',
+  }
+
   useEffect(() => {
-    if (showToast) {
-      setTimeout(() => setShowToast(false), 2000)
+    if (showSuccessToast) {
+      setTimeout(() => setShowSuccessToast(false), 2000)
     }
-  }, [showToast]);
+  }, [showSuccessToast]);
 
   useEffect(() => {
     dispatch({ type: 'reset_errors' })
@@ -71,15 +84,22 @@ export default function Page() {
           }
           setSavedProfileInfo(nextProfileInfo);
       } catch (error) {
-        console.error(error);
-        // show error toast
+        setShowSuccessToast(true);
       }
     }
     // TODO: show loading state
     if (userId) {
       loadInitialUserProfileData();
     }
-  }, []);
+  }, [ToastMessages.error, ToastTypes.error]);
+
+  const showErrorToast = (messages: string[]) => {
+    messages.forEach(message => {
+      toast.error(message, {
+        hideProgressBar: true,
+      });
+    })
+  }
 
   const handleFileUploadChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsFileUploading(true);
@@ -94,7 +114,6 @@ export default function Page() {
         try {
           const response = await fetch('/api/upload-image', {
             method: 'POST',
-            // not sure what appropriate headers are here, if any
             headers: {
               "Content-Type": blob.type,
             },
@@ -103,7 +122,7 @@ export default function Page() {
           const data = await response.json();
           dispatch({ type: 'uploaded_avatar', data })
         } catch (err) {
-          console.error(err)
+          setShowSuccessToast(true);
         }
       }    
     }
@@ -121,8 +140,12 @@ export default function Page() {
     dispatch(action);
     const nextState = userReducer(state, action);
     if (nextState.links.length < 1) {
-      await clearLinksInStore(userId);
-      setShowToast(true);
+      try {
+        await clearLinksInStore(userId);
+        setShowSuccessToast(true);
+      } catch (error) {
+        showErrorToast([ToastMessages.error]);
+      }
     }
   }
 
@@ -141,11 +164,16 @@ export default function Page() {
       const nextState = userReducer(state, action);
       const isError = nextState.links.some(link => link.status.isError === true);
       if (!isError) {
-        const res = await saveLinks(state.links, userId);
-        console.log(res);
-        setShowToast(true);
-      } else {
-        // should handle error and notify user
+        try {
+          const res = await saveLinks(state.links, userId);
+          if (res?.errors) {
+            showErrorToast(res.errors);
+          } else {
+            setShowSuccessToast(true);
+          }
+        } catch (error) {
+          showErrorToast([ToastMessages.error]);
+        }
       }
     } else {
       const action: Action = { type: 'saved_profile' };
@@ -154,20 +182,20 @@ export default function Page() {
       const isError = Object.values(nextState.profileInfo).some(value => value.errors[0])
       if (!isError) {
         try {
-          const res = await saveProfileInfo(state.profileInfo, userId);
-          console.log(res.data);
-          if (!res.errors && res.data) {
+          const promise = saveProfileInfo(state.profileInfo, userId);
+          toast.promise(promise, { pending: 'Saving' });
+          const res = await promise;
+          if (res.errors) {
+            // console.log(res.errors)
+            dispatch({ type: 'failed_server_validation', nextProfileInfo: res.nextProfileInfo });
+            showErrorToast(res.errors);
+          } else if (res.data) {
             setSavedProfileInfo(res.data);
-            setShowToast(true); // show success toast after successful save
-          } else if (res.errors) {
-            // display validation errors
+            setShowSuccessToast(true);
           }
         } catch (error) {
-          console.error(error);
+          showErrorToast([ToastMessages.error]);
         }
-      } else {
-        // should handle error and notify user
-        // errors from client-side validation
       }
     }
   }
@@ -182,8 +210,6 @@ export default function Page() {
       subtitle: 'Add your details to create a personal touch to your profile.'
     }
   }
-
-  const toastMsg = 'Your changes have been successfully saved!';
 
   return (
     <section className='max-w-screen-xl mx-auto'>
@@ -220,9 +246,10 @@ export default function Page() {
             <Button className='md:w-24' disabled={(state.links.length < 1) && !isProfileDetailsOpen} handleClick={handleSave}>Save</Button>
           </div>
         </div>
-        <div className={`fixed -bottom-20 w-full transition-transform duration-200 ease-in ${showToast && '-translate-y-40 lg:-translate-y-24'}`}>
+        <ToastContainer />
+        <div className={`fixed -bottom-20 w-full transition-transform duration-200 ease-in ${showSuccessToast && '-translate-y-40 lg:-translate-y-24'}`}>
           <div className='w-fit mx-auto'>
-            <Toast iconComponent={icons.changesSaved} message={toastMsg} />
+            <Toast iconComponent={icons.changesSaved} message={ToastMessages.success} />
           </div>
         </div>
       </main>
