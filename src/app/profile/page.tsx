@@ -1,13 +1,9 @@
 'use client'
 
 // TODO:
-// 1. Loading states (i.e. skeleton loaders)
-// 2. Error toast (fix styling) (x)
-// 3. Show server-thrown errors, validation errors in UI (x)
-// 4. Look at useTransition for wrapping server actions for error handling
-// 5. Case: Upload pic - successfully previewed/uploaded 
+// 1. Case: Upload pic - successfully previewed/uploaded 
 //          - change pic - cancel - typeerror
-// 6. Case: Can still open file uploader during loading state, shouldn't be allowed
+// 2. Case: Can still open file uploader during loading state, shouldn't be allowed
 
 import Button from '@/components/UI/Button';
 import { useEffect, useState, useRef, useReducer, FormEvent, useActionState } from 'react';
@@ -22,17 +18,10 @@ import { userReducer, Action } from '@/userReducer';
 import { ProfileInfo } from '@/types';
 import { clearLinksInStore, getUserData, saveLinks, saveProfileInfo} from '@/components/actions';
 import { toast, ToastContainer } from 'react-toastify';
-import "react-toastify/dist/ReactToastify.css";
+import { Skeleton } from '@mui/material';
 
 export default function Page() {
   const [isProfileDetailsOpen, setIsProfileDetailsOpen] = useState(false);
-
-  const enum ToastTypes {
-    error,
-    success,
-    initial,
-  }
-
   const [showSuccessToast, setShowSuccessToast] = useState(false);
 
   const initialProfileInfo: ProfileInfo = {
@@ -44,6 +33,8 @@ export default function Page() {
 
   const [savedProfileInfo, setSavedProfileInfo] = useState<ProfileInfo>(initialProfileInfo);
   const [isFileUploading, setIsFileUploading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState({});
   const submitBtn = useRef<HTMLButtonElement>(null);
 
   const initialState = {
@@ -74,7 +65,9 @@ export default function Page() {
     const userId = window.sessionStorage.getItem('id'); // temp auth flow
     const loadInitialUserProfileData = async () => {
       try {
+        setIsLoading(true);
         const data = await getUserData(userId);
+        setData(data);
         dispatch({ type: 'loaded_dashboard', data })
           const nextProfileInfo = {
             firstName: { value: data.profileInfo.firstName.value, errors: [''] },
@@ -85,13 +78,14 @@ export default function Page() {
           setSavedProfileInfo(nextProfileInfo);
       } catch (error) {
         setShowSuccessToast(true);
+      } finally {
+        setIsLoading(false);
       }
     }
-    // TODO: show loading state
     if (userId) {
       loadInitialUserProfileData();
     }
-  }, [ToastMessages.error, ToastTypes.error]);
+  }, []);
 
   const showErrorToast = (messages: string[]) => {
     messages.forEach(message => {
@@ -165,7 +159,10 @@ export default function Page() {
       const isError = nextState.links.some(link => link.status.isError === true);
       if (!isError) {
         try {
-          const res = await saveLinks(state.links, userId);
+          setIsLoading(true);
+          const promise = saveLinks(state.links, userId);
+          toast.promise(promise, { pending: 'Saving' });
+          const res = await promise;
           if (res?.errors) {
             dispatch({ type: 'failed_server_validation', nextState: { ...state, links: res.nextLinks }});
             showErrorToast(res.errors);
@@ -174,6 +171,8 @@ export default function Page() {
           }
         } catch (error) {
           showErrorToast([ToastMessages.error]);
+        } finally {
+          setIsLoading(false);
         }
       }
     } else {
@@ -183,6 +182,7 @@ export default function Page() {
       const isError = Object.values(nextState.profileInfo).some(value => value.errors[0])
       if (!isError) {
         try {
+          setIsLoading(true);
           const promise = saveProfileInfo(state.profileInfo, userId);
           toast.promise(promise, { pending: 'Saving' });
           const res = await promise;
@@ -195,6 +195,8 @@ export default function Page() {
           }
         } catch (error) {
           showErrorToast([ToastMessages.error]);
+        } finally {
+          setIsLoading(false);
         }
       }
     }
@@ -215,7 +217,7 @@ export default function Page() {
     <section className='max-w-screen-xl mx-auto'>
       <Header setIsProfileDetailsOpen={setIsProfileDetailsOpen} isProfileDetailsOpen={isProfileDetailsOpen} />
       <main className='lg:flex relative overflow-hidden'>
-        <PhoneMockup state={state} savedProfileInfo={savedProfileInfo} />
+        <PhoneMockup state={state} savedProfileInfo={savedProfileInfo} isLoading={isLoading} data={data} />
         <div className="p-4 md:p-6 md:pt-0 lg:w-3/5">
           <article className="p-6 space-y-10 border-b border-grey-200 md:p-10 md:pb-14">
             <div className="space-y-2 md:space-y-4">
@@ -232,9 +234,13 @@ export default function Page() {
                   <Button type='button' variant='secondary' handleClick={handleAddLink}>
                     + Add new link
                   </Button>
-                  {state.links.length < 1 ?
-                    <LinksInitial />
-                    : <Links state={state} dispatch={dispatch} handleRemoveLink={handleRemoveLink} />}
+                  {
+                    (Object.keys(data).length < 1) ? 
+                    <Skeleton height={250} />
+                    : 
+                    state.links.length < 1 ?
+                    <LinksInitial /> :
+                     <Links state={state} dispatch={dispatch} handleRemoveLink={handleRemoveLink} />}
                 </div> :
                 <ProfileDetails state={state} dispatch={dispatch} handleFileUploadChange={handleFileUploadChange} isFileUploading={isFileUploading} />
               }
