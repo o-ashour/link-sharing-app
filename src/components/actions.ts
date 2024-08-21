@@ -68,19 +68,16 @@ export const saveLinks = async (links: Link[], userId: string | null) => {
   const parse = schema.safeParse(links);
 
   if (!parse.success) {
-    // let errorMessage = '';
-    const errors: string[] = [];
-    // parse.error.issues.forEach((issue) => {
-    //   if (issue.path[1] === 'url' && typeof(issue.path[0]) === 'number') {
-    //     errorMessage = errorMessage + "Link #" + (issue.path[0] + 1) + ": " + issue.message + ' (check ' + issue.path[1] + '). ';
-    //   }
-    // })
+    const errors: string[] = ['Failed to save changes'];
+    const nextLinks: Link[] = [];
     parse.error.issues.forEach((issue) => {
       if (issue.path[1] === 'url' && typeof(issue.path[0]) === 'number') {
         errors.push("Link #" + (issue.path[0] + 1) + ": " + issue.message + ' (check ' + issue.path[1] + '). ')
+        const nextLink = { ...links[issue.path[0]], status: { isError: true, message: issue.message }};
+        nextLinks.push(nextLink);       
       }
     })
-    return { errors };
+    return { errors, nextLinks };
   }
 
   const data = parse.data;
@@ -178,13 +175,6 @@ export const saveProfileInfo = async (profileInfo: ProfileInfo, userId: string |
     email,
     profilePicUrl,
   })
-  // const parse = schema.safeParse({
-  //   userId,
-  //   firstName: 'jkfdsg',
-  //   lastName: 439578,
-  //   email: '98745jhksndf',
-  //   profilePicUrl: 'jkdskjn',
-  // })
 
   if (!parse.success) {
     const errors = ['Failed to save changes'];

@@ -22,7 +22,7 @@ import { userReducer, Action } from '@/userReducer';
 import { ProfileInfo } from '@/types';
 import { clearLinksInStore, getUserData, saveLinks, saveProfileInfo} from '@/components/actions';
 import { toast, ToastContainer } from 'react-toastify';
-// import "react-toastify/dist/ReactToastify.css";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Page() {
   const [isProfileDetailsOpen, setIsProfileDetailsOpen] = useState(false);
@@ -35,7 +35,7 @@ export default function Page() {
 
   const [showSuccessToast, setShowSuccessToast] = useState(false);
 
-  const initialProfileInfo = {
+  const initialProfileInfo: ProfileInfo = {
     firstName: { value: '', errors: [''] },
     lastName: { value: '', errors: [''] },
     email: { value: '', errors: [''] },
@@ -167,6 +167,7 @@ export default function Page() {
         try {
           const res = await saveLinks(state.links, userId);
           if (res?.errors) {
+            dispatch({ type: 'failed_server_validation', nextState: { ...state, links: res.nextLinks }});
             showErrorToast(res.errors);
           } else {
             setShowSuccessToast(true);
@@ -186,8 +187,7 @@ export default function Page() {
           toast.promise(promise, { pending: 'Saving' });
           const res = await promise;
           if (res.errors) {
-            // console.log(res.errors)
-            dispatch({ type: 'failed_server_validation', nextProfileInfo: res.nextProfileInfo });
+            dispatch({ type: 'failed_server_validation', nextState: {...state, profileInfo: res.nextProfileInfo }});
             showErrorToast(res.errors);
           } else if (res.data) {
             setSavedProfileInfo(res.data);

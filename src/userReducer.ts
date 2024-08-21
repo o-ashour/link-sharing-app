@@ -12,12 +12,6 @@ export type State = {
     url: string,
     status: { isError: boolean, message: string },
   }[] | [],
-  // profileInfo: {
-  //   firstName: { value: string, errors: string[] },
-  //   lastName: { value: string, errors: string[] },
-  //   email: { value: string, errors: string[] },
-  //   profilePicUrl: { value: string, errors: string[] },
-  // }
   profileInfo: ProfileInfo,
 }
 
@@ -33,7 +27,7 @@ type EditedProfile = { type: 'edited_profile', fieldName: string, fieldValue: st
 type ChangedAvatar = { type: 'changed_avatar', blob: Blob };
 type UploadedAvatar = { type: 'uploaded_avatar', data: { value: string, errors: string[] } };
 type LoadedDashboard = { type: 'loaded_dashboard', data: Data };
-type FailedServerValidation = { type: 'failed_server_validation', nextProfileInfo: ProfileInfo };
+type FailedServerValidation = { type: 'failed_server_validation', nextState: State };
 
 export type Action = AddedLink | RemovedLink | SelectedPlatform | MovedLink | EditedUrl | SavedLinks | ResetErrors | SavedProfile | EditedProfile | ChangedAvatar | UploadedAvatar | LoadedDashboard | FailedServerValidation;
 
@@ -108,7 +102,7 @@ export const userReducer = (state: State, action: Action): State => {
         } else if (!isUrlValid) {
           return { ...link, status: { isError: true, message: 'Invalid Url' } };
         } else {
-          return { ...link, status: { isError: false, message: '' } };
+          return link;
         }
       })
       return { ...state, links: arr };
@@ -120,7 +114,7 @@ export const userReducer = (state: State, action: Action): State => {
 
       const nextProfileInfo = { ...state.profileInfo };
       Object.entries(nextProfileInfo).map(([k, v]) => {
-        nextProfileInfo[k as keyof ProfileInfo] = { value: v.value, errors: [''] }
+        nextProfileInfo[k as keyof ProfileInfo] = { value: v.value || '', errors: [''] }
       })
       return { ...state, links: nextLinksState, profileInfo: nextProfileInfo };
     }
@@ -172,7 +166,7 @@ export const userReducer = (state: State, action: Action): State => {
       return nextState;
     }
     case 'failed_server_validation': {
-      return { ...state, profileInfo: action.nextProfileInfo };
+      return action.nextState;
     }
     default:
       return state;
