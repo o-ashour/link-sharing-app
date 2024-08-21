@@ -3,8 +3,10 @@ import PlatformBtn from '@/components/UI/PlatformBtn';
 import Avatar from '@/components/Avatar';
 import Link from 'next/link';
 import profilePicDefault from '/public/logo/logo-devlinks-small.svg';
+import { Data } from '@/types';
+import { LinkShareSupportedPlatforms } from '@/config/index';
 
-const Component: React.FC = ({ data }) => {
+const Component: React.FC<{data: Data}> = ({ data }) => {
   return (
     <div className='px-16 py-14 space-y-14 md:relative md:bg-white md:w-[21.75rem] md:mx-auto md:rounded-2xl md:px-14 md:py-12 md:mt-24 md:drop-shadow-2xl'>
       <div className='text-center space-y-6 md:space-y-8'>
@@ -24,10 +26,17 @@ const Component: React.FC = ({ data }) => {
       <div>
         <ul className='space-y-5' id='links'>
           {data.links.map(link => {
+            const { platform, id } = link;
+
             return (
-              <li key={link.id}>
+              <li key={id}>
                 {/* <Link href={link.url}> */}
-                  <PlatformBtn iconComponent={linkSharePlatformsConfigs[link.platform].iconComponentForPreviewBtn} themeColor={linkSharePlatformsConfigs[link.platform].themeColor} name={linkSharePlatformsConfigs[link.platform].readableName} themeType={linkSharePlatformsConfigs[link.platform].previewBtnThemeType} />
+                <PlatformBtn 
+                  iconComponent={linkSharePlatformsConfigs[platform as LinkShareSupportedPlatforms].iconComponentForPreviewBtn} 
+                  themeColor={linkSharePlatformsConfigs[platform as LinkShareSupportedPlatforms].themeColor} 
+                  name={linkSharePlatformsConfigs[platform as LinkShareSupportedPlatforms].readableName} 
+                  themeType={linkSharePlatformsConfigs[platform as LinkShareSupportedPlatforms].previewBtnThemeType} 
+                />
                 {/* </Link> */}
               </li>
             )

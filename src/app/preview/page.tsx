@@ -13,6 +13,7 @@ import Toast from '@/components/UI/Toast';
 import { icons } from '@/config/index';
 import { useEffect, useState } from 'react';
 import { getUserData } from '@/components/actions';
+import { Data, ProfileInfo } from '@/types';
 
 export default function Page() {
   const toastLinkCopiedMsg = 'The link has been copied to your clipboard!'
@@ -20,7 +21,7 @@ export default function Page() {
   const isSuccessful = false;
   const isAnimate = false;
 
-  const initialProfileInfo = {
+  const initialProfileInfo: ProfileInfo = {
     firstName: { value: '', errors: [''] },
     lastName: { value: '', errors: [''] },
     email: { value: '', errors: [''] },
@@ -32,12 +33,12 @@ export default function Page() {
     profileInfo: initialProfileInfo,
   }
 
-  const [data, setData] = useState(initialState);
+  const [data, setData] = useState<Data>(initialState);
 
   useEffect(() => {
     const userId = window.sessionStorage.getItem('id');
     const getData = async () => {
-      const data = await getUserData(userId);
+      const data: Data = await getUserData(userId);
       console.log(data)
       setData(data);
       return;
