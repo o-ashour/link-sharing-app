@@ -1,7 +1,12 @@
 import Link from 'next/link';
 import Button from '../UI/Button';
 
-const Component: React.FC = () => {
+const Component: React.FC<{ copyToClipboard: (text: string) => void }> = ({ copyToClipboard }) => {
+  const handleClick = () => {
+    const url = 'http://localhost:3000/preview'; // temp for dev
+    copyToClipboard(url);
+  }
+
   return (
     <header className='p-4 md:p-6'>
       <nav className='md:p-4 md:bg-white md:relative md:rounded-xl'>
@@ -14,7 +19,7 @@ const Component: React.FC = () => {
             </Link>              
           </li>
           <li className='flex-1 md:flex-none'>
-            <Button>
+            <Button handleClick={handleClick}>
               Share Link
             </Button>
           </li>

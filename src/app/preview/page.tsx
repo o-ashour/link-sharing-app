@@ -9,24 +9,42 @@ import Toast from '@/components/UI/Toast';
 import { icons } from '@/config/index';
 import { useEffect, useState } from 'react';
 import { getUserData } from '@/components/actions';
-import { Data } from '@/types';
+import { Data, ToastMessages } from '@/types';
 import { toast, ToastContainer } from 'react-toastify';
-import { ToastMessages } from '@/types';
+import copy from 'copy-to-clipboard';
 
 export default function Page() {
   const toastLinkCopiedMsg = 'The link has been copied to your clipboard!'
 
-  const isSuccessful = false;
-  const isAnimate = false;
-
   const [data, setData] = useState({});
   const [isError, setIsError] = useState(false);
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+
+  useEffect(() => {
+    if (showSuccessToast) {
+      setTimeout(() => setShowSuccessToast(false), 2000)
+    }
+  }, [showSuccessToast]);
 
   const showErrorToast = (message: string) => {
     toast.error(message, {
       hideProgressBar: true,
-      toastId: 'server-error-500',
+      toastId: 'server-error',
     });
+  }
+
+  const copyToClipboard = async (text: string) => {
+    if ('clipboard' in navigator) {
+      try {
+        await navigator.clipboard.writeText(text);
+        setShowSuccessToast(true);
+      } catch (error) {
+        showErrorToast('Error copying to clipboard');
+      }
+    } else {
+      copy(text);
+      setShowSuccessToast(true);
+    }
   }
 
   useEffect(() => {
@@ -48,7 +66,7 @@ export default function Page() {
   return (
     <section>
       <div id='background-section' className='hidden md:block md:bg-purple-300 md:absolute md:w-full md:h-[22rem] lg:h-[22.25rem] md:rounded-b-3xl' />
-      <PreviewHeader />
+      <PreviewHeader copyToClipboard={copyToClipboard} />
       <main className='pb-8 space-y-20 overflow-hidden relative'>
         {/* error state display, TODO: refactor into component */}
         {isError ?
@@ -70,16 +88,11 @@ export default function Page() {
           </div> :
           <Preview data={data} isError={isError} />
         }
-        
-        {
-          isSuccessful && (
-            <div className={`fixed -bottom-20 w-full transition-transform duration-200 ease-in ${isAnimate && '-translate-y-24'}`}>
-              <div className='w-fit mx-auto'>
-                <Toast iconComponent={icons.linkCopiedToClipboard} message={toastLinkCopiedMsg} />
-              </div>
-            </div>
-          )
-        }
+        <div className={`fixed -bottom-20 w-full transition-transform duration-200 ease-in ${showSuccessToast && '-translate-y-40 lg:-translate-y-24'}`}>
+          <div className='w-fit mx-auto'>
+            <Toast iconComponent={icons.linkCopiedToClipboard} message={toastLinkCopiedMsg} />
+          </div>
+        </div>
         <ToastContainer />
       </main>
     </section>
