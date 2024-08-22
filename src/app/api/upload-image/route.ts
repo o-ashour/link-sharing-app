@@ -10,6 +10,11 @@ const {
   CLOUDFLARE_R2_BUCKET_NAME,
 } = process.env;
 
+console.log(CLOUDFLARE_ACCOUNT_ID,
+  CLOUDFLARE_ACCESS_ID,
+  CLOUDFLARE_ACCESS_KEY,
+  CLOUDFLARE_R2_BUCKET_NAME,)
+
 const S3 = new S3Client({
   region: 'auto',
   endpoint: `https://${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com`,
@@ -40,6 +45,7 @@ export async function POST(request: Request) {
     const userId = Date.now(); // setting this user id temporarily
     const imgId = uuidv4();
     const objectKey = `${userId}/${imgId}`;
+    console.log(process.env.CLOUDFLARE_IMAGE_BASE_PATH)
     imageUrl = `${process.env.CLOUDFLARE_IMAGE_BASE_PATH}/${objectKey}`;
 
     const cmd = new PutObjectCommand({
