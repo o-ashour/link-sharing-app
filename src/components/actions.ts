@@ -45,6 +45,8 @@ export const getUserData = async (userId: string | null) => {
     email: { value: '', errors: [''] },
     profilePicUrl: { value: '', errors: [''] },
   };
+  // these try-blocks might be redundant
+  // catching already with each function call below
   try {
     links = await getUserLinks(userId);
   } catch (error) {

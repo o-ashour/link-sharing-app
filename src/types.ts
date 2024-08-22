@@ -14,6 +14,15 @@ export interface Link {
   status: { isError: boolean, message: string },
 };
 
+/// naming conflict so duplicating
+// TODO: Refactor
+export interface LinkType {
+  id: number,
+  platform: LinkShareSupportedPlatforms,
+  url: string,
+  status: { isError: boolean, message: string },
+};
+
 export type Data = {
   links: {
     id: any;
@@ -42,4 +51,9 @@ export type Data = {
       errors: string[];
     };
   }
+}
+
+export enum ToastMessages {
+  success = 'Your changes have been successfully saved!',
+  error = 'Something went wrong.',
 }

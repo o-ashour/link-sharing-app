@@ -15,7 +15,7 @@ import Toast from '@/components/UI/Toast';
 import { icons } from '@/config/index';
 import PhoneMockup from '@/components/content/PhoneMockup';
 import { userReducer, Action } from '@/userReducer';
-import { ProfileInfo } from '@/types';
+import { ProfileInfo, ToastMessages } from '@/types';
 import { clearLinksInStore, getUserData, saveLinks, saveProfileInfo} from '@/components/actions';
 import { toast, ToastContainer } from 'react-toastify';
 import { Skeleton } from '@mui/material';
@@ -45,11 +45,6 @@ export default function Page() {
 
   // temp log
   console.log(state);
-
-  const enum ToastMessages {
-    success = 'Your changes have been successfully saved!',
-    error = 'Something went wrong.',
-  }
 
   useEffect(() => {
     if (showSuccessToast) {
