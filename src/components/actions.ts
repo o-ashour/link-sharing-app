@@ -1,9 +1,23 @@
 'use server'
+// TODO:
+// 1. maybe move this file to a /lib
+// 2. add console.error in try-catch db update
 
-import { Link, ProfileInfo } from "@/types";
+import { Link, ProfileInfo, SignUpFormData } from "@/types";
 import { sql } from "@vercel/postgres";
 import { z } from 'zod';
 import { LinkShareSupportedPlatforms } from "@/config";
+import { signIn } from "../../auth";
+import { AuthError } from "next-auth";
+import bcrypt from 'bcrypt';
+import { signUpSchema } from "@/lib/schema";
+import { redirect } from "next/navigation";
+
+// type SignUpData = {
+//   email: string;
+//   password: string;
+//   confirmPassword: string;
+// }
 
 const getUserProfileInfo = async (userId: string | null) => {
   try {
@@ -138,24 +152,24 @@ export const clearLinksInStore = async (userId: string | null) => {
   }
 }
 
-export const storeNewUser = async (email: string, userId: string | null) => {
-  const schema = z.object({
-    email: z.string().email(),
-  })
-
-  const parse = schema.safeParse({ email });
+export const storeNewUser = async (data: SignUpFormData) => {
+  const parse = signUpSchema.safeParse(data);
   if (!parse.success) {
     return {
       errors: parse.error?.flatten().fieldErrors,
     }
   }
 
+  const hashedPassword = await bcrypt.hash(parse.data.confirmPassword, 10);
+
   try {
-    await sql`INSERT INTO users(user_id, email) VALUES (${userId}, ${email})`;
+    await sql`INSERT INTO users (email, password) VALUES (${parse.data.email}, ${hashedPassword})`;
   } catch (error) {
-    throw new Error('Failed to store user info')
+    console.error(error);
+    throw new Error('Failed to create new user')
   }
-  return;
+  // should change route to '/dashboard'
+  redirect('/profile');
 }
 
 export const saveProfileInfo = async (profileInfo: ProfileInfo, userId: string | null) => {
@@ -216,5 +230,21 @@ export const saveProfileInfo = async (profileInfo: ProfileInfo, userId: string |
     return { data: nextProfileInfo };
   } catch (error) {
     throw new Error('Failed to fetch user data')
+  }
+}
+
+export const authenticate = async (prevState: string | undefined, formData: FormData) => {
+  try {
+    await signIn('credentials', formData);
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case 'CredentialsSignin':
+          return 'Invalid credentials.';
+        default:
+          return 'Something went wrong.';
+      }
+    }
+    throw error;
   }
 }

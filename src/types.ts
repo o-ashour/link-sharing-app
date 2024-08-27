@@ -1,5 +1,8 @@
-import { LinkShareSupportedPlatforms } from "./config";
+// move to lib?
 
+import { LinkShareSupportedPlatforms } from "./config";
+import { signUpSchema } from "./lib/schema";
+import { z } from "zod";
 export interface ProfileInfo {
   firstName: { value: string, errors: string[] },
   lastName: { value: string, errors: string[] },
@@ -57,3 +60,5 @@ export enum ToastMessages {
   success = 'Your changes have been successfully saved!',
   error = 'Something went wrong.',
 }
+
+export type SignUpFormData = z.infer<typeof signUpSchema>
