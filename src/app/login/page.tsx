@@ -1,15 +1,8 @@
-'use client'
-
 import Link from "next/link";
-import { icons } from '@/config';
-import TextInputWithIcon from '@/components/UI/TextInputWithIcon';
-import Button from '@/components/UI/Button';
 import AuthHeader from '@/components/layout/AuthHeader';
+import SignInForm from "@/components/SignInForm";
 
 export default function Page() {
-  // to be integrated into logic
-  const isError = false;
-
   return (
     <section className='px-8 py-8'>
       <div className='space-y-16 md:space-y-12 md:mt-48 lg:mt-36'>
@@ -25,35 +18,12 @@ export default function Page() {
           </div>
 
           <div className="mt-10">
-            <form className="space-y-6" action="#" method="POST">
-              <div>
-                <label htmlFor="email" className={`text-grey-400 text-sm ${isError && 'text-red'}`}>
-                  Email address
-                </label>
-                <div className="mt-1">
-                  <TextInputWithIcon id='email' name='email' type='email' autocomplete='email' isError={isError} placeholder='e.g. 2pac@email.com' icon={icons.email} required />
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="password" className={`text-grey-400 text-sm ${isError && 'text-red'}`}>
-                  Password
-                </label>
-                <div className="mt-1">
-                  <TextInputWithIcon id='password' name='password' type='password' autocomplete='current-password' isError={isError} icon={icons.password} placeholder='Enter your password' required />
-                </div>
-              </div>
-
-              <div>
-                <Button type='submit'>Login</Button>
-              </div>
-            </form>
-
+            <SignInForm />
             <div className="flex flex-col mt-6 text-center justify-center md:gap-1 md:flex-row">
               <p className='text-grey-300'>
                 Don&apos;t have an account?
               </p>
-              <Link href="/signup" className="text-purple-300">
+              <Link href="/" className="text-purple-300">
                 Create account
               </Link>
             </div>

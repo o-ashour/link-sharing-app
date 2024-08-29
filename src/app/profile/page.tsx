@@ -6,7 +6,12 @@
 // 2. Case: Can still open file uploader during loading state, shouldn't be allowed
 
 import Button from '@/components/UI/Button';
-import { useEffect, useState, useRef, useReducer, FormEvent, useActionState } from 'react';
+import { 
+  useEffect, 
+  useState, 
+  useRef, 
+  useReducer, 
+  FormEvent } from 'react';
 import LinksInitial from '@/components/content/LinksInitial';
 import Links from '@/components/content/Links';
 import Header from '@/components/layout/Header';
@@ -16,7 +21,12 @@ import { icons } from '@/config/index';
 import PhoneMockup from '@/components/content/PhoneMockup';
 import { userReducer, Action } from '@/userReducer';
 import { ProfileInfo, ToastMessages } from '@/types';
-import { clearLinksInStore, getUserData, saveLinks, saveProfileInfo} from '@/components/actions';
+import { 
+  clearLinksInStore, 
+  getUserData, 
+  logout, 
+  saveLinks, 
+  saveProfileInfo } from '@/components/actions';
 import { toast, ToastContainer } from 'react-toastify';
 import { Skeleton } from '@mui/material';
 
@@ -56,19 +66,20 @@ export default function Page() {
     dispatch({ type: 'reset_errors' })
   }, [isProfileDetailsOpen]);
 
+
+
   useEffect(() => {
-    const userId = window.sessionStorage.getItem('id'); // temp auth flow
     const loadInitialUserProfileData = async () => {
       try {
         setIsLoading(true);
-        const data = await getUserData(userId);
+        const data = await getUserData();
         setData(data);
         dispatch({ type: 'loaded_dashboard', data })
           const nextProfileInfo = {
-            firstName: { value: data.profileInfo.firstName.value, errors: [''] },
-            lastName: { value: data.profileInfo.lastName.value, errors: [''] },
-            email: { value: data.profileInfo.email.value, errors: [''] },
-            profilePicUrl: { value: data.profileInfo.profilePicUrl.value, errors: [''] },
+            firstName: { value: data?.profileInfo.firstName.value, errors: [''] },
+            lastName: { value: data?.profileInfo.lastName.value, errors: [''] },
+            email: { value: data?.profileInfo.email.value, errors: [''] },
+            profilePicUrl: { value: data?.profileInfo.profilePicUrl.value, errors: [''] },
           }
           setSavedProfileInfo(nextProfileInfo);
       } catch (error) {
@@ -77,9 +88,7 @@ export default function Page() {
         setIsLoading(false);
       }
     }
-    if (userId) {
-      loadInitialUserProfileData();
-    }
+    loadInitialUserProfileData();
   }, []);
 
   const showErrorToast = (messages: string[]) => {
@@ -124,13 +133,12 @@ export default function Page() {
   }
 
   const handleRemoveLink = async (linkId: number) => {
-    const userId = window.sessionStorage.getItem('id'); // temp auth flow
     const action: Action = { type: 'removed_link', linkId };
     dispatch(action);
     const nextState = userReducer(state, action);
     if (nextState.links.length < 1) {
       try {
-        await clearLinksInStore(userId);
+        await clearLinksInStore();
         setShowSuccessToast(true);
       } catch (error) {
         showErrorToast([ToastMessages.error]);
@@ -146,7 +154,6 @@ export default function Page() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const userId = window.sessionStorage.getItem('id'); // temp auth flow
     if (!isProfileDetailsOpen) {
       const action: Action = { type: 'saved_links' };
       dispatch(action);
@@ -155,7 +162,7 @@ export default function Page() {
       if (!isError) {
         try {
           setIsLoading(true);
-          const promise = saveLinks(state.links, userId);
+          const promise = saveLinks(state.links);
           toast.promise(promise, { pending: 'Saving' });
           const res = await promise;
           if (res?.errors) {
@@ -178,7 +185,7 @@ export default function Page() {
       if (!isError) {
         try {
           setIsLoading(true);
-          const promise = saveProfileInfo(state.profileInfo, userId);
+          const promise = saveProfileInfo(state.profileInfo);
           toast.promise(promise, { pending: 'Saving' });
           const res = await promise;
           if (res.errors) {
@@ -195,6 +202,10 @@ export default function Page() {
         }
       }
     }
+  }
+
+  const handleLogout = () => {
+    logout()
   }
 
   const content = {
@@ -246,6 +257,7 @@ export default function Page() {
           <div className="p-4 md:px-10 md:py-6 md:flex md:justify-end">
             <Button className='md:w-24' disabled={(state.links.length < 1) && !isProfileDetailsOpen} handleClick={handleSave}>Save</Button>
           </div>
+          <button onClick={handleLogout}>Logout</button>
         </div>
         <ToastContainer />
         <div className={`fixed -bottom-20 w-full transition-transform duration-200 ease-in ${showSuccessToast && '-translate-y-40 lg:-translate-y-24'}`}>

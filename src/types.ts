@@ -1,7 +1,7 @@
 // move to lib?
 
 import { LinkShareSupportedPlatforms } from "./config";
-import { signUpSchema } from "./lib/schema";
+import { signInSchema, signUpSchema } from "./lib/schema";
 import { z } from "zod";
 export interface ProfileInfo {
   firstName: { value: string, errors: string[] },
@@ -62,3 +62,23 @@ export enum ToastMessages {
 }
 
 export type SignUpFormData = z.infer<typeof signUpSchema>
+
+export type SignInFormData = z.infer<typeof signInSchema>
+
+// unused
+export type FormState =
+  | {
+    errors?: {
+      name?: string[];
+      email?: string[];
+      password?: string[];
+    };
+    message?: string;
+  }
+  | undefined;
+
+// redundant see /schema.ts
+export const LoginFormSchema = z.object({
+  email: z.string().email({ message: 'Please enter a valid email.' }),
+  password: z.string().min(1, { message: 'Password field must not be empty.' }),
+});

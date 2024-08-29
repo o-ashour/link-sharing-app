@@ -48,10 +48,9 @@ export default function Page() {
   }
 
   useEffect(() => {
-    const userId = window.sessionStorage.getItem('id');
     const getData = async () => {
       try {
-        const data: Data = await getUserData(userId);
+        const data: Data = await getUserData();
         setData(data);
       } catch (error) {
         console.error(error);
