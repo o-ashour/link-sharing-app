@@ -1,10 +1,5 @@
 'use client'
 
-// TODO:
-// 1. Case: Upload pic - successfully previewed/uploaded 
-//          - change pic - cancel - typeerror
-// 2. Case: Can still open file uploader during loading state, shouldn't be allowed
-
 import Button from '@/components/UI/Button';
 import { 
   useEffect, 
@@ -53,9 +48,6 @@ export default function Page() {
   }
   const [state, dispatch] = useReducer(userReducer, initialState);
 
-  // temp log
-  console.log(state);
-
   useEffect(() => {
     if (showSuccessToast) {
       setTimeout(() => setShowSuccessToast(false), 2000)
@@ -65,8 +57,6 @@ export default function Page() {
   useEffect(() => {
     dispatch({ type: 'reset_errors' })
   }, [isProfileDetailsOpen]);
-
-
 
   useEffect(() => {
     const loadInitialUserProfileData = async () => {
@@ -101,7 +91,7 @@ export default function Page() {
 
   const handleFileUploadChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsFileUploading(true);
-    if (e.target.files) {
+    if (e.target.files && e.target.files.length > 0) {
       const blob = e.target.files[0];
       const action: Action = { type: 'changed_avatar', blob };
       dispatch(action);
@@ -255,7 +245,7 @@ export default function Page() {
 
           </article>
           <div className="p-4 md:px-10 md:py-6 md:flex md:justify-end">
-            <Button className='md:w-24' disabled={(state.links.length < 1) && !isProfileDetailsOpen} handleClick={handleSave}>Save</Button>
+            <Button className='md:w-24' disabled={(state.links.length < 1) && !isProfileDetailsOpen || isFileUploading} handleClick={handleSave}>Save</Button>
           </div>
           <button onClick={handleLogout}>Logout</button>
         </div>

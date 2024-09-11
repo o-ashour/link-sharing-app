@@ -50,7 +50,7 @@ const Component: React.FC<{
           </div>
           <div className='absolute hidden'>
             <label htmlFor="file" className="sr-only">Choose File</label>
-            <input ref={fileInputRef} name='file' id='file' type='file' onChange={handleFileUploadChange} accept='.png, .jpg, .jpeg' />
+            <input ref={fileInputRef} name='file' id='file' type='file' onChange={handleFileUploadChange} accept='.png, .jpg, .jpeg' disabled={isFileUploading} />
           </div>
         </div>
 
