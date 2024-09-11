@@ -8,7 +8,7 @@ const Component: React.FC<{ id?: string, value?: string, name?: string, type?: H
       </div>
       {isError &&
         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-          <span className="text-red sm:text-sm">Please check again</span>
+          <span className="text-red text-sm bg-white z-50">Please check again</span>
         </div>
       }
       <input

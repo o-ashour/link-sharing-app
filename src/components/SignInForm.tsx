@@ -80,7 +80,7 @@ const SignInForm: React.FC = () => {
           </div>
           {errors.email &&
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-              <span className="text-red sm:text-sm">{errors.email.message}</span>
+              <span className="text-red text-sm bg-white z-50">{errors.email.message}</span>
             </div>
           }
           <input
@@ -102,7 +102,7 @@ const SignInForm: React.FC = () => {
           </div>
           {errors.password &&
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-              <span className="text-red sm:text-sm">{errors.password.message}</span>
+              <span className="text-red text-sm bg-white z-50">{errors.password.message}</span>
             </div>
           }
           <input
