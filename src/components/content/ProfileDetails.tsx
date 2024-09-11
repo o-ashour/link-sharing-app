@@ -2,21 +2,29 @@ import UploadImage from '@/components/UI/UploadImage';
 import TextInput from '@/components/UI/TextInput';
 import { useRef, Dispatch } from 'react';
 import { State, Action } from '@/userReducer';
+import { SetStateAction } from 'react';
 
 const Component: React.FC<{
   handleFileUploadChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
   isFileUploading: boolean,
   state: State, 
-  dispatch: Dispatch<Action>
+  dispatch: Dispatch<Action>,
+  setIsEmailChanged: Dispatch<SetStateAction<boolean>>,
+  isEmailChanged: boolean,
 }> = ({
   handleFileUploadChange,
   isFileUploading,
   state,
   dispatch,
+  setIsEmailChanged,
+  isEmailChanged,
  }) => {
     const fileInputRef = useRef(null);
 
     const handleProfileInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.name === 'email' && !isEmailChanged) {
+        setIsEmailChanged(true)
+      }
       dispatch({ type: 'edited_profile', fieldValue: e.target.value, fieldName: e.target.name });
     }
 
@@ -63,12 +71,16 @@ const Component: React.FC<{
           </div>
 
           <div className='space-y-1 md:flex md:flex-row md:items-center'>
-            <label htmlFor='last-name' className='text-sm text-grey-400 md:text-grey-300 md:w-5/12 md:text-base'>Last name*</label>
+            <label htmlFor='last-name' className='text-sm text-grey-400 md:text-grey-300 md:w-5/12 md:text-base'>
+              Last name*
+            </label>
             <TextInput className='md:w-7/12' type='text' value={state.profileInfo.lastName.value} name='lastName' id='last-name' autocomplete='family-name' placeholder='Ahmed' handleChange={handleProfileInfoChange} isError={Boolean(state.profileInfo.lastName.errors[0])} />
           </div>
 
           <div className='space-y-1 md:flex md:flex-row md:items-center'>
-            <label htmlFor='email' className='text-sm text-grey-400 md:text-base md:text-grey-300 md:w-5/12'>Email</label>
+            <label htmlFor='email' className='text-sm text-grey-400 md:text-base md:text-grey-300 md:w-5/12'>
+              Email*
+            </label>
             <TextInput className='md:w-7/12' type='email' value={state.profileInfo.email.value} name='email' id='email' autocomplete='email' placeholder='e.g. shady@example.com' handleChange={handleProfileInfoChange} isError={Boolean(state.profileInfo.email.errors[0])} />
           </div>
         </div>

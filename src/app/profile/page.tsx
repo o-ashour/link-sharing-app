@@ -40,6 +40,7 @@ export default function Page() {
   const [isFileUploading, setIsFileUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState({});
+  const [isEmailChanged, setIsEmailChanged] = useState(false);
   const submitBtn = useRef<HTMLButtonElement>(null);
 
   const initialState = {
@@ -57,6 +58,15 @@ export default function Page() {
   useEffect(() => {
     dispatch({ type: 'reset_errors' })
   }, [isProfileDetailsOpen]);
+
+  useEffect(() => {
+    if (isEmailChanged) {
+      const message = 'You will be logged out once you change your email and save'
+      toast.warn(message, {
+        hideProgressBar: true,
+      });
+    }
+  }, [isEmailChanged]);
 
   useEffect(() => {
     const loadInitialUserProfileData = async () => {
@@ -182,13 +192,15 @@ export default function Page() {
             dispatch({ type: 'failed_server_validation', nextState: {...state, profileInfo: res.nextProfileInfo }});
             showErrorToast(res.errors);
           } else if (res.data) {
-            setSavedProfileInfo(res.data);
+            setSavedProfileInfo(res.data.nextProfileInfo);
             setShowSuccessToast(true);
+            if (res.data.isEmailChanged) logout();
           }
         } catch (error) {
           showErrorToast([ToastMessages.error]);
         } finally {
           setIsLoading(false);
+          setIsEmailChanged(false);
         }
       }
     }
@@ -238,7 +250,7 @@ export default function Page() {
                     <LinksInitial /> :
                      <Links state={state} dispatch={dispatch} handleRemoveLink={handleRemoveLink} />}
                 </div> :
-                <ProfileDetails state={state} dispatch={dispatch} handleFileUploadChange={handleFileUploadChange} isFileUploading={isFileUploading} />
+                <ProfileDetails state={state} dispatch={dispatch} handleFileUploadChange={handleFileUploadChange} isFileUploading={isFileUploading} setIsEmailChanged={setIsEmailChanged} isEmailChanged={isEmailChanged} />
               }
               <button aria-label='hidden-submit-button-for-design' type='submit' className='hidden' ref={submitBtn}>Submit</button>
             </form>

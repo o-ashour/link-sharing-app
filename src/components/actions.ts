@@ -195,7 +195,7 @@ export const saveProfileInfo = async (profileInfo: ProfileInfo) => {
   const schema = z.object({
     firstName: z.string().min(1).nullable(),
     lastName: z.string().min(1).nullable(),
-    email: z.string().email().optional().nullable(),
+    email: z.string().email().min(1).nullable(),
     profilePicUrl: z.string().url().optional().nullable(),
   });
 
@@ -228,11 +228,23 @@ export const saveProfileInfo = async (profileInfo: ProfileInfo) => {
   }
 
   const data = parse.data;
+  let isEmailChanged = false;
+
+  try {
+    const savedEmail = await sql`SELECT email FROM Users WHERE ${user?.id} = id;`;
+    if (data.email !== savedEmail.rows[0].email) {
+      isEmailChanged = true;
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error('Failed to fetch user email')
+  }
 
   // store in db
   try {
     await sql`UPDATE users SET first_name = ${data.firstName}, last_name = ${data.lastName}, email = ${data.email}, profile_pic_url = ${data.profilePicUrl} WHERE id = ${user?.id}`;
   } catch (error) {
+    console.error(error);
     throw new Error('Failed to update profile info')
   }
 
@@ -244,8 +256,9 @@ export const saveProfileInfo = async (profileInfo: ProfileInfo) => {
       email: { value: userInfo.rows[0].email || '', errors: [''] },
       profilePicUrl: { value: userInfo.rows[0].profile_pic_url, errors: [''] },
     }
-    return { data: nextProfileInfo };
+    return { data: { nextProfileInfo, isEmailChanged } };
   } catch (error) {
+    console.error(error)
     throw new Error('Failed to fetch user data')
   }
 }

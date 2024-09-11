@@ -120,12 +120,15 @@ export const userReducer = (state: State, action: Action): State => {
     }
     case 'saved_profile': {
       let userInfo = { ...state.profileInfo };
-      if (!userInfo.firstName.value || !userInfo.lastName.value) {
+      if (!userInfo.firstName.value || !userInfo.lastName.value || !userInfo.email.value) {
         if (!userInfo.firstName.value) {
           userInfo = { ...userInfo, firstName: { ...userInfo.firstName, errors: ['First name field is required'] } }
         }
         if (!userInfo.lastName.value) {
           userInfo = { ...userInfo, lastName: { ...userInfo.lastName, errors: ['Last name field is required'] } }
+        }
+        if (!userInfo.email.value) {
+          userInfo = { ...userInfo, email: { ...userInfo.email, errors: ['Email field is required'] } }
         }
       }
       return { ...state, profileInfo: userInfo };
