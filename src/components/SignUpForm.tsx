@@ -91,9 +91,11 @@ const SignUpForm: React.FC = () => {
             {icons.email}
           </div>
           <input
+            id='email'
             className={`block w-full rounded-lg border px-4 py-3 pl-10 ${errors.email ? 'text-red border-red' : 'text-grey-400 border-grey-200'} caret-purple-300 focus:outline-none focus:border-none focus:ring-1 focus:ring-inset focus:ring-purple-300 focus:shadow-[0px_0px_14px_2px_rgba(99,60,255,0.3)] placeholder:text-grey-400 placeholder:opacity-50`}
             type='email'
             placeholder='e.g. 2pac@email.com'
+            autoComplete='email'
             {...register('email')}
           />
         </div>
@@ -113,6 +115,7 @@ const SignUpForm: React.FC = () => {
             {icons.password}
           </div>
           <input
+            id='password'
             className={`block w-full rounded-lg border px-4 py-3 pl-10 ${errors.password ? 'text-red border-red' : 'text-grey-400 border-grey-200'} caret-purple-300 focus:outline-none focus:border-none focus:ring-1 focus:ring-inset focus:ring-purple-300 focus:shadow-[0px_0px_14px_2px_rgba(99,60,255,0.3)] placeholder:text-grey-400 placeholder:opacity-50`}
             type='password'
             placeholder='At least 8 characters'
@@ -135,6 +138,7 @@ const SignUpForm: React.FC = () => {
             {icons.password}
           </div>
           <input
+            id='confirm-password'
             className={`block w-full rounded-lg border px-4 py-3 pl-10 ${errors.confirmPassword ? 'text-red border-red' : 'text-grey-400 border-grey-200'} caret-purple-300 focus:outline-none focus:border-none focus:ring-1 focus:ring-inset focus:ring-purple-300 focus:shadow-[0px_0px_14px_2px_rgba(99,60,255,0.3)] placeholder:text-grey-400 placeholder:opacity-50`}
             type='password'
             placeholder='At least 8 characters'
