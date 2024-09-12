@@ -68,16 +68,16 @@ const Component: React.FC<{ state: State, dispatch: Dispatch<Action>, handleRemo
                   </div>
 
                   <div>
-                    <label htmlFor="platform-selection" className="text-grey-400 text-sm">
+                    <p className="text-grey-400 text-sm">
                       Platform
-                    </label>
+                    </p>
                     <Dropdown linkId={link.id} dispatch={dispatch} state={state} />
                   </div>
 
                   <div>
-                    <label htmlFor="link" className="text-grey-400 text-sm">
+                    <p className="text-grey-400 text-sm">
                       Link
-                    </label>
+                    </p>
                     <TextInputWithIcon value={link.url} name='link' type='url' autocomplete='url' isError={link.status.isError} icon={icons.link} handleChange={(e, linkId = link.id) => handleUrlChange(e, linkId)} placeholder='e.g https://www.github.com/al-khawarizmi' />
                   </div>
                 </li>
