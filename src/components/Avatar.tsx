@@ -8,6 +8,7 @@ const Component: React.FC<{ profilePic?: string }> = ({ profilePic = profilePicD
       src={profilePic}
       alt="Profile picture"
       fill
+      sizes="150px"
       priority
     />
   )
