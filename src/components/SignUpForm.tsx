@@ -81,15 +81,15 @@ const SignUpForm: React.FC = () => {
         <label htmlFor="email" className="text-grey-400 text-sm">
           Email address
         </label>
+        {errors.email &&
+          <p className="text-red text-sm mt-1 mb-1.5">
+            {errors.email.message}
+          </p>
+        }
         <div className="w-full relative mt-1 rounded-md shadow-sm">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
             {icons.email}
           </div>
-          {errors.email &&
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-              <span className="text-red text-sm bg-white z-50">{errors.email.message}</span>
-            </div>
-          }
           <input
             className={`block w-full rounded-lg border px-4 py-3 pl-10 ${errors.email ? 'text-red border-red' : 'text-grey-400 border-grey-200'} caret-purple-300 focus:outline-none focus:border-none focus:ring-1 focus:ring-inset focus:ring-purple-300 focus:shadow-[0px_0px_14px_2px_rgba(99,60,255,0.3)] placeholder:text-grey-400 placeholder:opacity-50`}
             type='email'
@@ -103,18 +103,17 @@ const SignUpForm: React.FC = () => {
         <label htmlFor="password" className="text-grey-400 text-sm">
           Password
         </label>
+        {errors.password &&
+          <p className="text-red text-sm mt-1 mb-1.5">
+            {errors.password.message}
+          </p>
+        }
         <div className="w-full relative mt-1 rounded-md shadow-sm">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
             {icons.password}
           </div>
-          {errors.password &&
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-              <span className="text-red text-sm bg-white z-50">{errors.password.message}</span>
-            </div>
-          }
           <input
             className={`block w-full rounded-lg border px-4 py-3 pl-10 ${errors.password ? 'text-red border-red' : 'text-grey-400 border-grey-200'} caret-purple-300 focus:outline-none focus:border-none focus:ring-1 focus:ring-inset focus:ring-purple-300 focus:shadow-[0px_0px_14px_2px_rgba(99,60,255,0.3)] placeholder:text-grey-400 placeholder:opacity-50`}
-            // disabled={isSubmitting}
             type='password'
             placeholder='At least 8 characters'
             {...register('password')}
@@ -126,15 +125,15 @@ const SignUpForm: React.FC = () => {
         <label htmlFor="confirm-password" className="text-grey-400 text-sm">
           Confirm Password
         </label>
+        {errors.confirmPassword &&
+          <p className="text-red text-sm mt-1 mb-1.5">
+            {errors.confirmPassword.message}
+          </p>
+        }
         <div className="w-full relative mt-1 rounded-md shadow-sm">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
             {icons.password}
           </div>
-          {errors.confirmPassword &&
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-              <span className="text-red text-sm bg-white z-50">{errors.confirmPassword?.message}</span>
-            </div>
-          }
           <input
             className={`block w-full rounded-lg border px-4 py-3 pl-10 ${errors.confirmPassword ? 'text-red border-red' : 'text-grey-400 border-grey-200'} caret-purple-300 focus:outline-none focus:border-none focus:ring-1 focus:ring-inset focus:ring-purple-300 focus:shadow-[0px_0px_14px_2px_rgba(99,60,255,0.3)] placeholder:text-grey-400 placeholder:opacity-50`}
             type='password'
