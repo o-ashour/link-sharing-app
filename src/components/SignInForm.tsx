@@ -29,15 +29,17 @@ const SignInForm: React.FC = () => {
   const onSubmit: SubmitHandler<SignInFormData> = async (data) => {
     const parse = signInSchema.safeParse(data);
     if (parse.success) {
-      try {
-        const promise = login(parse.data);
-        toast.promise(promise, { pending: 'Logging in' });
-        const res = await promise;
-        if (res?.errors) {
-          const errors = res.errors;
-          const messages = ['Failed to login'];
+      const promise = login(parse.data);
+      toast.promise(promise, { pending: 'Logging in' });
+      const res = await promise;
+      if (res?.errors) {
+        const errors = res.errors;
+        const messages = ['Failed to login'];
 
-          if (errors.email && errors.email.length > 0) {
+        if (errors.email && errors.email.length > 0) {
+          if (errors.email.some(message => message === 'Invalid credentials')) {
+            showToast(['Invalid credentials'])
+          } else {
             errors.email.forEach(error => {
               messages.push('Email: ' + error)
             })
@@ -45,8 +47,12 @@ const SignInForm: React.FC = () => {
               type: 'server',
               message: errors.email[0],
             })
-          }
-          if (errors.password && errors.password.length > 0) {
+          }            
+        }
+        if (errors.password && errors.password.length > 0) {
+          if (errors.password.some(message => message === 'Invalid credentials')) {
+            showToast(['Invalid credentials'])
+          } else {
             errors.password.forEach(error => {
               messages.push('Password: ' + error)
             })
@@ -55,12 +61,8 @@ const SignInForm: React.FC = () => {
               message: errors.password[0],
             })
           }
-          showToast(messages);
         }
-      } catch (error) {
-        if (error instanceof Error) {
-          showToast([error.message]);
-        }
+        showToast(messages);
       }
     }
     return;

@@ -120,12 +120,14 @@ export default function Page() {
           });
           const data = await response.json();
           dispatch({ type: 'uploaded_avatar', data })
+          toast.success('Image uploaded successfully!', {
+            hideProgressBar: true,
+          });
         } catch (err) {
-          setShowSuccessToast(true);
+          showErrorToast([ToastMessages.error]);
         }
       }    
     }
-    // should tell user about successful upload
     setIsFileUploading(false);
   }
 
@@ -153,57 +155,65 @@ export default function Page() {
     }
   }
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const submitLinks = async () => {
+    const action: Action = { type: 'saved_links' };
+    dispatch(action);
+    const nextState = userReducer(state, action);
+    const isError = nextState.links.some(link => link.status.isError === true);
+    if (!isError) {
+      try {
+        setIsLoading(true);
+        const promise = saveLinks(state.links);
+        toast.promise(promise, { pending: 'Saving' });
+        const res = await promise;
+        if (res?.errors) {
+          dispatch({ type: 'failed_server_validation', nextState: { ...state, links: res.nextLinks } });
+          showErrorToast(res.errors);
+        } else {
+          setShowSuccessToast(true);
+        }
+      } catch (error) {
+        showErrorToast([ToastMessages.error]);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  }
+
+  const submitProfileInfo = async () => {
+    const action: Action = { type: 'saved_profile' };
+    dispatch(action);
+    const nextState = userReducer(state, action);
+    const isError = Object.values(nextState.profileInfo).some(value => value.errors[0])
+    if (!isError) {
+      try {
+        setIsLoading(true);
+        const promise = saveProfileInfo(state.profileInfo);
+        toast.promise(promise, { pending: 'Saving' });
+        const res = await promise;
+        if (res.errors) {
+          dispatch({ type: 'failed_server_validation', nextState: { ...state, profileInfo: res.nextProfileInfo } });
+          showErrorToast(res.errors);
+        } else if (res.data) {
+          setSavedProfileInfo(res.data.nextProfileInfo);
+          setShowSuccessToast(true);
+          if (res.data.isEmailChanged) logout();
+        }
+      } catch (error) {
+        showErrorToast([ToastMessages.error]);
+      } finally {
+        setIsLoading(false);
+        setIsEmailChanged(false);
+      }
+    }
+  }
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isProfileDetailsOpen) {
-      const action: Action = { type: 'saved_links' };
-      dispatch(action);
-      const nextState = userReducer(state, action);
-      const isError = nextState.links.some(link => link.status.isError === true);
-      if (!isError) {
-        try {
-          setIsLoading(true);
-          const promise = saveLinks(state.links);
-          toast.promise(promise, { pending: 'Saving' });
-          const res = await promise;
-          if (res?.errors) {
-            dispatch({ type: 'failed_server_validation', nextState: { ...state, links: res.nextLinks }});
-            showErrorToast(res.errors);
-          } else {
-            setShowSuccessToast(true);
-          }
-        } catch (error) {
-          showErrorToast([ToastMessages.error]);
-        } finally {
-          setIsLoading(false);
-        }
-      }
+      submitLinks();
     } else {
-      const action: Action = { type: 'saved_profile' };
-      dispatch(action);
-      const nextState = userReducer(state, action);
-      const isError = Object.values(nextState.profileInfo).some(value => value.errors[0])
-      if (!isError) {
-        try {
-          setIsLoading(true);
-          const promise = saveProfileInfo(state.profileInfo);
-          toast.promise(promise, { pending: 'Saving' });
-          const res = await promise;
-          if (res.errors) {
-            dispatch({ type: 'failed_server_validation', nextState: {...state, profileInfo: res.nextProfileInfo }});
-            showErrorToast(res.errors);
-          } else if (res.data) {
-            setSavedProfileInfo(res.data.nextProfileInfo);
-            setShowSuccessToast(true);
-            if (res.data.isEmailChanged) logout();
-          }
-        } catch (error) {
-          showErrorToast([ToastMessages.error]);
-        } finally {
-          setIsLoading(false);
-          setIsEmailChanged(false);
-        }
-      }
+      submitProfileInfo();
     }
   }
 

@@ -1,5 +1,6 @@
-import { linkSharePlatformsConfigs } from '@/config';
-import { LinkShareSupportedPlatforms } from '@/config';
+import { 
+  linkSharePlatformsConfigs, 
+  LinkShareSupportedPlatforms } from '@/config';
 import { State, Action } from '@/lib/definitions';
 import { Dispatch } from 'react';
 

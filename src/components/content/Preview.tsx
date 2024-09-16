@@ -6,7 +6,7 @@ import { ShareLink } from '@/lib/definitions';
 import { LinkShareSupportedPlatforms } from '@/config/index';
 import { Skeleton } from '@mui/material';
 
-const Component: React.FC<{ data: any, isError: boolean }> = ({ data, isError }) => {
+const Component: React.FC<{ data: any, isError: boolean }> = ({ data }) => {
   return (
     <div className='px-16 py-14 space-y-14 md:relative md:bg-white md:w-[21.75rem] md:mx-auto md:rounded-2xl md:px-14 md:py-12 md:mt-24 md:drop-shadow-2xl'>
       <div className='text-center space-y-6 md:space-y-8'>

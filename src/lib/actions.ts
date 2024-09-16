@@ -1,6 +1,4 @@
 'use server'
-// TODO:
-// 3. check comments
 
 import { ShareLink, ProfileInfo, SignInFormData, SignUpFormData, signInSchema, signUpSchema } from "@/lib/definitions";
 import { sql } from "@vercel/postgres";
@@ -148,7 +146,6 @@ export const clearLinksInStore = async () => {
   }
 }
 
-// change to 'signUp' or 'createUserOnSignup'
 export const storeNewUser = async (data: SignUpFormData) => {
   const parse = signUpSchema.safeParse(data);
   if (!parse.success) {
@@ -169,7 +166,6 @@ export const storeNewUser = async (data: SignUpFormData) => {
   const userId = await getUserId(parse.data.email);
 
   await createSession(userId);
-  // should change route to '/dashboard'
   redirect('/profile');
 }
 
@@ -241,7 +237,7 @@ export const saveProfileInfo = async (profileInfo: ProfileInfo) => {
     }
     return { data: { nextProfileInfo, isEmailChanged } };
   } catch (error) {
-    console.error(error)
+    console.error('Database error:', error)
     throw new Error('Failed to fetch user data')
   }
 }
@@ -252,37 +248,35 @@ export const logout = () => {
 
 export async function login(formData: SignInFormData) {
   const validatedFields = signInSchema.safeParse(formData);
-  const errorMessage = 'Invalid login credentials.';
 
-  // If any form fields are invalid, return early
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
     };
   }
 
-  try {
-    const user = await sql`SELECT * FROM Users WHERE email = ${validatedFields.data.email};`;
+  const user = await sql`SELECT * FROM Users WHERE email = ${validatedFields.data.email};`;
 
-    // If user is not found, return early
-    if (!user.rows[0]) {
-      // not ideal to throw on each login bad credentials error?
-      throw new Error(errorMessage)
-    }
-    const storedPassword = user.rows[0].password;
-    const passwordMatch = await bcrypt.compare(
-      validatedFields.data.password,
-      storedPassword,
-    );
-    // If the password does not match, return early
-    if (!passwordMatch) {
-      // not ideal to throw on each login bad credentials error?
-      throw new Error(errorMessage)
-    }
-    const userId = user.rows[0].id.toString();
-    await createSession(userId);
-  } catch (error) {
-    console.error('Database error:', error)
-    throw new Error('Failed to fetch user data.')
+  // if no user found, return early
+  if (!user.rows[0]) {
+    return {
+      errors: {
+        email: ['Invalid credentials'],
+      }
+    };
   }
+  const storedPassword = user.rows[0].password;
+  const passwordMatch = await bcrypt.compare(
+    validatedFields.data.password,
+    storedPassword,
+  );
+  if (!passwordMatch) {
+    return {
+      errors: {
+        password: ['Invalid credentials'],
+      }
+    };
+  }
+  const userId = user.rows[0].id.toString();
+  await createSession(userId);
 }
