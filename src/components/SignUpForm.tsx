@@ -2,13 +2,11 @@
 
 import Button from '@/components/UI/Button';
 import { icons } from '@/config';
-import { storeNewUser } from "@/components/actions";
+import { storeNewUser } from '@/lib/actions';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast, ToastContainer } from 'react-toastify';
-import { signUpSchema } from '@/lib/schema';
-import { SignUpFormData } from '@/types';
-import { redirect } from 'next/navigation';
+import { SignUpFormData, signUpSchema } from '@/lib/definitions';
 
 const SignUpForm: React.FC = () => {
   const { 

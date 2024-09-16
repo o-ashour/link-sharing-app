@@ -9,7 +9,7 @@ import {
 } from "react"
 import Button from './elements/Button';
 import Menu from './elements/Menu';
-import { State, Action } from "@/userReducer";
+import { State, Action } from "@/lib/definitions";
 
 const Component: React.FC<{ linkId: number, dispatch: Dispatch<Action>, state: State }> = ({ linkId, dispatch, state }) => {
   const [isOpen, setIsOpen] = useState(false);

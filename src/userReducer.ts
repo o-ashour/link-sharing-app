@@ -1,35 +1,8 @@
-// TODO:
-// 1. Move types to /types.ts ?
-
-import { LinkShareSupportedPlatforms } from "./config";
-import { linkSharePlatformsConfigs } from "./config";
-import { ProfileInfo, Data } from "./types";
-
-export type State = {
-  links: {
-    id: number,
-    platform: LinkShareSupportedPlatforms,
-    url: string,
-    status: { isError: boolean, message: string },
-  }[] | [],
-  profileInfo: ProfileInfo,
-}
-
-type AddedLink = { type: 'added_link' };
-type RemovedLink = { type: 'removed_link', linkId: number };
-type SelectedPlatform = { type: 'selected_platform', linkId: number, selectedPlatformId: LinkShareSupportedPlatforms };
-type MovedLink = { type: 'moved_link', draggedLinkId: string, dropzoneLinkId: string | number };
-type EditedUrl = { type: 'edited_url', url: string, linkId: number };
-type SavedLinks = { type: 'saved_links' };
-type ResetErrors = { type: 'reset_errors' };
-type SavedProfile = { type: 'saved_profile' };
-type EditedProfile = { type: 'edited_profile', fieldName: string, fieldValue: string };
-type ChangedAvatar = { type: 'changed_avatar', blob: Blob };
-type UploadedAvatar = { type: 'uploaded_avatar', data: { value: string, errors: string[] } };
-type LoadedDashboard = { type: 'loaded_dashboard', data: Data };
-type FailedServerValidation = { type: 'failed_server_validation', nextState: State };
-
-export type Action = AddedLink | RemovedLink | SelectedPlatform | MovedLink | EditedUrl | SavedLinks | ResetErrors | SavedProfile | EditedProfile | ChangedAvatar | UploadedAvatar | LoadedDashboard | FailedServerValidation;
+import { 
+  LinkShareSupportedPlatforms, 
+  linkSharePlatformsConfigs, 
+} from "./config";
+import { State, Action, ProfileInfo } from "./lib/definitions";
 
 export const userReducer = (state: State, action: Action): State => {
   switch (action.type) {

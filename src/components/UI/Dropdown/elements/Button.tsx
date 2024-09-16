@@ -1,7 +1,7 @@
 import ChevronDownIcon from '@/components/icons/ChevronDownIcon';
 import ChevronUpIcon from '@/components/icons/ChevronUpIcon';
 import { linkSharePlatformsConfigs } from '@/config/index';
-import { State } from '@/userReducer';
+import { State } from '@/lib/definitions';
 
 const Component: React.FC<{ isOpen: boolean, buttonRef: any, linkId: number, state: State, setIsOpen: React.Dispatch<boolean> }> = ({ isOpen, buttonRef, linkId, state, setIsOpen }) => {
   const foundLink = state.links.find(link => link.id == linkId);

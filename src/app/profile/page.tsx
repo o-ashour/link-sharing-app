@@ -14,14 +14,15 @@ import ProfileDetails from '@/components/content/ProfileDetails';
 import Toast from '@/components/UI/Toast';
 import { icons } from '@/config/index';
 import PhoneMockup from '@/components/content/PhoneMockup';
-import { userReducer, Action } from '@/userReducer';
-import { ProfileInfo, ToastMessages } from '@/types';
+import { userReducer } from '@/userReducer';
+import { ProfileInfo, ToastMessages, Action } from '@/lib/definitions';
 import { 
   clearLinksInStore, 
   getUserData, 
   logout, 
   saveLinks, 
-  saveProfileInfo } from '@/components/actions';
+  saveProfileInfo
+} from '@/lib/actions';
 import { toast, ToastContainer } from 'react-toastify';
 import { Skeleton } from '@mui/material';
 

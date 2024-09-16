@@ -1,8 +1,7 @@
 import UploadImage from '@/components/UI/UploadImage';
 import TextInput from '@/components/UI/TextInput';
-import { useRef, Dispatch } from 'react';
-import { State, Action } from '@/userReducer';
-import { SetStateAction } from 'react';
+import { useRef, Dispatch, SetStateAction } from 'react';
+import { State, Action } from '@/lib/definitions';
 
 const Component: React.FC<{
   handleFileUploadChange: (event: React.ChangeEvent<HTMLInputElement>) => void,

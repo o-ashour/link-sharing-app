@@ -2,8 +2,7 @@ import Avatar from '@/components/Avatar';
 import PlatformBtnPreview from '@/components/UI/PlatformBtnPreview';
 import { linkSharePlatformsConfigs, LinkShareSupportedPlatforms } from '@/config/index';
 import IllustrationPhoneMockup from '@/components/illustrations/IllustrationPhoneMockup';
-import { ProfileInfo } from '@/types';
-import { State } from '@/userReducer';
+import { ProfileInfo, State } from '@/lib/definitions';
 import { Skeleton } from '@mui/material';
 
 const Component: React.FC<{ savedProfileInfo: ProfileInfo, state: State, isLoading: boolean, data: any }>

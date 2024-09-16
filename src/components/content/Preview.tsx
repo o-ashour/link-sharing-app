@@ -2,7 +2,7 @@ import { linkSharePlatformsConfigs } from '@/config/index';
 import PlatformBtn from '@/components/UI/PlatformBtn';
 import Avatar from '@/components/Avatar';
 import Link from 'next/link';
-import { LinkType } from '@/types';
+import { ShareLink } from '@/lib/definitions';
 import { LinkShareSupportedPlatforms } from '@/config/index';
 import { Skeleton } from '@mui/material';
 
@@ -38,7 +38,7 @@ const Component: React.FC<{ data: any, isError: boolean }> = ({ data, isError })
         {Object.keys(data).length < 1 ? 
           <Skeleton height={60} variant='rectangular' /> :
         <ul className='space-y-5' id='links'>          
-          {data.links.map((link: LinkType) => {
+          {data.links.map((link: ShareLink) => {
             const { platform, id, url } = link;
             return (
               <li key={id}>

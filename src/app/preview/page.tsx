@@ -1,15 +1,12 @@
 'use client'
 
-// TODO:
-// 1. Check console for issues around label element FOR property when links are added
-
 import PreviewHeader from '@/components/layout/PreviewHeader';
 import Preview from '@/components/content/Preview';
 import Toast from '@/components/UI/Toast';
 import { icons } from '@/config/index';
 import { useEffect, useState } from 'react';
-import { getUserData } from '@/components/actions';
-import { Data, ToastMessages } from '@/types';
+import { getUserData } from '@/lib/actions';
+import { Data, ToastMessages } from '@/lib/definitions';
 import { toast, ToastContainer } from 'react-toastify';
 import copy from 'copy-to-clipboard';
 

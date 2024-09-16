@@ -37,6 +37,7 @@ export async function POST(request: Request) {
   let imageUrl = '';
 
   if (data && data.size > 1000) {
+    // this needs updating with auth user id
     const userId = Date.now(); // setting this user id temporarily
     const imgId = uuidv4();
     const objectKey = `${userId}/${imgId}`;

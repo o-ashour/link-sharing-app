@@ -1,6 +1,6 @@
 import { linkSharePlatformsConfigs } from '@/config';
 import { LinkShareSupportedPlatforms } from '@/config';
-import { State, Action } from '@/userReducer';
+import { State, Action } from '@/lib/definitions';
 import { Dispatch } from 'react';
 
 const Component: React.FC<{

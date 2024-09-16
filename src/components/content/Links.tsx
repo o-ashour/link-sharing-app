@@ -2,9 +2,8 @@ import DragAndDropIcon from '../icons/DragAndDropIcon';
 import Dropdown from '@/components/UI/Dropdown/index';
 import TextInputWithIcon from '@/components/UI/TextInputWithIcon';
 import { icons } from '@/config/index';
-import { useState } from 'react';
-import { State, Action } from '@/userReducer';
-import { Dispatch } from 'react';
+import { useState, Dispatch } from 'react';
+import { State, Action } from '@/lib/definitions';
 
 const Component: React.FC<{ state: State, dispatch: Dispatch<Action>, handleRemoveLink: (id: number) => void }> = ({ state, dispatch, handleRemoveLink }) => {
   const [isExpand, setIsExpand] = useState(false);

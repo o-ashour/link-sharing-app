@@ -5,9 +5,8 @@ import { icons } from '@/config';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast, ToastContainer } from 'react-toastify';
-import { signInSchema } from '@/lib/schema';
-import { SignInFormData } from '@/types';
-import { login } from './actions';
+import { SignInFormData, signInSchema } from '@/lib/definitions';
+import { login } from '../lib/actions';
 
 const SignInForm: React.FC = () => {
   const {

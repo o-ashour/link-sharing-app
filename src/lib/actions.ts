@@ -1,18 +1,14 @@
 'use server'
 // TODO:
-// 1. maybe move this file to a /lib
-// 2. add console.error in try-catch db update e.g console.error('Failed to create new user': error)
 // 3. check comments
 
-import {  Link, LoginFormSchema, ProfileInfo, SignInFormData, SignUpFormData } from "@/types";
+import { ShareLink, ProfileInfo, SignInFormData, SignUpFormData, signInSchema, signUpSchema } from "@/lib/definitions";
 import { sql } from "@vercel/postgres";
 import { z } from 'zod';
 import { LinkShareSupportedPlatforms } from "@/config";
 import bcrypt from 'bcrypt';
-import {  signUpSchema } from "@/lib/schema";
 import { redirect } from "next/navigation";
-import { createSession, decrypt, deleteSession } from "@/lib/session";
-import { cookies } from "next/headers";
+import { createSession, deleteSession } from "@/lib/session";
 import { getUser } from "@/lib/dal";
 
 const getUserId = async (email: string) => {
@@ -37,6 +33,7 @@ const getUserProfileInfo = async () => {
       profilePicUrl: { value: Boolean(result.rows[0].profile_pic_url) ? result.rows[0].profile_pic_url : '', errors: [''] },
     }
   } catch (error) {
+    console.error('Database error:', error)
     throw new Error('Failed to fetch user profile info');
   }
 }
@@ -56,35 +53,18 @@ const getUserLinks = async () => {
     })
     return links;
   } catch (error) {
+    console.error('Database error:', error)
     throw new Error('Failed to fetch user links');
   }
 }
 
-// redundant considering getUser ?
 export const getUserData = async () => {
-  let links = [];
-  let profileInfo = {
-    firstName: { value: '', errors: [''] },
-    lastName: { value: '', errors: [''] },
-    email: { value: '', errors: [''] },
-    profilePicUrl: { value: '', errors: [''] },
-  };
-  // these try-blocks might be redundant
-  // catching already with each function call below
-  try {
-    links = await getUserLinks();
-  } catch (error) {
-    throw new Error('Failed to fetch user links')
-  }
-  try {
-    profileInfo = await getUserProfileInfo();
-  } catch (error) {
-    throw new Error('Failed to fetch user profile info')
-  }
+  const links = await getUserLinks();
+  const profileInfo = await getUserProfileInfo();
   return { links, profileInfo }
 }
 
-export const saveLinks = async (links: Link[]) => {
+export const saveLinks = async (links: ShareLink[]) => {
   const user = await getUser();
   const schema = z.array(z.object({
     id: z.number(),
@@ -96,7 +76,7 @@ export const saveLinks = async (links: Link[]) => {
 
   if (!parse.success) {
     const errors: string[] = ['Failed to save changes'];
-    const nextLinks: Link[] = [];
+    const nextLinks: ShareLink[] = [];
     parse.error.issues.forEach((issue) => {
       if (issue.path[1] === 'url' && typeof(issue.path[0]) === 'number') {
         errors.push("Link #" + (issue.path[0] + 1) + ": " + issue.message + ' (check ' + issue.path[1] + '). ')
@@ -125,12 +105,14 @@ export const saveLinks = async (links: Link[]) => {
         try {
           return sql`UPDATE links SET index = ${idx + 1}, platform_name = ${link.platform}, url = ${link.url} WHERE ${link.id} = id;`;
         } catch (error) {
+          console.error('Database error:', error)
           throw new Error('Failed to update link')
         }
       }
     })
     await Promise.all(promises);
   } catch (error) {
+    console.error('Database error:', error)
     throw new Error('Failed to fetch link count');
   }
   
@@ -150,6 +132,7 @@ export const saveLinks = async (links: Link[]) => {
     })
     await Promise.all(promises);
   } catch (error) {
+    console.error('Database error:', error)
     throw new Error('Failed to fetch links')
   }
   return;
@@ -160,6 +143,7 @@ export const clearLinksInStore = async () => {
   try {
     await sql`DELETE FROM links WHERE user_id = ${user?.id};`;
   } catch (error) {
+    console.error('Database error:', error)
     throw new Error('Failed to clear links');
   }
 }
@@ -178,11 +162,10 @@ export const storeNewUser = async (data: SignUpFormData) => {
   try {
     await sql`INSERT INTO users (email, password) VALUES (${parse.data.email}, ${hashedPassword})`;
   } catch (error) {
-    console.error(error);
+    console.error('Database error:', error)
     throw new Error('Failed to create new user')
   }
 
-  // should validate this
   const userId = await getUserId(parse.data.email);
 
   await createSession(userId);
@@ -236,7 +219,7 @@ export const saveProfileInfo = async (profileInfo: ProfileInfo) => {
       isEmailChanged = true;
     }
   } catch (error) {
-    console.error(error);
+    console.error('Database error:', error)
     throw new Error('Failed to fetch user email')
   }
 
@@ -244,7 +227,7 @@ export const saveProfileInfo = async (profileInfo: ProfileInfo) => {
   try {
     await sql`UPDATE users SET first_name = ${data.firstName}, last_name = ${data.lastName}, email = ${data.email}, profile_pic_url = ${data.profilePicUrl} WHERE id = ${user?.id}`;
   } catch (error) {
-    console.error(error);
+    console.error('Database error:', error)
     throw new Error('Failed to update profile info')
   }
 
@@ -267,20 +250,8 @@ export const logout = () => {
   deleteSession();
 }
 
-// duplicate see /dal.ts
-export const verifySession = async () => {
-  const cookie = cookies().get('session')?.value;
-  const session = await decrypt(cookie);
-
-  if (!session?.userId) {
-    redirect('/login');
-  }
-
-  return { isAuth: true, userId: session.userId.toString() };
-}
-
 export async function login(formData: SignInFormData) {
-  const validatedFields = LoginFormSchema.safeParse(formData);
+  const validatedFields = signInSchema.safeParse(formData);
   const errorMessage = 'Invalid login credentials.';
 
   // If any form fields are invalid, return early
@@ -290,27 +261,28 @@ export async function login(formData: SignInFormData) {
     };
   }
 
-  // no error handling with this request ??
-  const user = await sql`SELECT * FROM Users WHERE email = ${validatedFields.data.email};`;
+  try {
+    const user = await sql`SELECT * FROM Users WHERE email = ${validatedFields.data.email};`;
 
-  // If user is not found, return early
-  if (!user.rows[0]) {
-    // not ideal to throw on each login bad credentials error?
-    throw new Error(errorMessage)
+    // If user is not found, return early
+    if (!user.rows[0]) {
+      // not ideal to throw on each login bad credentials error?
+      throw new Error(errorMessage)
+    }
+    const storedPassword = user.rows[0].password;
+    const passwordMatch = await bcrypt.compare(
+      validatedFields.data.password,
+      storedPassword,
+    );
+    // If the password does not match, return early
+    if (!passwordMatch) {
+      // not ideal to throw on each login bad credentials error?
+      throw new Error(errorMessage)
+    }
+    const userId = user.rows[0].id.toString();
+    await createSession(userId);
+  } catch (error) {
+    console.error('Database error:', error)
+    throw new Error('Failed to fetch user data.')
   }
-  const storedPassword = user.rows[0].password;
-  const passwordMatch = await bcrypt.compare(
-    validatedFields.data.password,
-    storedPassword,
-  );
-
-  // If the password does not match, return early
-  if (!passwordMatch) {
-    // not ideal to throw on each login bad credentials error?
-    throw new Error(errorMessage)
-
-  }
-
-  const userId = user.rows[0].id.toString();
-  await createSession(userId);
 }
