@@ -2,6 +2,7 @@ import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { z } from 'zod';
 import { v4 as uuidv4 } from 'uuid';
+import { getUser } from '@/lib/dal';
 
 const {
   CLOUDFLARE_ACCOUNT_ID,
@@ -37,8 +38,8 @@ export async function POST(request: Request) {
   let imageUrl = '';
 
   if (data && data.size > 1000) {
-    // this needs updating with auth user id
-    const userId = Date.now(); // setting this user id temporarily
+    const user = await getUser()
+    const userId = user?.id;
     const imgId = uuidv4();
     const objectKey = `${userId}/${imgId}`;
     imageUrl = `${process.env.CLOUDFLARE_IMAGE_BASE_PATH}/${objectKey}`;
