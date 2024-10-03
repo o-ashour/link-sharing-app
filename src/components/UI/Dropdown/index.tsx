@@ -16,7 +16,6 @@ const Component: React.FC<{ linkId: number, dispatch: Dispatch<Action>, state: S
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  // check type for event
   const handleMouseDown = useCallback((e: any) => {
     if (isOpen && !menuRef.current?.contains(e.target) &&
       !buttonRef.current?.contains(e.target)
