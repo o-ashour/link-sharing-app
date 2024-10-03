@@ -14,7 +14,7 @@ import ProfileDetails from '@/components/content/ProfileDetails';
 import Toast from '@/components/UI/Toast';
 import { icons } from '@/config/index';
 import PhoneMockup from '@/components/content/PhoneMockup';
-import { userReducer } from '@/userReducer';
+import { userReducer } from '@/reducer/userReducer';
 import { ProfileInfo, ToastMessages, Action } from '@/lib/definitions';
 import { 
   clearLinksInStore, 
