@@ -32,7 +32,7 @@ export const createSession = async (userId: string) => {
 
 
   cookies().set('session', session, {
-    httpOnly: true, // can only read this on server     
+    httpOnly: true,     
     secure: true,
     expires: expiresAt,
     sameSite: 'lax',

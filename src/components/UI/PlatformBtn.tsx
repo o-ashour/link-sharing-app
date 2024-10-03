@@ -1,7 +1,6 @@
 import ArrowRightIcon from '../icons/ArrowRightIcon';
 import { linkSharePlatformsConfigs } from '@/config';
 
-// default props for button
 const { iconComponentForPreviewBtn, readableName, themeColor: platformTheme, previewBtnThemeType } = linkSharePlatformsConfigs['GitHub'];
 
 const Component: React.FC<{ iconComponent?: any, themeColor?: string, name?: string, themeType?: string }> = ({ iconComponent = iconComponentForPreviewBtn, themeColor = platformTheme, name = readableName, themeType = previewBtnThemeType }) => {

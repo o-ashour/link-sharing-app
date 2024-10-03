@@ -87,7 +87,6 @@ export const saveLinks = async (links: ShareLink[]) => {
 
   const data = parse.data;
 
-  // create or update links 
   try {
     const promises = data.map(async (link, idx) => {
       let doesLinkRecordExist = false;
@@ -114,7 +113,6 @@ export const saveLinks = async (links: ShareLink[]) => {
     throw new Error('Failed to fetch link count');
   }
   
-  // delete links removed in UI
   try {
     const linkIds = data.map(link => link.id);
     const result = await sql`SELECT * FROM links WHERE ${user?.id} = user_id`;
@@ -219,7 +217,6 @@ export const saveProfileInfo = async (profileInfo: ProfileInfo) => {
     throw new Error('Failed to fetch user email')
   }
 
-  // store in db
   try {
     await sql`UPDATE users SET first_name = ${data.firstName}, last_name = ${data.lastName}, email = ${data.email}, profile_pic_url = ${data.profilePicUrl} WHERE id = ${user?.id}`;
   } catch (error) {
@@ -257,7 +254,6 @@ export async function login(formData: SignInFormData) {
 
   const user = await sql`SELECT * FROM Users WHERE email = ${validatedFields.data.email};`;
 
-  // if no user found, return early
   if (!user.rows[0]) {
     return {
       errors: {
