@@ -29,9 +29,9 @@ export const decrypt = async (session: string | undefined = '') => {
 export const createSession = async (userId: string) => {
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
   const session = await encrypt({ userId, expiresAt })
+  const cookieStore = await cookies();
 
-
-  cookies().set('session', session, {
+  cookieStore.set('session', session, {
     httpOnly: true,     
     secure: true,
     expires: expiresAt,
@@ -43,7 +43,8 @@ export const createSession = async (userId: string) => {
 }
 
 export const updateSession = async () => {
-  const session = cookies().get('session')?.value
+  const cookieStore = await cookies();
+  const session = cookieStore.get('session')?.value
   const payload = await decrypt(session)
 
   if (!session || !payload) {
@@ -51,7 +52,7 @@ export const updateSession = async () => {
   }
 
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-  cookies().set('session', session, {
+  cookieStore.set('session', session, {
     httpOnly: true,
     secure: true,
     expires: expiresAt,
@@ -60,7 +61,8 @@ export const updateSession = async () => {
   })
 }
 
-export const deleteSession = () => {
-  cookies().delete('session');
+export const deleteSession = async () => {
+  const cookieStore = await cookies();
+  cookieStore.delete('session');
   redirect('/login');
 }

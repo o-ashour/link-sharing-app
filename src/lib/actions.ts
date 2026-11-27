@@ -239,7 +239,7 @@ export const saveProfileInfo = async (profileInfo: ProfileInfo) => {
   }
 }
 
-export const logout = () => {
+export const logout = async () => {
   deleteSession();
 }
 

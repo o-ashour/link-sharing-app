@@ -6,7 +6,8 @@ import { redirect } from 'next/navigation';
 import { sql } from '@vercel/postgres';
 
 export const verifySession = async () => {
-  const cookie = cookies().get('session')?.value;
+  const cookieStore = await cookies();
+  const cookie = cookieStore.get('session')?.value;
   const session = await decrypt(cookie);
 
   if (!session?.userId) {
